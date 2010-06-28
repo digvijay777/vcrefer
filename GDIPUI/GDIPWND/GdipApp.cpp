@@ -9,8 +9,8 @@ CGdipApp theGdipApp;
 
 CGdipApp::CGdipApp()
 {
-	m_fScaleX = 1.0;
-	m_fScaleY = 1.0;
+	m_pGdiToken = NULL;
+	m_hhook = NULL;
 }
 
 CGdipApp::~CGdipApp()
@@ -33,9 +33,6 @@ BOOL CGdipApp::InitGdipWndApp()
 
 	// 设置窗体钩子
 	m_hhook = SetWindowsHookEx(WH_CBT, CGdipApp::CBTProc, NULL, GetCurrentThreadId());
-
-	// 设置窗体缩放比例
-	
 
 	return (NULL != m_hhook);
 }

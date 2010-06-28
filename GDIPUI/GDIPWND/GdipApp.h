@@ -13,8 +13,6 @@ public:
 private:
 	HHOOK		m_hhook;
 	ULONG		m_pGdiToken;
-	float		m_fScaleX;
-	float		m_fScaleY;
 
 public:
 	BOOL		InitGdipWndApp();

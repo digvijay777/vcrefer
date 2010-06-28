@@ -16,6 +16,12 @@ public:
 
 public:
 	HWND	m_hWnd;
+	float	m_fScaleX;
+	float	m_fScaleY;
+
+public:
+	float	GetDPIPixel(HDC hDC, int nDPI, HFONT hFont, BOOL bHeight = FALSE, int nWidth = 1);
+	BOOL	GetFontSize(HDC hDC, HFONT hFont, float* pWidth, float* pHeight);
 
 public:
 	LRESULT		DefWindowProc(IN UINT Msg, IN WPARAM wParam, IN LPARAM lParam);
