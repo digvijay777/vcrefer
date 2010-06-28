@@ -83,15 +83,15 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_GDIPDLG_DIALOG DIALOGEX 0, 0, 320, 200
+IDD_GDIPDLG_DIALOG DIALOGEX 0, 0, 319, 200
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
     WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "GDIPDlg"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
-    PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
+    DEFPUSHBUTTON   "确定",IDOK,80,77,50,16
+    PUSHBUTTON      "取消",IDCANCEL,83,108,50,16
     CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC,10,96,300,8
 END
 
@@ -154,7 +154,7 @@ BEGIN
     IDD_GDIPDLG_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 313
+        RIGHTMARGIN, 312
         TOPMARGIN, 7
         BOTTOMMARGIN, 193
     END
@@ -164,10 +164,10 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// JPG
+// PNG
 //
 
-IDR_DLGBK               JPG                     "res\\01.jpg"
+IDR_DLGBK               PNG                     "res\\01.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

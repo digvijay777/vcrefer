@@ -95,7 +95,7 @@ BOOL CGDIPDlgDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	GdipWnd::Dlg_SetBk(GetSafeHwnd(), IDR_DLGBK, "JPG");
+	GdipWnd::Dlg_SetBk(GetSafeHwnd(), IDR_DLGBK, "PNG");
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE
 }
 

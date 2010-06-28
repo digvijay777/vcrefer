@@ -11,7 +11,7 @@ public:
 	virtual BOOL		WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 private:
-	Image*		m_pBkImage;
+	Bitmap*		m_pBkImage;
 	HGLOBAL		m_hGlobal;
 
 public:

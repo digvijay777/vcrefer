@@ -211,6 +211,9 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\res\01.png">
+		</File>
+		<File
 			RelativePath=".\res\GDIPDlg.manifest">
 		</File>
 		<File

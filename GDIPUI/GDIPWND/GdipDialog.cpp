@@ -61,7 +61,7 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpID, LPCTSTR lpType)
 	memcpy(pMem, hGlobal, dwSize);
 	CreateStreamOnHGlobal(m_hGlobal, FALSE, &pStream);
 
-	m_pBkImage = Image::FromStream(pStream);
+	m_pBkImage = Bitmap::FromStream(pStream);
 
 	GlobalUnlock(m_hGlobal);
 	pStream->Release();
@@ -73,7 +73,7 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpID, LPCTSTR lpType)
 
 LRESULT CGdipDialog::SetBk(LPCTSTR lpPath)
 {
-	m_pBkImage = Image::FromFile((WCHAR*)_bstr_t(lpPath));
+	m_pBkImage = Bitmap::FromFile((WCHAR*)_bstr_t(lpPath));
 
 	CreateRgnDlg();
 	return 0;
@@ -107,31 +107,37 @@ BOOL CGdipDialog::CreateRgnDlg()
 	if(NULL == m_pBkImage)
 		return FALSE;
 	
-	Bitmap		desBmp(m_pBkImage->GetWidth(), m_pBkImage->GetHeight());
-	Graphics	gBmp(&desBmp);
-	
-	gBmp.DrawImage(m_pBkImage, 0, 0, m_pBkImage->GetWidth(), m_pBkImage->GetHeight());
+	HRGN		hRgn				= ::CreateRectRgn(0, 0, 0, 0);
+	Rect		rect(0, 0, 1, 1);
+
 	for(int i = 0; i < m_pBkImage->GetWidth(); i++)
 	{
 		for(int j = 0; j < m_pBkImage->GetHeight(); j++)
 		{
-			Color		col;
-			BYTE		alp;
+			Color		color;
 
-			desBmp.GetPixel(i, j, &col);
-			alp = col.GetA();
-			if(0 == alp)
-				col = Color(255, 0x0, 0x0, 0x0);
-			else
-				col = Color(255, 0xff, 0xff, 0xff);
-			desBmp.SetPixel(i, j, col);
+			m_pBkImage->GetPixel(i, j, &color);
+			
+			if(0x0 != color.GetA())	// alpha 为0时不显示这块
+			{
+				HRGN		hPixelRgn	= ::CreateRectRgn(i, j, i+1, j+1);
+
+				::CombineRgn(hRgn, hRgn, hPixelRgn, RGN_OR);
+				DeleteObject((HGDIOBJ)hPixelRgn);
+			}
 		}
 	}
-
-	HRGN		hRgn		= ::PathToRegion(gBmp.GetHDC());
 	
+	// 去除标题栏
+	DWORD		dwStyle		= GetWindowLong(m_hWnd, GWL_STYLE);
+
+	dwStyle &= ~WS_CAPTION;
+	dwStyle &= ~WS_BORDER;
+	SetWindowLong(m_hWnd, GWL_STYLE, dwStyle);
+	UpdateWindow(m_hWnd);
+	// 设置区域
 	SetWindowRgn(m_hWnd, hRgn, TRUE);
-    DeleteObject((HGDIOBJ)hRgn);
+	DeleteObject((HGDIOBJ)hRgn);
 
 	return TRUE;
 }
