@@ -17,5 +17,6 @@ private:
 public:
 	virtual LRESULT		SetBk(LPCTSTR lpPath);
 	virtual LRESULT		SetBk(LPCTSTR lpID, LPCTSTR lpType);
-	virtual LRESULT		OnEraseBkGnd(Graphics* pGraphics);
+	virtual LRESULT		OnEraseBkGnd(HDC hDC);
+	virtual BOOL		CreateRgnDlg();
 };

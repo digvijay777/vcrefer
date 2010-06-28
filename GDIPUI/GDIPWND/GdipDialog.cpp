@@ -27,7 +27,7 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 		*pResult = SetBk((LPCSTR)wParam, (LPCSTR)lParam);
 		return TRUE;
 	case WM_ERASEBKGND:
-		*pResult = OnEraseBkGnd(Graphics::FromHDC((HDC)wParam));
+		*pResult = OnEraseBkGnd((HDC)wParam);
 		return TRUE;
 	}
 
@@ -66,6 +66,8 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpID, LPCTSTR lpType)
 	GlobalUnlock(m_hGlobal);
 	pStream->Release();
 	FreeResource(hGlobal);
+
+	CreateRgnDlg();
 	return 0;
 }
 
@@ -73,26 +75,63 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpPath)
 {
 	m_pBkImage = Image::FromFile((WCHAR*)_bstr_t(lpPath));
 
+	CreateRgnDlg();
 	return 0;
 }
 
 // 画背景
-LRESULT CGdipDialog::OnEraseBkGnd(Graphics* pGraphics)
+LRESULT CGdipDialog::OnEraseBkGnd(HDC hDC)
 {
 	// 调用默认过程
-	if(NULL == pGraphics || NULL == m_pBkImage)
+	if(NULL == m_pBkImage)
 	{
-		return CGdipWnd::DefWindowProc(WM_ERASEBKGND, (WPARAM)pGraphics->GetHDC(), NULL);
+		return CGdipWnd::DefWindowProc(WM_ERASEBKGND, (WPARAM)hDC, NULL);
 	}
 	// 调用绘制过程
 	RECT		rtClient;
+	Graphics	graphics(hDC);
 
 	GetClientRect(m_hWnd, &rtClient);
 	Rect		rtDraw(rtClient.left, rtClient.top, rtClient.right - rtClient.left, rtClient.bottom - rtClient.top);
-	pGraphics->DrawImage(m_pBkImage,/* rtDraw,*/ 0, 0
+	graphics.DrawImage(m_pBkImage,/* rtDraw,*/ 0, 0
 		, rtDraw.Width
 		, rtDraw.Height
 		/*, UnitDisplay*/);
 
 	return 0;
+}
+
+// 创建不规则的窗体
+BOOL CGdipDialog::CreateRgnDlg()
+{
+	if(NULL == m_pBkImage)
+		return FALSE;
+	
+	Bitmap		desBmp(m_pBkImage->GetWidth(), m_pBkImage->GetHeight());
+	Graphics	gBmp(&desBmp);
+	
+	gBmp.DrawImage(m_pBkImage, 0, 0, m_pBkImage->GetWidth(), m_pBkImage->GetHeight());
+	for(int i = 0; i < m_pBkImage->GetWidth(); i++)
+	{
+		for(int j = 0; j < m_pBkImage->GetHeight(); j++)
+		{
+			Color		col;
+			BYTE		alp;
+
+			desBmp.GetPixel(i, j, &col);
+			alp = col.GetA();
+			if(0 == alp)
+				col = Color(255, 0x0, 0x0, 0x0);
+			else
+				col = Color(255, 0xff, 0xff, 0xff);
+			desBmp.SetPixel(i, j, col);
+		}
+	}
+
+	HRGN		hRgn		= ::PathToRegion(gBmp.GetHDC());
+	
+	SetWindowRgn(m_hWnd, hRgn, TRUE);
+    DeleteObject((HGDIOBJ)hRgn);
+
+	return TRUE;
 }
