@@ -22,7 +22,7 @@ public:
 public:
 	float	GetDPIPixel(HDC hDC, int nDPI, HFONT hFont, BOOL bHeight = FALSE, int nWidth = 1);
 	BOOL	GetFontSize(HDC hDC, HFONT hFont, float* pWidth, float* pHeight);
-
+	void	ScreenToClient(HWND hWnd, LPRECT lpRect);
 public:
 	LRESULT		DefWindowProc(IN UINT Msg, IN WPARAM wParam, IN LPARAM lParam);
 

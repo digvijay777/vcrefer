@@ -13,6 +13,7 @@ public:
 private:
 	Bitmap*		m_pBkImage;
 	HGLOBAL		m_hGlobal;
+	ARGB		m_bkColor;
 
 public:
 	virtual LRESULT		SetBk(LPCTSTR lpPath);

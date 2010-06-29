@@ -204,6 +204,12 @@
 				RelativePath="..\Gdipwnd\GdipDialog.h">
 			</File>
 			<File
+				RelativePath="..\Gdipwnd\GdipStatic.cpp">
+			</File>
+			<File
+				RelativePath="..\Gdipwnd\GdipStatic.h">
+			</File>
+			<File
 				RelativePath="..\Gdipwnd\GdipWnd.cpp">
 			</File>
 			<File

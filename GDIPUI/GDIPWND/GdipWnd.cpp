@@ -83,7 +83,22 @@ BOOL CGdipWnd::GetFontSize(HDC hDC, HFONT hFont, float* pWidth, float* pHeight)
 	::SelectObject(hDC, (HGDIOBJ)hOldFont);
 	return TRUE;
 }
+// 转换坐标
+void CGdipWnd::ScreenToClient(HWND hWnd, LPRECT lpRect)
+{
+	POINT			point;
 
+	point.x = lpRect->left;
+	point.y = lpRect->top;
+	::ScreenToClient(hWnd, &point);
+	lpRect->left = point.x;
+	lpRect->top = point.y;
+	point.x = lpRect->right;
+	point.y = lpRect->bottom;
+	::ScreenToClient(hWnd, &point);
+	lpRect->right = point.x;
+	lpRect->bottom = point.y;
+}
 // 调用默认窗口过程
 LRESULT	CGdipWnd::DefWindowProc(IN UINT Msg, IN WPARAM wParam, IN LPARAM lParam)
 {

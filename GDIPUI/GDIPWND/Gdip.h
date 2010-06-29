@@ -23,6 +23,8 @@ BOOL		InitGdipWndApp();
 #define UM_GDIPDLG_SETBK		UM_GDIPDIALOG+1
 // wParam:资源ID			lParam:为资类型
 #define UM_GDIPDLG_SETBK2		UM_GDIPDIALOG+2
+// wParam: ARGB
+#define UM_GDIPDLG_SETBKCOLOR	UM_GDIPDIALOG+3
 
 
 
@@ -39,5 +41,9 @@ namespace GdipWnd
 	inline BOOL Dlg_SetBk(HWND hWnd, LPCTSTR lpPath)
 	{
 		return (BOOL)SendMessage(hWnd, UM_GDIPDLG_SETBK, (WPARAM)lpPath, NULL);
+	}
+	inline BOOL Dlg_SetBkColor(HWND hWnd, DWORD dwColor)
+	{
+		return (BOOL)SendMessage(hWnd, UM_GDIPDLG_SETBKCOLOR, (WPARAM)dwColor, 0);
 	}
 }

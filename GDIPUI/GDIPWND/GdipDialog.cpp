@@ -7,6 +7,7 @@ CGdipDialog::CGdipDialog(HWND hWnd)
 {
 	m_pBkImage = NULL;	
 	m_hGlobal = NULL;
+	m_bkColor = 0xffffffff;
 }
 
 CGdipDialog::~CGdipDialog()
@@ -25,6 +26,10 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 		return TRUE;
 	case UM_GDIPDLG_SETBK2:
 		*pResult = SetBk((LPCSTR)wParam, (LPCSTR)lParam);
+		return TRUE;
+	case UM_GDIPDLG_SETBKCOLOR:
+		*pResult = 1;
+		m_bkColor = (ARGB)wParam;
 		return TRUE;
 	case WM_ERASEBKGND:
 		*pResult = OnEraseBkGnd((HDC)wParam);
@@ -94,11 +99,12 @@ LRESULT CGdipDialog::OnEraseBkGnd(HDC hDC)
 	RECT		rtClient;
 	Graphics	graphics(hDC);
 
+	graphics.Clear(Color(m_bkColor));
 	GetClientRect(m_hWnd, &rtClient);
 	Rect		rtDraw(rtClient.left, rtClient.top, rtClient.right - rtClient.left, rtClient.bottom - rtClient.top);
 	graphics.DrawImage(m_pBkImage,/* rtDraw,*/ 0, 0
-		, rtDraw.Width
-		, rtDraw.Height
+		, m_pBkImage->GetWidth()
+		, m_pBkImage->GetHeight()
 		/*, UnitDisplay*/);
 
 	return 0;
@@ -131,6 +137,12 @@ BOOL CGdipDialog::CreateRgnDlg()
 		}
 	}
 	
+	// 调整窗口大小
+	RECT		rtWnd;
+
+	GetRgnBox(hRgn, &rtWnd);
+	SetWindowPos(m_hWnd, NULL, -1, -1, rtWnd.right - rtWnd.left
+		, rtWnd.bottom - rtWnd.top, SWP_NOMOVE);
 	// 去除标题栏
 	DWORD		dwStyle		= GetWindowLong(m_hWnd, GWL_STYLE);
 

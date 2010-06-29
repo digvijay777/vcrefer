@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "GdipApp.h"
 #include "GdipDialog.h"
+#include "GdipStatic.h"
 
 CGdipApp theGdipApp;
 
@@ -48,6 +49,10 @@ BOOL CGdipApp::AttachWindow(HWND hWnd, CREATESTRUCT* pCreate)
 	{
 		// ¹³×¡¶Ô»°¿ò
 		return AttachGdipWnd(hWnd, new CGdipDialog(hWnd));
+	}
+	else if(stricmp("static", szClassName) == 0)
+	{
+		return AttachGdipWnd(hWnd, new CGdipStatic(hWnd));
 	}
 
 	return FALSE;
