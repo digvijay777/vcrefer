@@ -29,6 +29,9 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 	case WM_ERASEBKGND:
 		*pResult = OnEraseBkGnd((HDC)wParam);
 		return TRUE;
+	case WM_NCHITTEST:
+		*pResult = OnNcHisttest(LOWORD(lParam), HIWORD(lParam));
+		return TRUE;
 	}
 
 	return FALSE;
@@ -140,4 +143,10 @@ BOOL CGdipDialog::CreateRgnDlg()
 	DeleteObject((HGDIOBJ)hRgn);
 
 	return TRUE;
+}
+
+// WM_NCHITTEST
+LRESULT CGdipDialog::OnNcHisttest(int nX, int nY)
+{
+	return HTCAPTION;
 }

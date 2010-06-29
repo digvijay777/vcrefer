@@ -19,4 +19,5 @@ public:
 	virtual LRESULT		SetBk(LPCTSTR lpID, LPCTSTR lpType);
 	virtual LRESULT		OnEraseBkGnd(HDC hDC);
 	virtual BOOL		CreateRgnDlg();
+	virtual LRESULT		OnNcHisttest(int nX, int nY);
 };
