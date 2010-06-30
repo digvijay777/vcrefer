@@ -5,6 +5,7 @@
 #include "GDIPDlg.h"
 #include "GDIPDlgDlg.h"
 #include "../gdipwnd/Gdip.h"
+#include ".\gdipdlgdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -62,6 +63,8 @@ BEGIN_MESSAGE_MAP(CGDIPDlgDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDCANCEL, OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -145,4 +148,17 @@ void CGDIPDlgDlg::OnPaint()
 HCURSOR CGDIPDlgDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CGDIPDlgDlg::OnBnClickedCancel()
+{
+	// TODO: Add your control notification handler code here
+	// OnCancel();
+	// SetDlgItemText(IDC_INFO, "改变文本");
+	GetDlgItem(IDC_INFO)->SetWindowText("改变文本");
+}
+
+void CGDIPDlgDlg::OnBnClickedButton1()
+{
+	SetDlgItemText(IDC_INFO, "设置比较长的文本");
 }

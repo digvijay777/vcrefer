@@ -3,6 +3,7 @@
 #include "GdipApp.h"
 
 #pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib, "comsupp.lib")
 
 //////////////////////////////////////////////////////////////////////////
 // Gdip Wnd
@@ -113,5 +114,80 @@ LRESULT	CGdipWnd::DefWindowProc(IN UINT Msg, IN WPARAM wParam, IN LPARAM lParam)
 // 窗口过程
 BOOL CGdipWnd::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
+	switch(Msg)
+	{
+	case WM_DESTROY:
+		SetProp(m_hWnd, GDIPAPP_WNDPTR, NULL);
+		DefWindowProc(Msg, wParam, lParam);
+		delete this;
+		return TRUE;
+	}
+
 	return FALSE;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// 内存DC
+CGdipMemDC::CGdipMemDC(HDC hDC, int nWidth, int nHeight)
+{
+	HBITMAP		hBmp;
+
+	m_hDC = ::CreateCompatibleDC(hDC);
+	hBmp = ::CreateCompatibleBitmap(hDC, nWidth, nHeight);
+	m_hBitmap = (HBITMAP)::SelectObject(m_hDC, (HGDIOBJ)hBmp);
+	m_graphics = new Graphics(m_hDC);
+}
+
+CGdipMemDC::~CGdipMemDC()
+{
+	if(NULL != m_graphics)
+		delete m_graphics;
+
+	if(NULL != m_hBitmap)
+	{
+		HBITMAP		hBmp;
+		
+		hBmp = (HBITMAP)::SelectObject(m_hDC, (HGDIOBJ)m_hBitmap);
+		::DeleteObject((HGDIOBJ)hBmp);
+	}
+
+	if(NULL != m_hDC)
+	{
+		::DeleteDC(m_hDC);
+	}
+}
+
+// 得到DC
+HDC CGdipMemDC::GetDC()
+{
+	return m_hDC;
+}
+
+// 重载->
+Graphics* CGdipMemDC::operator ->()
+{
+	return m_graphics;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 控件DC 
+CGdipCtrlDC::CGdipCtrlDC(HDC hDC, LPRECT lpRect)
+:CGdipMemDC(hDC, lpRect->right, lpRect->bottom)
+{
+	m_rect = *lpRect;
+	m_hCtrlDC = hDC;
+	m_graphics->TranslateTransform((REAL)m_rect.left, (REAL)m_rect.top);
+}
+
+CGdipCtrlDC::~CGdipCtrlDC()
+{
+	DrawCtrl();
+}
+
+// 绘制
+BOOL CGdipCtrlDC::DrawCtrl()
+{
+	return ::BitBlt(m_hCtrlDC, 0, 0, m_rect.right - m_rect.left, m_rect.bottom - m_rect.top
+		, m_hDC, m_rect.left, m_rect.top, SRCCOPY);
+}
+

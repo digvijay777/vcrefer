@@ -19,6 +19,9 @@ CGdipDialog::~CGdipDialog()
 // ´°¿Ú¹ý³Ì
 BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
+	if(FALSE != CGdipWnd::WindowProc(Msg, wParam, lParam, pResult))
+		return TRUE;
+
 	switch(Msg)
 	{
 	case UM_GDIPDLG_SETBK:

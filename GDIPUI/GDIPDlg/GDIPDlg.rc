@@ -90,7 +90,8 @@ FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,80,77,50,16
     PUSHBUTTON      "取消",IDCANCEL,83,108,50,16
-    CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC,10,96,300,8
+    CTEXT           "TODO: 在此放置对话框控件。",IDC_INFO,7,26,300,8
+    PUSHBUTTON      "SetText",IDC_BUTTON1,138,109,50,14
 END
 
 

@@ -227,5 +227,8 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="GDIPDlg.rc"/>
 	</Globals>
 </VisualStudioProject>

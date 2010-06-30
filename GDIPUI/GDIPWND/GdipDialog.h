@@ -5,7 +5,7 @@ class CGdipDialog : public CGdipWnd
 {
 public:
 	CGdipDialog(HWND hWnd);
-	~CGdipDialog();
+	virtual ~CGdipDialog();
 
 public:
 	virtual BOOL		WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult);

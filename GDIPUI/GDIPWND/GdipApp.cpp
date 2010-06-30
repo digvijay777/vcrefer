@@ -16,7 +16,8 @@ CGdipApp::CGdipApp()
 
 CGdipApp::~CGdipApp()
 {
-
+	if(NULL != m_hhook)
+		UnhookWindowsHookEx(m_hhook);
 }
 
 // 初始化库
@@ -58,16 +59,6 @@ BOOL CGdipApp::AttachWindow(HWND hWnd, CREATESTRUCT* pCreate)
 	return FALSE;
 }
 
-BOOL CGdipApp::DetachWindow(HWND hWnd)
-{
-	CGdipWnd*	pWnd		= (CGdipWnd *)GetProp(hWnd, GDIPAPP_WNDPTR);
-
-	if(NULL != pWnd)
-		delete pWnd;
-
-	return TRUE;
-}
-
 // 设置窗口过程
 BOOL CGdipApp::AttachGdipWnd(HWND hWnd, CGdipWnd* pWnd)
 {
@@ -94,9 +85,6 @@ LRESULT CGdipApp::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 	case HCBT_CREATEWND:
 		theGdipApp.AttachWindow((HWND)wParam, ((CBT_CREATEWND *)lParam)->lpcs);
-		break;
-	case HCBT_DESTROYWND:
-		theGdipApp.DetachWindow((HWND)wParam);
 		break;
 	}
 

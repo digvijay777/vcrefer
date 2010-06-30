@@ -1,5 +1,6 @@
 #pragma once
 #include <atltypes.h>
+#include <comdef.h>
 
 #include <gdiplus.h>
 #include <Gdiplusinit.h>
@@ -12,7 +13,7 @@ class CGdipWnd
 {
 public:
 	CGdipWnd(HWND hWnd);
-	~CGdipWnd();
+	virtual ~CGdipWnd();
 
 public:
 	HWND	m_hWnd;
@@ -28,4 +29,32 @@ public:
 
 public:
 	virtual BOOL		WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+};
+
+class CGdipMemDC
+{
+public:
+	CGdipMemDC(HDC hDC, int nWidth, int nHeight);
+	virtual ~CGdipMemDC();
+
+protected:
+	HDC			m_hDC;
+	HBITMAP		m_hBitmap;
+	Graphics*	m_graphics;
+	
+public:
+	HDC			GetDC();
+	Graphics* operator->();
+};
+
+class CGdipCtrlDC : public CGdipMemDC
+{
+public:
+	CGdipCtrlDC(HDC hDC, LPRECT lpRect);
+	virtual ~CGdipCtrlDC();
+protected:
+	RECT		m_rect;
+	HDC			m_hCtrlDC;
+public:
+	BOOL		DrawCtrl();
 };

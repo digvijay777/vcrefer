@@ -17,7 +17,6 @@ private:
 public:
 	BOOL		InitGdipWndApp();
 	BOOL		AttachWindow(HWND hWnd, CREATESTRUCT* pCreate);
-	BOOL		DetachWindow(HWND hWnd);
 	BOOL		AttachGdipWnd(HWND hWnd, CGdipWnd* pWnd);
 
 
