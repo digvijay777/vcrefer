@@ -216,6 +216,10 @@
 				RelativePath="..\Gdipwnd\GdipWnd.h">
 			</File>
 		</Filter>
+		<Filter
+			Name="GDIPCtrl"
+			Filter="">
+		</Filter>
 		<File
 			RelativePath=".\res\01.png">
 		</File>
