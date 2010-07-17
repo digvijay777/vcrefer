@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Gdip.h"
+#include "GdipDefines.h"
 #include "GdipDialog.h"
 
 CGdipDialog::CGdipDialog(HWND hWnd)
@@ -7,6 +7,10 @@ CGdipDialog::CGdipDialog(HWND hWnd)
 {
 	m_bkColor = 0xffffffff;
 	m_hBkBrush = CreateSolidBrush(GetSysColor(CTLCOLOR_DLG));
+	m_InfoCaption.rect.left = -1;
+	m_InfoCaption.rect.top = -1;
+	m_InfoCaption.rect.right = -1;
+	m_InfoCaption.rect.bottom = -1;
 }
 
 CGdipDialog::~CGdipDialog()
@@ -33,6 +37,9 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 		*pResult = 1;
 		m_bkColor = (ARGB)wParam;
 		return TRUE;
+	case UM_GDIPDLG_SETCAPTION:
+		m_InfoCaption.rect = *((RECT *)wParam);
+		return TRUE;
 	case WM_ERASEBKGND:
 		*pResult = OnEraseBkGnd((HDC)wParam);
 		return TRUE;
@@ -40,9 +47,10 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 		*pResult = OnNcHisttest(LOWORD(lParam), HIWORD(lParam));
 		return TRUE;
 	case WM_CTLCOLORBTN:
-		return TRUE;
+	case WM_CTLCOLORSCROLLBAR:
 	case WM_CTLCOLORSTATIC:
-		*pResult = OnCtlColorStatic((HDC)wParam, (HWND)lParam);
+		::SetBkMode((HDC)wParam, TRANSPARENT);
+		*pResult = (LRESULT)GetBkBrush();
 		return TRUE;
 	}
 
@@ -115,6 +123,20 @@ void CGdipDialog::SetBkBitmap(Bitmap* pBmp)
 	HBITMAP		hBitmap;
 	pBmp->GetHBITMAP(m_bkColor, &hBitmap);
 	m_hBkBrush = CreatePatternBrush(hBitmap);
+	SetProp(m_hWnd, GDIPAPP_WNDBKBRUSH, (HANDLE)m_hBkBrush);
+}
+HBRUSH CGdipDialog::GetBkBrush()
+{
+	HBRUSH		hBrush		= NULL;
+
+	if(WS_CHILD & GetWindowLong(m_hWnd, GWL_STYLE))
+	{
+		hBrush = (HBRUSH)GetProp(GetParent(m_hWnd), GDIPAPP_WNDBKBRUSH);
+	}
+	if(NULL == hBrush)
+		hBrush = m_hBkBrush;
+
+	return hBrush;
 }
 // »­±³¾°
 LRESULT CGdipDialog::OnEraseBkGnd(HDC hDC)
@@ -123,7 +145,7 @@ LRESULT CGdipDialog::OnEraseBkGnd(HDC hDC)
 	RECT		rtClient;
 
 	GetClientRect(m_hWnd, &rtClient);
-	FillRect(hDC, &rtClient, m_hBkBrush);
+	FillRect(hDC, &rtClient, GetBkBrush());
 
 	return 0;
 }
@@ -178,12 +200,38 @@ BOOL CGdipDialog::CreateRgnDlg(Bitmap* pBmp)
 // WM_NCHITTEST
 LRESULT CGdipDialog::OnNcHisttest(int nX, int nY)
 {
-	return HTCAPTION;
+	if(WS_CAPTION & GetWindowLong(m_hWnd, GWL_STYLE))
+		return DefWindowProc(WM_NCHITTEST, 0, MAKELPARAM(nX, nY));
+
+	if(WS_CHILD & GetWindowLong(m_hWnd, GWL_STYLE))
+		return HTTRANSPARENT;
+
+	RECT		rect;
+	RECT		rtCaption;
+	POINT		pt			= {nX, nY};
+
+	GetWindowRect(m_hWnd, &rect);
+	CopyRect(&rtCaption, &rect);
+	if(-1 != m_InfoCaption.rect.left)
+		rtCaption.left = m_InfoCaption.rect.left;
+	if(-1 != m_InfoCaption.rect.top)
+		rtCaption.top = m_InfoCaption.rect.top;
+	if(-1 != m_InfoCaption.rect.right)
+		rtCaption.right = m_InfoCaption.rect.right;
+	if(-1 != m_InfoCaption.rect.bottom)
+		rtCaption.bottom = m_InfoCaption.rect.bottom;
+
+	MENUBARINFO			menuInfo		= {0};
+	menuInfo.cbSize = sizeof(menuInfo);
+	if(GetMenuBarInfo(m_hWnd, OBJID_MENU, 0, &menuInfo))
+	{
+		if(PtInRect(&menuInfo.rcBar, pt))
+			return HTMENU;
+	}
+// 	::ScreenToClient(m_hWnd, &pt);
+	if(PtInRect(&rtCaption, pt))
+		return HTCAPTION;
+	
+	return HTCLIENT;
 }
 
-// WM_CTLCOLORSTATIC
-LRESULT CGdipDialog::OnCtlColorStatic(HDC hDC, HWND hWnd)
-{
-	::SetBkMode(hDC, TRANSPARENT);
-	return (LRESULT)m_hBkBrush;
-}

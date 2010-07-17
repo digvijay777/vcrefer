@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GdipWnd.h"
+#include "GdipDefines.h"
 #include "GdipApp.h"
 
 #pragma comment(lib, "gdiplus.lib")

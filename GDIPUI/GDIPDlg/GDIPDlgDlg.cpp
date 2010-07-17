@@ -70,7 +70,7 @@ END_MESSAGE_MAP()
 
 
 // CGDIPDlgDlg 消息处理程序
-
+CAboutDlg		gAboutDlg;
 BOOL CGDIPDlgDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
@@ -100,6 +100,9 @@ BOOL CGDIPDlgDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	GdipWnd::Dlg_SetBk(GetSafeHwnd(), IDR_DLGBK, "PNG");
+
+	gAboutDlg.Create(MAKEINTRESOURCE(IDD_ABOUTBOX), this);
+	gAboutDlg.ShowWindow(SW_SHOW);
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE
 }
 
@@ -107,8 +110,8 @@ void CGDIPDlgDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
-		CAboutDlg dlgAbout;
-		dlgAbout.DoModal();
+// 		CAboutDlg dlgAbout;
+// 		dlgAbout.DoModal();
 	}
 	else
 	{
@@ -156,7 +159,8 @@ void CGDIPDlgDlg::OnBnClickedCancel()
 	// TODO: Add your control notification handler code here
 	// OnCancel();
 	// SetDlgItemText(IDC_INFO, "改变文本");
-	GetDlgItem(IDC_INFO)->SetWindowText("改变文本");
+	// GetDlgItem(IDC_INFO)->SetWindowText("改变文本");
+	MessageBox("这是提示框");
 }
 
 void CGDIPDlgDlg::OnBnClickedButton1()

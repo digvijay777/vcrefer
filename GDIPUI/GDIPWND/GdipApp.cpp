@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "GdipApp.h"
 #include "GdipDialog.h"
-#include "GdipStatic.h"
+#include "GdipDefines.h"
 
 CGdipApp theGdipApp;
 

@@ -72,9 +72,7 @@ IDR_MAINFRAME           ICON                    "res\\GDIPDlg.ico"
 //
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
-CAPTION "关于 GDIPDlg"
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
@@ -86,12 +84,22 @@ END
 IDD_GDIPDLG_DIALOG DIALOGEX 0, 0, 319, 200
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
+MENU IDR_MENU1
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,80,77,50,16
     PUSHBUTTON      "取消",IDCANCEL,83,108,50,16
-    CTEXT           "TODO: 在此放置对话框控件。",IDC_INFO,7,26,300,8
+    CTEXT           "TODO: 在此放置对话框控件。",IDC_INFO,7,161,300,8
     PUSHBUTTON      "SetText",IDC_BUTTON1,138,109,50,14
+    EDITTEXT        IDC_EDIT1,15,95,40,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,7,134,305,
+                    14
+    LISTBOX         IDC_LIST1,196,75,97,58,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Radio1",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,157,89,
+                    37,10
+    CONTROL         "Check1",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,154,74,39,10
 END
 
 
@@ -167,6 +175,24 @@ END
 //
 
 IDR_DLGBK               PNG                     "res\\01.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Exit",                       ID_FILE_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",                      ID_HELP_ABOUT
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

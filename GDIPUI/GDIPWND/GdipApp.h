@@ -1,9 +1,6 @@
 #pragma once
 #include "GdipWnd.h"
 
-#define GDIPAPP_WNDPROC			_T("_GdipWnd_WNDPROC_")
-#define GDIPAPP_WNDPTR			_T("_GdipWnd_WndPtr_")
-
 class CGdipApp
 {
 public:
