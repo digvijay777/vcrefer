@@ -5,15 +5,14 @@
 CGdipDialog::CGdipDialog(HWND hWnd)
 : CGdipWnd(hWnd)
 {
-	m_pBkImage = NULL;	
-	m_hGlobal = NULL;
 	m_bkColor = 0xffffffff;
+	m_hBkBrush = CreateSolidBrush(GetSysColor(CTLCOLOR_DLG));
 }
 
 CGdipDialog::~CGdipDialog()
 {
-	if(NULL != m_hGlobal)
-		GlobalFree(m_hGlobal);
+	if(NULL != m_hBkBrush)
+		DeleteObject((HGDIOBJ)m_hBkBrush);
 }
 
 // 窗口过程
@@ -40,6 +39,11 @@ BOOL CGdipDialog::WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pR
 	case WM_NCHITTEST:
 		*pResult = OnNcHisttest(LOWORD(lParam), HIWORD(lParam));
 		return TRUE;
+	case WM_CTLCOLORBTN:
+		return TRUE;
+	case WM_CTLCOLORSTATIC:
+		*pResult = OnCtlColorStatic((HDC)wParam, (HWND)lParam);
+		return TRUE;
 	}
 
 	return FALSE;
@@ -51,8 +55,9 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpID, LPCTSTR lpType)
 	HRSRC		hSrc;
 	DWORD		dwSize;
 	HMODULE		hInstace;
-	HGLOBAL		hGlobal;
 	IStream*	pStream;
+	HGLOBAL		hRes				= NULL;
+	HGLOBAL		hGlobal				= NULL;
 
 	hInstace = (HMODULE)GetWindowLong(m_hWnd, GWL_HINSTANCE);
 	hSrc = FindResource(hInstace, lpID, lpType);
@@ -62,73 +67,83 @@ LRESULT CGdipDialog::SetBk(LPCTSTR lpID, LPCTSTR lpType)
 		return -1;
 	}
 	dwSize = SizeofResource(hInstace, hSrc);
+	hRes = LoadResource(hInstace, hSrc);
+	hGlobal = GlobalAlloc(GMEM_FIXED, dwSize);
 
-	if(NULL != m_hGlobal)
-		GlobalFree(m_hGlobal);
-	m_hGlobal	= GlobalAlloc(GMEM_FIXED, dwSize);
-	BYTE*		pMem	= (BYTE*)GlobalLock(m_hGlobal);
+	BYTE*		pMem	= (BYTE*)GlobalLock(hGlobal);
+	memcpy(pMem, hRes, dwSize);
+	CreateStreamOnHGlobal(hGlobal, FALSE, &pStream);
 
-	hGlobal = LoadResource(hInstace, hSrc);
-	memcpy(pMem, hGlobal, dwSize);
-	CreateStreamOnHGlobal(m_hGlobal, FALSE, &pStream);
-
-	m_pBkImage = Bitmap::FromStream(pStream);
-
-	GlobalUnlock(m_hGlobal);
+	Bitmap*		pBmp	= Bitmap::FromStream(pStream);
+	if(NULL != pBmp)
+	{
+		SetBkBitmap(pBmp);
+		delete pBmp;
+	}
 	pStream->Release();
-	FreeResource(hGlobal);
+	FreeResource(hRes);
+	GlobalUnlock(hGlobal);
+	GlobalFree(hGlobal);
 
-	CreateRgnDlg();
 	return 0;
 }
 
 LRESULT CGdipDialog::SetBk(LPCTSTR lpPath)
 {
-	m_pBkImage = Bitmap::FromFile((WCHAR*)_bstr_t(lpPath));
+	Bitmap*		pBmp	= Bitmap::FromFile((WCHAR*)_bstr_t(lpPath));
 
-	CreateRgnDlg();
+	if(NULL != pBmp)
+	{
+		SetBkBitmap(pBmp);
+		delete pBmp;
+	}
+
 	return 0;
 }
 
+// 设置背景
+void CGdipDialog::SetBkBitmap(Bitmap* pBmp)
+{
+	// 设置窗口区域
+	CreateRgnDlg(pBmp);
+
+	// 设置背景BRUSH
+	if(NULL != m_hBkBrush)
+	{
+		DeleteObject((HGDIOBJ)m_hBkBrush);
+	}
+	HBITMAP		hBitmap;
+	pBmp->GetHBITMAP(m_bkColor, &hBitmap);
+	m_hBkBrush = CreatePatternBrush(hBitmap);
+}
 // 画背景
 LRESULT CGdipDialog::OnEraseBkGnd(HDC hDC)
 {
 	// 调用默认过程
-	if(NULL == m_pBkImage)
-	{
-		return CGdipWnd::DefWindowProc(WM_ERASEBKGND, (WPARAM)hDC, NULL);
-	}
-	// 调用绘制过程
 	RECT		rtClient;
-	Graphics	graphics(hDC);
 
-	graphics.Clear(Color(m_bkColor));
 	GetClientRect(m_hWnd, &rtClient);
-	Rect		rtDraw(rtClient.left, rtClient.top, rtClient.right - rtClient.left, rtClient.bottom - rtClient.top);
-	graphics.DrawImage(m_pBkImage,/* rtDraw,*/ 0, 0
-		, m_pBkImage->GetWidth()
-		, m_pBkImage->GetHeight()
-		/*, UnitDisplay*/);
+	FillRect(hDC, &rtClient, m_hBkBrush);
 
 	return 0;
 }
 
 // 创建不规则的窗体
-BOOL CGdipDialog::CreateRgnDlg()
+BOOL CGdipDialog::CreateRgnDlg(Bitmap* pBmp)
 {
-	if(NULL == m_pBkImage)
+	if(NULL == pBmp)
 		return FALSE;
 	
 	HRGN		hRgn				= ::CreateRectRgn(0, 0, 0, 0);
 	Rect		rect(0, 0, 1, 1);
 
-	for(int i = 0; i < m_pBkImage->GetWidth(); i++)
+	for(int i = 0; i < pBmp->GetWidth(); i++)
 	{
-		for(int j = 0; j < m_pBkImage->GetHeight(); j++)
+		for(int j = 0; j < pBmp->GetHeight(); j++)
 		{
 			Color		color;
 
-			m_pBkImage->GetPixel(i, j, &color);
+			pBmp->GetPixel(i, j, &color);
 			
 			if(0x0 != color.GetA())	// alpha 为0时不显示这块
 			{
@@ -164,4 +179,11 @@ BOOL CGdipDialog::CreateRgnDlg()
 LRESULT CGdipDialog::OnNcHisttest(int nX, int nY)
 {
 	return HTCAPTION;
+}
+
+// WM_CTLCOLORSTATIC
+LRESULT CGdipDialog::OnCtlColorStatic(HDC hDC, HWND hWnd)
+{
+	::SetBkMode(hDC, TRANSPARENT);
+	return (LRESULT)m_hBkBrush;
 }

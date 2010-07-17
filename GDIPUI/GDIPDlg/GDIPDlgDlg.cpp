@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CGDIPDlgDlg, CDialog)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDCANCEL, OnBnClickedCancel)
 	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -161,4 +162,14 @@ void CGDIPDlgDlg::OnBnClickedCancel()
 void CGDIPDlgDlg::OnBnClickedButton1()
 {
 	SetDlgItemText(IDC_INFO, "设置比较长的文本");
+}
+
+HBRUSH CGDIPDlgDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  Change any attributes of the DC here
+
+	// TODO:  Return a different brush if the default is not desired
+	return hbr;
 }

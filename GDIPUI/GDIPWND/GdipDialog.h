@@ -11,14 +11,15 @@ public:
 	virtual BOOL		WindowProc(UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 private:
-	Bitmap*		m_pBkImage;
-	HGLOBAL		m_hGlobal;
 	ARGB		m_bkColor;
+	HBRUSH		m_hBkBrush;
 
+	void		SetBkBitmap(Bitmap* pBmp);
 public:
 	virtual LRESULT		SetBk(LPCTSTR lpPath);
 	virtual LRESULT		SetBk(LPCTSTR lpID, LPCTSTR lpType);
 	virtual LRESULT		OnEraseBkGnd(HDC hDC);
-	virtual BOOL		CreateRgnDlg();
+	virtual BOOL		CreateRgnDlg(Bitmap* pBmp);
 	virtual LRESULT		OnNcHisttest(int nX, int nY);
+	virtual LRESULT		OnCtlColorStatic(HDC hDC, HWND hWnd);
 };
