@@ -51,6 +51,10 @@ CNetClientDlg::CNetClientDlg(CWnd* pParent /*=NULL*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_sockChart = NULL;
+	GetModuleFileName(NULL, m_strINI.GetBufferSetLength(1024), 1024);
+	m_strINI.ReleaseBuffer();
+	m_strINI = m_strINI.Left(m_strINI.ReverseFind('.'));
+	m_strINI += ".ini";
 }
 
 void CNetClientDlg::DoDataExchange(CDataExchange* pDX)
@@ -67,6 +71,7 @@ BEGIN_MESSAGE_MAP(CNetClientDlg, CDialog)
 // 	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BT_CONNECT, OnBnClickedBtConnect)
 	ON_BN_CLICKED(IDC_BT_SEND, OnBnClickedBtSend)
+	ON_BN_CLICKED(IDC_BT_SENDNAT, OnBnClickedBtSendnat)
 END_MESSAGE_MAP()
 
 
@@ -102,7 +107,14 @@ BOOL CNetClientDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	HANDLE		hTread		= 0;
 
-	hTread = CreateThread(NULL, 0, ListenSocketThread, this, 0, NULL);
+	if(1 == GetPrivateProfileInt("Nat", "TCP", 1, m_strINI.GetBuffer()))
+	{
+		hTread = CreateThread(NULL, 0, ListenSocketThread, this, 0, NULL);
+	}
+	else
+	{
+		hTread = CreateThread(NULL, 0, RecvFromSocketThread, this, 0, NULL);
+	}
 	CloseHandle(hTread);
 
 	EnableChartWin();
@@ -222,7 +234,7 @@ DWORD CNetClientDlg::ListenSocketThread(LPVOID lpParam)
 
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&flag, len);
 
-	addr.sin_port = htons(6666);
+	addr.sin_port = htons(GetPrivateProfileInt("Nat", "Port", 6666, pDlg->m_strINI.GetBuffer()));
 	addr.sin_family = AF_INET;
 	addr.sin_addr.S_un.S_addr = INADDR_ANY;
 	VERIFY(0 == bind(sock, (SOCKADDR*)&addr, sizeof(addr)));
@@ -289,16 +301,19 @@ void CNetClientDlg::ListenSocket(SOCKET sock)
 		{
 			SetDlgItemText(IDC_ET_IP, inet_ntoa(addr.sin_addr));
 			SetDlgItemText(IDC_ET_PORT, itoa((unsigned int)ntohs(addr.sin_port), szBuff, 10));
-			SetDlgItemText(IDC_ET_SENDPORT, "6666");
+			CString			strSend;
+			GetPrivateProfileString("Nat", "SendPort", "6666", strSend.GetBufferSetLength(1024), 1024, m_strINI.GetBuffer());
+			strSend.ReleaseBuffer();
+			SetDlgItemText(IDC_ET_SENDPORT, strSend.GetBuffer());
 
-			shutdown(sock, SD_BOTH);
-			flag = 0;
-			len = sizeof(flag);
-			//	setsockopt(m_sockChart, SOL_SOCKET, SO_DONTROUTE, (char *)&flag, len);
-			setsockopt(sock, SOL_SOCKET, SO_LINGER, (char *)&flag, len);
-			closesocket(sock);
+// 			shutdown(sock, SD_BOTH);
+// 			flag = 0;
+// 			len = sizeof(flag);
+// 			//	setsockopt(m_sockChart, SOL_SOCKET, SO_DONTROUTE, (char *)&flag, len);
+// 			setsockopt(sock, SOL_SOCKET, SO_LINGER, (char *)&flag, len);
+// 			closesocket(sock);
 
-			Sleep(1500);
+// 			Sleep(1500);
 			PostMessage(WM_COMMAND, IDC_BT_CONNECT);
 			break;
 		}
@@ -347,7 +362,7 @@ void CNetClientDlg::OnBnClickedBtConnect()
 		len = sizeof(flag);
 		setsockopt(m_sockChart, SOL_SOCKET, SO_REUSEADDR, (char *)&flag, len);
 
-		addr.sin_port = htons(6666);
+		addr.sin_port = htons(GetPrivateProfileInt("Nat", "Port", 6666, m_strINI.GetBuffer()));
 		addr.sin_family = AF_INET;
 		addr.sin_addr.S_un.S_addr = ADDR_ANY;
 		VERIFY(0 == bind(m_sockChart, (SOCKADDR*)&addr, sizeof(addr)));
@@ -394,4 +409,105 @@ void CNetClientDlg::OnBnClickedBtSend()
 	m_list.AddString(strMsg);
 
 	OnBnClickedBtConnect();
+}
+
+void CNetClientDlg::OnBnClickedBtSendnat()
+{
+	CString				strIP;
+	CString				strCmd;
+	SOCKET				sock;
+	int					nPort;
+	int					nSendPort;
+	int					flag		= 1;
+	int					len			= sizeof(flag);
+
+	// 连接
+	GetDlgItemText(IDC_ET_IP, strIP);
+	nPort = GetDlgItemInt(IDC_ET_PORT);
+
+	SOCKADDR_IN			addr		= {0};
+	int					nRev		= 0;
+
+	sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+	if(0 != nSendPort)
+	{
+		flag = 1;
+		len = sizeof(flag);
+		setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&flag, len);
+
+		addr.sin_port = htons(GetPrivateProfileInt("Nat", "Port", 6666, m_strINI.GetBuffer()));
+		addr.sin_family = AF_INET;
+		addr.sin_addr.S_un.S_addr = ADDR_ANY;
+		VERIFY(0 == bind(sock, (SOCKADDR*)&addr, sizeof(addr)));
+	}
+
+	addr.sin_port = htons(nPort);
+	addr.sin_family = AF_INET;
+	addr.sin_addr.S_un.S_addr = inet_addr(strIP.GetBuffer());
+
+	sendto(sock, "FFFF", 5, 0, (SOCKADDR *)&addr, sizeof(addr));
+	closesocket(sock);
+}
+
+DWORD CNetClientDlg::RecvFromSocketThread(LPVOID lpParam)
+{
+	CNetClientDlg*		pDlg		= (CNetClientDlg *)lpParam;
+	SOCKET				sock		= NULL;
+	SOCKADDR_IN			addr		= {0};
+	int					flag		= 1;
+	int					len			= sizeof(flag);
+
+	sock = socket(AF_INET, SOCK_DGRAM, 0);
+	ASSERT(INVALID_SOCKET  != sock);
+
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&flag, len);
+
+	addr.sin_port = htons(GetPrivateProfileInt("Nat", "Port", 6666, pDlg->m_strINI.GetBuffer()));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.S_un.S_addr = INADDR_ANY;
+	VERIFY(0 == bind(sock, (SOCKADDR*)&addr, sizeof(addr)));
+	
+	CHAR		szBuff[1024];
+	while(true)
+	{
+		memset(szBuff, 0, sizeof(szBuff));
+		SOCKADDR_IN			addrClient		= {0};
+		int					nLen			= sizeof(addrClient);
+
+		recvfrom(sock, szBuff, sizeof(szBuff), 0, (SOCKADDR *)&addrClient, &nLen);
+
+		CString		strLine;
+		strLine.Format("%s:%d say %s", inet_ntoa(addrClient.sin_addr), (unsigned int)ntohs(addrClient.sin_port), &szBuff[1]);
+		pDlg->m_list.AddString(strLine);
+
+		if('FFFF' == *(DWORD *)&szBuff[0])
+		{
+			pDlg->SetDlgItemText(IDC_ET_IP, inet_ntoa(addrClient.sin_addr));
+			pDlg->SetDlgItemText(IDC_ET_PORT, itoa((unsigned int)ntohs(addrClient.sin_port), szBuff, 10));
+			CString			strSend;
+			GetPrivateProfileString("Nat", "SendPort", "6666", strSend.GetBufferSetLength(1024), 1024, pDlg->m_strINI.GetBuffer());
+			strSend.ReleaseBuffer();
+			pDlg->SetDlgItemText(IDC_ET_SENDPORT, strSend.GetBuffer());
+
+			// 			shutdown(sock, SD_BOTH);
+			// 			flag = 0;
+			// 			len = sizeof(flag);
+			// 			//	setsockopt(m_sockChart, SOL_SOCKET, SO_DONTROUTE, (char *)&flag, len);
+			// 			setsockopt(sock, SOL_SOCKET, SO_LINGER, (char *)&flag, len);
+			// 			closesocket(sock);
+
+			// 			Sleep(1500);
+			pDlg->PostMessage(WM_COMMAND, IDC_BT_CONNECT);
+		}
+	}
+
+	shutdown(sock, SD_BOTH);
+	flag = 0;
+	len = sizeof(flag);
+	//	setsockopt(sock, SOL_SOCKET, SO_DONTROUTE, (char *)&flag, len);
+	setsockopt(sock, SOL_SOCKET, SO_LINGER, (char *)&flag, len);
+	closesocket(sock);
+
+	return 0;
 }

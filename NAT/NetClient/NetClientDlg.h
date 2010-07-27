@@ -22,6 +22,7 @@ public:
 // 实现
 protected:
 	HICON m_hIcon;
+	CString			m_strINI;
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
@@ -38,7 +39,9 @@ public:
 	void		EnableChartWin(BOOL bConnect = FALSE);
 public:
 	static DWORD CALLBACK	ListenSocketThread(LPVOID lpParam);
+	static DWORD CALLBACK	RecvFromSocketThread(LPVOID lpParam);
 	CListBox m_list;
 	afx_msg void OnBnClickedBtConnect();
 	afx_msg void OnBnClickedBtSend();
+	afx_msg void OnBnClickedBtSendnat();
 };

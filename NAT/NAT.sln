@@ -3,6 +3,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetClient", "NetClient\NetC
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NatServer", "NatServer\NatServer.vcproj", "{71A29757-458B-4D27-B0DF-0BAA7C058D60}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{B7F82AA1-1C45-4E5D-84AA-2EE27D88D255}.Debug.Build.0 = Debug|Win32
 		{B7F82AA1-1C45-4E5D-84AA-2EE27D88D255}.Release.ActiveCfg = Release|Win32
 		{B7F82AA1-1C45-4E5D-84AA-2EE27D88D255}.Release.Build.0 = Release|Win32
+		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Debug.ActiveCfg = Debug|Win32
+		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Debug.Build.0 = Debug|Win32
+		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Release.ActiveCfg = Release|Win32
+		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

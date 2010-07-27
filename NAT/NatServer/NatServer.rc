@@ -48,7 +48,7 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\NetClient.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""res\\NatServer.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
     "#include ""afxres.rc""         // 标准组件\r\n"
     "#endif\r\n"
     "\0"
@@ -64,7 +64,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\NetClient.ico"
+IDR_MAINFRAME           ICON                    "res\\NatServer.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -74,57 +74,27 @@ IDR_MAINFRAME           ICON                    "res\\NetClient.ico"
 IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
-CAPTION "关于 NetClient"
+CAPTION "关于 NatServer"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "NetClient Version 1.0",IDC_STATIC,40,10,119,8,
+    LTEXT           "NatServer Version 1.0",IDC_STATIC,40,10,119,8,
                     SS_NOPREFIX
     LTEXT           "Copyright (C) 2010",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_NETCLIENT_DIALOG DIALOGEX 0, 0, 320, 200
+IDD_NATSERVER_DIALOG DIALOGEX 0, 0, 320, 200
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
     WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "NetClient"
+CAPTION "NatServer"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    LISTBOX         IDC_LIST1,7,7,158,186,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+    DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
+    PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
+    LISTBOX         IDC_LIST1,7,7,251,186,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
                     WS_TABSTOP
-    GROUPBOX        "聊天",IDC_STATIC,171,7,142,186
-    EDITTEXT        IDC_ET_IP,191,23,113,14,ES_AUTOHSCROLL
-    LTEXT           "IP:",IDC_STATIC,178,27,10,8
-    LTEXT           "端口:",IDC_STATIC,178,46,17,8
-    EDITTEXT        IDC_ET_PORT,199,43,40,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "连接",IDC_BT_CONNECT,270,62,34,14
-    EDITTEXT        IDC_ET_MSG,178,83,126,83,ES_MULTILINE | ES_AUTOVSCROLL | 
-                    WS_VSCROLL
-    PUSHBUTTON      "Send",IDC_BT_SEND,255,170,50,14
-    LTEXT           "发送端口:",IDC_STATIC,180,66,31,8
-    EDITTEXT        IDC_ET_SENDPORT,215,63,40,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Send Nat",IDC_BT_SENDNAT,178,170,50,14
-END
-
-IDD_NATCLIENT DIALOGEX 0, 0, 343, 234
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
-CAPTION "Dialog"
-FONT 9, "MS Shell Dlg", 0, 0, 0x0
-BEGIN
-    DEFPUSHBUTTON   "连接",IDOK,286,7,50,16
-    LISTBOX         IDC_LIST1,7,7,268,102,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
-                    WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "刷新",IDC_BUTTON1,149,130,50,14
-    LISTBOX         IDC_LIST2,14,131,123,89,LBS_NOINTEGRALHEIGHT | 
-                    WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "Static",IDC_STATIC,7,119,329,108
-    PUSHBUTTON      "请求聊天",IDC_BT_HOLE,202,130,50,14
-    EDITTEXT        IDC_EDIT1,149,206,143,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "发送",IDC_BT_SEND,295,206,32,14
-    EDITTEXT        IDC_EDIT2,149,149,178,54,ES_MULTILINE | ES_AUTOVSCROLL | 
-                    WS_VSCROLL
 END
 
 
@@ -153,9 +123,9 @@ BEGIN
             VALUE "CompanyName", "TODO: <公司名>"
             VALUE "FileDescription", "TODO: <文件说明>"
             VALUE "FileVersion", "1.0.0.1"
-            VALUE "InternalName", "NetClient.exe"
+            VALUE "InternalName", "NatServer.exe"
             VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
-            VALUE "OriginalFilename", "NetClient.exe"
+            VALUE "OriginalFilename", "NatServer.exe"
             VALUE "ProductName", "TODO: <产品名>"
             VALUE "ProductVersion", "1.0.0.1"
         END
@@ -183,20 +153,12 @@ BEGIN
         BOTTOMMARGIN, 48
     END
 
-    IDD_NETCLIENT_DIALOG, DIALOG
+    IDD_NATSERVER_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 313
         TOPMARGIN, 7
         BOTTOMMARGIN, 193
-    END
-
-    IDD_NATCLIENT, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 336
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 227
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -209,7 +171,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDS_ABOUTBOX            "关于 NetClient(&A)..."
+    IDS_ABOUTBOX            "关于 NatServer(&A)..."
 END
 
 #endif    // Chinese (P.R.C.) resources
@@ -230,7 +192,7 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\NetClient.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "res\NatServer.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
 #include "afxres.rc"         // 标准组件
 #endif
 

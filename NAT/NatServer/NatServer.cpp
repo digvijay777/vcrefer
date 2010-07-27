@@ -1,40 +1,39 @@
-// NetClient.cpp : 定义应用程序的类行为。
+// NatServer.cpp : 定义应用程序的类行为。
 //
 
 #include "stdafx.h"
-#include "NetClient.h"
-#include "NetClientDlg.h"
-#include "NatClient.h"
+#include "NatServer.h"
+#include "NatServerDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CNetClientApp
+// CNatServerApp
 
-BEGIN_MESSAGE_MAP(CNetClientApp, CWinApp)
+BEGIN_MESSAGE_MAP(CNatServerApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CNetClientApp 构造
+// CNatServerApp 构造
 
-CNetClientApp::CNetClientApp()
+CNatServerApp::CNatServerApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
 
-// 唯一的一个 CNetClientApp 对象
+// 唯一的一个 CNatServerApp 对象
 
-CNetClientApp theApp;
+CNatServerApp theApp;
 
 
-// CNetClientApp 初始化
+// CNatServerApp 初始化
 
-BOOL CNetClientApp::InitInstance()
+BOOL CNatServerApp::InitInstance()
 {
 	VERIFY(AfxSocketInit());
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
@@ -55,8 +54,7 @@ BOOL CNetClientApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-// 	CNetClientDlg dlg;
-	CNatClient		dlg;
+	CNatServerDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
