@@ -217,24 +217,41 @@ void CNatClient::StartHole(int nPort)
 	addr.sin_family = AF_INET;
 	bind(sock, (SOCKADDR *)&addr, sizeof(addr));
 
+	ULONG		argp		= 1;
+	ioctlsocket(sock, FIONBIO, &argp);
 	// 等待商口发过来
 	addr.sin_addr.S_un.S_addr = inet_addr(m_strHoleIP.GetBuffer());
 	WaitForSingleObject(m_hEvent, INFINITE);
 	addr.sin_port = htons(m_nPortChart);
+	strmsg.Format("start hole port: %d", m_nPortChart);
+	m_list.AddString(strmsg);
 
-	for(int i = 30; i >= 0; i--)
+	for(int i = 3000; i >= 0; i--)
 	{
 		nerr = connect(sock, (SOCKADDR *)&addr, sizeof(addr));
-		if(0 == nerr)
+
+		struct timeval	LmtTime; 
+		fd_set			SockList;
+		int				nError;
+
+		FD_ZERO(&SockList);
+		FD_SET(sock, &SockList);
+
+		LmtTime.tv_sec = 1; //连接超时: 秒 
+		LmtTime.tv_usec = 0; 
+		nerr = select(0, 0, &SockList, 0, &LmtTime); 
+		if(nerr == 1)
 		{
 			m_sockChart = sock;
+			argp = 0;
+			ioctlsocket(sock, FIONBIO, &argp);
 			GetDlgItem(IDC_BT_SEND)->EnableWindow(TRUE);
+			m_list.AddString("Connect to desc.");
 			CreateThread(NULL, 0, OnChart, NULL, 0, NULL);
-			break;
 		}
 // 		if(0 != m_sockChart)
 // 			break;
-		Sleep(1000);
+// 		Sleep(1);
 	}	
 }
 
@@ -271,6 +288,7 @@ void CNatClient::ConnectHole(int nPort)
 		{
 			m_sockChart = client;
 			GetDlgItem(IDC_BT_SEND)->EnableWindow(TRUE);
+			m_list.AddString("accept src connect.");
 			CreateThread(NULL, 0, OnChart, NULL, 0, NULL);
 			/*break;*/
 		}
@@ -308,6 +326,8 @@ void CNatClient::StartListen()
 
 			m_nPortChart = ntohs(pSendaddr->sin_port);
 			SetEvent(m_hEvent);
+			strMsg.Format("Get hole port: %d", m_nPortChart);
+			m_list.AddString(strMsg);
 			
 			// 发送请求
 			SOCKET		sock;
@@ -358,6 +378,8 @@ void CNatClient::StartListen()
 			SOCKADDR_IN*		pSendaddr		= (SOCKADDR_IN*)&szBuffer[6];
 
 			m_nPortChart = ntohs(pSendaddr->sin_port);
+			strMsg.Format("Request hole port: %d", m_nPortChart);
+			m_list.AddString(strMsg);
 			SetEvent(m_hEvent);
 
 			break;

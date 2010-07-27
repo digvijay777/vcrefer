@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NatServer", "NatServer\NatS
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UpnpTest", "UpnpTest\UpnpTest.vcproj", "{C764B4C9-3005-4A1F-9ECC-9C00AC6017A1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -21,6 +25,10 @@ Global
 		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Debug.Build.0 = Debug|Win32
 		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Release.ActiveCfg = Release|Win32
 		{71A29757-458B-4D27-B0DF-0BAA7C058D60}.Release.Build.0 = Release|Win32
+		{C764B4C9-3005-4A1F-9ECC-9C00AC6017A1}.Debug.ActiveCfg = Debug|Win32
+		{C764B4C9-3005-4A1F-9ECC-9C00AC6017A1}.Debug.Build.0 = Debug|Win32
+		{C764B4C9-3005-4A1F-9ECC-9C00AC6017A1}.Release.ActiveCfg = Release|Win32
+		{C764B4C9-3005-4A1F-9ECC-9C00AC6017A1}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

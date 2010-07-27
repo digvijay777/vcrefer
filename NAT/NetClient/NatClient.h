@@ -22,6 +22,7 @@ public:
 	int				m_nPortChart;
 	HANDLE			m_hEvent;
 	CString			m_strHoleIP;
+	BOOL			m_bHole;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
