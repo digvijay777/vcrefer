@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProxyMon", "ProxyMon\ProxyMon.vcproj", "{1AE08571-FC86-43F5-95E2-637D4B94D952}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProxy", "TestProxy\TestProxy.vcproj", "{408981D6-249D-49CA-80F0-70AA70124280}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProxy", "TestProxy\TestProxy.vcproj", "{408981D6-249D-49CA-80F0-70AA70124280}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DetourMon", "DetourMon\DetourMon.vcproj", "{EAAD3679-2993-4A36-8FFA-6D0D697A499A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -13,14 +13,14 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{1AE08571-FC86-43F5-95E2-637D4B94D952}.Debug.ActiveCfg = Debug|Win32
-		{1AE08571-FC86-43F5-95E2-637D4B94D952}.Debug.Build.0 = Debug|Win32
-		{1AE08571-FC86-43F5-95E2-637D4B94D952}.Release.ActiveCfg = Release|Win32
-		{1AE08571-FC86-43F5-95E2-637D4B94D952}.Release.Build.0 = Release|Win32
 		{408981D6-249D-49CA-80F0-70AA70124280}.Debug.ActiveCfg = Debug|Win32
 		{408981D6-249D-49CA-80F0-70AA70124280}.Debug.Build.0 = Debug|Win32
 		{408981D6-249D-49CA-80F0-70AA70124280}.Release.ActiveCfg = Release|Win32
 		{408981D6-249D-49CA-80F0-70AA70124280}.Release.Build.0 = Release|Win32
+		{EAAD3679-2993-4A36-8FFA-6D0D697A499A}.Debug.ActiveCfg = Debug|Win32
+		{EAAD3679-2993-4A36-8FFA-6D0D697A499A}.Debug.Build.0 = Debug|Win32
+		{EAAD3679-2993-4A36-8FFA-6D0D697A499A}.Release.ActiveCfg = Release|Win32
+		{EAAD3679-2993-4A36-8FFA-6D0D697A499A}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

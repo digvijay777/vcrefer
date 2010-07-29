@@ -151,7 +151,7 @@ HCURSOR CTestProxyDlg::OnQueryDragIcon()
 
 void CTestProxyDlg::OnBnClickedButton1()
 {
-	HINSTANCE		hInst	= LoadLibrary("../../ProxyMon/debug/ProxyMon.dll");
+	HINSTANCE		hInst	= LoadLibrary("DetourMon.dll");
 	if(NULL != hInst)
 	{
 		// FreeLibrary(hInst);

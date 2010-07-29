@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "PreConnect.h"
+#include "ProxyDetour.h"
 
 HMODULE			g_hInstance		= NULL;
 
@@ -15,11 +15,11 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	switch(ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		g_preConnect.Attach();
+		g_proxyDetour.Attach();
 		DisableThreadLibraryCalls(g_hInstance);
 		break;
 	case DLL_PROCESS_DETACH:
-		g_preConnect.Detach();
+		g_proxyDetour.Detach();
 		break;
 	}
     return TRUE;
