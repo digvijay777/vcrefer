@@ -99,7 +99,7 @@ BOOL CGDIPDlgDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	GdipWnd::Dlg_SetBk(GetSafeHwnd(), IDR_DLGBK, "PNG");
+// 	GdipWnd::Dlg_SetBk(GetSafeHwnd(), IDR_DLGBK, "PNG");
 
 	gAboutDlg.Create(MAKEINTRESOURCE(IDD_ABOUTBOX), this);
 	gAboutDlg.ShowWindow(SW_SHOW);
