@@ -1,10 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-<title>无标题文档</title>
+<title>菜单</title>
+<link rel="stylesheet" href="all.css">
+<style type="text/css">
+<!--
+div.PanelItem{
+	width:100%;
+	height:30px;
+	text-align:center;
+	vertical-align:bottom;
+	position: relative;
+	cursor:hand;
+}
+div.Panel{
+	height: 100%;
+	width: 100%;
+	z-index: 0;
+	position: relative;
+}
+-->
+</style>
+<script language="javascript">
+<!--
+var gPanel = null
+
+// 加载页面
+function OnBodyLoad()
+{
+	gPanel = [
+		{id:idShowGroup, bkImg:"img/group.png", bkImgSel:"", title:"防毒墙群管理"}
+		, {id:idShowUser, bkImg:"img/user.png", bkImgSel:"", title:"账号管理"}
+	];
+	
+	// 动态添加
+	for(var i = 0; i < gPanel.length; i++)
+	{
+		var html	= '<div class="PanelItem" id="PanelItem' + i + '" onClick="OnSelPanel(' + i + ')"';
+		
+		html += ' onmouseover="this.style.cursor=\'hand\';" onmouseout="this.style.cursor=\'auto\';">';
+		html += '<img width="16" height="16" src="' + gPanel[i].bkImg + '" />';
+		html += '</div>';
+		
+		idMenu.insertAdjacentHTML("beforeEnd", html);
+	}
+	// 选择元素
+	OnSelPanel(0);
+}
+
+// 单击其中一个面板
+function OnSelPanel(nIdex)
+{
+	for(var i = 0; i < gPanel.length; i++)
+	{
+		var obj = document.getElementById("PanelItem" + i);
+		
+		if(null == obj)
+			continue;
+		if(i == nIdex)
+		{
+			obj.style.backgroundColor = "#FFFFFF";
+			gPanel[i].id.style.display = "";
+			lblTitle.innerText = gPanel[i].title;
+		}
+		else
+		{
+			obj.style.backgroundColor = "";
+			gPanel[i].id.style.display = "none";
+		}
+	}
+}
+-->
+</script>
 </head>
 
-<body bgcolor="#CCCCCC">
+<body scroll=no onLoad="OnBodyLoad()">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="20" align="center" bgcolor="#7B869A"></td>
+	    <td height="20" align="center" bgcolor="#7B869A"><label id="lblTitle">&nbsp;</label></td>
+	</tr>
+	<tr>
+		<td width="25" height="*" bgcolor="#9900FF">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="right" valign="top">
+					<br>
+					<div id="idMenu">					</div>				</td>
+			</tr>
+			<tr>
+				<td valign="bottom"><img src="#" width="100%" height="100"></td>
+			</tr>
+		  </table>	  	</td>
+		<td width="*">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="100%" align="left">
+				<!-- 组面板 -->
+				<div id="idShowGroup" style="display:none" class="Panel" scroll=no>
+					<iframe src="menu_group.html" frameborder="0" scrolling="auto" width="100%" height="100%"></iframe>
+				</div>
+				<!-- 用户管理 -->
+				<div id="idShowUser" style="display:none" class="Panel">
+					<iframe src="menu_user.html" frameborder="0" scrolling="auto" width="100%" height="100%"></iframe>
+				</div>				</td>
+			</tr>
+			</table>	  </td>
+	</tr>
+</table>
 </body>
 </html>
