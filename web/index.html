@@ -2,6 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>无标题文档</title>
+<script language="javascript" src="Spliter.js"></script>
 <style type="text/css">
 <!--
 #idFrames{
@@ -23,6 +24,13 @@ iframe{
 	height: 100%;
 	width: 100%;
 }
+.Spliter_LR{
+	background-color:#99CCCC;
+}
+.Spliter_LR_Hover{
+	background-color:#CCCCCC;
+	cursor:w-resize;
+}
 -->
 </style>
 <script language="javascript">
@@ -39,13 +47,13 @@ function OnBodyLoad()
 		// 登录成功
 		idFrames.style.display = "";
 		idLoading.style.display = "none";
-		setTimeout("OnBreak('连接中断')", 4000);
+		SpliterBorder(Frame_Spliter, Frame_Left_td, true, 'Spliter_LR', 'Spliter_LR_Hover', 150, 600);
 	}
 	else
 	{
 		alert(str);
 		SetMethodToServer("LogFailed");
-	}	
+	}
 }
 
 // 连接中断
@@ -70,14 +78,15 @@ function SetMethodToServer(cmd)
 <div id="idFrames" style="display:none;">
 	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-	  <td colspan="2" height="100" id="Frame_Top_td"><iframe name="Frame_Top" src="top.html" frameborder="0" scrolling="no"></iframe></td>
+	  <td colspan="3" height="100" id="Frame_Top_td"><iframe name="Frame_Top" src="top.html" frameborder="0" scrolling="no"></iframe></td>
 	</tr>
 	<tr>
-	  <td width="100" height="*" id="Frame_Left_td"><iframe name="Frame_Left" src="menu.html" frameborder="0" scrolling="auto"></iframe></td>
+	  <td width="150" height="*" id="Frame_Left_td"><iframe name="Frame_Left" src="menu.html" frameborder="0" scrolling="auto"></iframe></td>
+	  <td width="5" id="Frame_Spliter" class="Spliter_LR"><label></label></td>
 	  <td width="*" id="Frame_Main_td"><iframe name="Frame_Main" src="main.html" frameborder="0" scrolling="auto"></iframe></td>
 	</tr>
 	<tr>
-	  <td colspan="2" height="80" id="Frame_Bottom_td"><iframe name="Frame_Bottom" src="bottom.html" frameborder="0" scrolling="no"></iframe></td>
+	  <td colspan="3" height="80" id="Frame_Bottom_td"><iframe name="Frame_Bottom" src="bottom.html" frameborder="0" scrolling="no"></iframe></td>
 	</tr>
   </table>
 </div>
