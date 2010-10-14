@@ -1,214 +1,140 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7,10"
+	Version="7.10"
 	Name="win-system"
 	ProjectGUID="{56EADC5B-9C2C-431C-9275-98FE9088518B}"
 	RootNamespace="winsystem"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
-	>
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Wtsapi32.lib"
-			/>
+				AdditionalDependencies="Wtsapi32.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..;."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Wtsapi32.lib"
-			/>
+				AdditionalDependencies="Wtsapi32.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="DebugNoUnicode|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="0"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Wtsapi32.lib"
-			/>
+				AdditionalDependencies="Wtsapi32.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="ReleaseNoUnicode|Win32"
@@ -216,65 +142,42 @@
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..;."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Wtsapi32.lib"
-			/>
+				AdditionalDependencies="Wtsapi32.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -283,277 +186,209 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\AnonymousPipe.cpp"
-				>
+				RelativePath=".\AnonymousPipe.cpp">
 			</File>
 			<File
-				RelativePath=".\AnonymousPipeFactory.cpp"
-				>
+				RelativePath=".\AnonymousPipeFactory.cpp">
 			</File>
 			<File
-				RelativePath=".\AutoImpersonator.cpp"
-				>
+				RelativePath=".\AutoImpersonator.cpp">
 			</File>
 			<File
-				RelativePath=".\CtrlAltDelSimulator.cpp"
-				>
+				RelativePath=".\CtrlAltDelSimulator.cpp">
 			</File>
 			<File
-				RelativePath=".\CurrentConsoleProcess.cpp"
-				>
+				RelativePath=".\CurrentConsoleProcess.cpp">
 			</File>
 			<File
-				RelativePath=".\DynamicLibrary.cpp"
-				>
+				RelativePath=".\DynamicLibrary.cpp">
 			</File>
 			<File
-				RelativePath=".\Environment.cpp"
-				>
+				RelativePath=".\Environment.cpp">
 			</File>
 			<File
-				RelativePath=".\Impersonator.cpp"
-				>
+				RelativePath=".\Impersonator.cpp">
 			</File>
 			<File
-				RelativePath=".\InputInjector.cpp"
-				>
+				RelativePath=".\InputInjector.cpp">
 			</File>
 			<File
-				RelativePath=".\Keyboard.cpp"
-				>
+				RelativePath=".\Keyboard.cpp">
 			</File>
 			<File
-				RelativePath=".\LocalWindowsApplication.cpp"
-				>
+				RelativePath=".\LocalWindowsApplication.cpp">
 			</File>
 			<File
-				RelativePath=".\Pipe.cpp"
-				>
+				RelativePath=".\Pipe.cpp">
 			</File>
 			<File
-				RelativePath=".\PipeClient.cpp"
-				>
+				RelativePath=".\PipeClient.cpp">
 			</File>
 			<File
-				RelativePath=".\PipeServer.cpp"
-				>
+				RelativePath=".\PipeServer.cpp">
 			</File>
 			<File
-				RelativePath=".\Process.cpp"
-				>
+				RelativePath=".\Process.cpp">
 			</File>
 			<File
-				RelativePath=".\Registry.cpp"
-				>
+				RelativePath=".\Registry.cpp">
 			</File>
 			<File
-				RelativePath=".\RegistryKey.cpp"
-				>
+				RelativePath=".\RegistryKey.cpp">
 			</File>
 			<File
-				RelativePath=".\SCMClient.cpp"
-				>
+				RelativePath=".\SCMClient.cpp">
 			</File>
 			<File
-				RelativePath=".\SecurityAttributes.cpp"
-				>
+				RelativePath=".\SecurityAttributes.cpp">
 			</File>
 			<File
-				RelativePath=".\security\SecurityDescriptor.cpp"
-				>
+				RelativePath=".\security\SecurityDescriptor.cpp">
 			</File>
 			<File
-				RelativePath=".\security\SecurityIdentifier.cpp"
-				>
+				RelativePath=".\security\SecurityIdentifier.cpp">
 			</File>
 			<File
-				RelativePath=".\Service.cpp"
-				>
+				RelativePath=".\Service.cpp">
 			</File>
 			<File
-				RelativePath=".\SharedMemory.cpp"
-				>
+				RelativePath=".\SharedMemory.cpp">
 			</File>
 			<File
-				RelativePath=".\Shell.cpp"
-				>
+				RelativePath=".\Shell.cpp">
 			</File>
 			<File
-				RelativePath=".\SystemException.cpp"
-				>
+				RelativePath=".\SystemException.cpp">
 			</File>
 			<File
-				RelativePath=".\UipiControl.cpp"
-				>
+				RelativePath=".\UipiControl.cpp">
 			</File>
 			<File
-				RelativePath=".\VersionInfo.cpp"
-				>
+				RelativePath=".\VersionInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsApplication.cpp"
-				>
+				RelativePath=".\WindowsApplication.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsEvent.cpp"
-				>
+				RelativePath=".\WindowsEvent.cpp">
 			</File>
 			<File
-				RelativePath=".\WinStaLibrary.cpp"
-				>
+				RelativePath=".\WinStaLibrary.cpp">
 			</File>
 			<File
-				RelativePath=".\WinTimeMillis.cpp"
-				>
+				RelativePath=".\WinTimeMillis.cpp">
 			</File>
 			<File
-				RelativePath=".\Workstation.cpp"
-				>
+				RelativePath=".\Workstation.cpp">
 			</File>
 			<File
-				RelativePath=".\WTS.cpp"
-				>
+				RelativePath=".\WTS.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\AnonymousPipe.h"
-				>
+				RelativePath=".\AnonymousPipe.h">
 			</File>
 			<File
-				RelativePath=".\AnonymousPipeFactory.h"
-				>
+				RelativePath=".\AnonymousPipeFactory.h">
 			</File>
 			<File
-				RelativePath=".\AutoImpersonator.h"
-				>
+				RelativePath=".\AutoImpersonator.h">
 			</File>
 			<File
-				RelativePath=".\CtrlAltDelSimulator.h"
-				>
+				RelativePath=".\CtrlAltDelSimulator.h">
 			</File>
 			<File
-				RelativePath=".\CurrentConsoleProcess.h"
-				>
+				RelativePath=".\CurrentConsoleProcess.h">
 			</File>
 			<File
-				RelativePath=".\DynamicLibrary.h"
-				>
+				RelativePath=".\DynamicLibrary.h">
 			</File>
 			<File
-				RelativePath=".\Environment.h"
-				>
+				RelativePath=".\Environment.h">
 			</File>
 			<File
-				RelativePath=".\Impersonator.h"
-				>
+				RelativePath=".\Impersonator.h">
 			</File>
 			<File
-				RelativePath=".\InputInjector.h"
-				>
+				RelativePath=".\InputInjector.h">
 			</File>
 			<File
-				RelativePath=".\Keyboard.h"
-				>
+				RelativePath=".\Keyboard.h">
 			</File>
 			<File
-				RelativePath=".\LocalWindowsApplication.h"
-				>
+				RelativePath=".\LocalWindowsApplication.h">
 			</File>
 			<File
-				RelativePath=".\Pipe.h"
-				>
+				RelativePath=".\Pipe.h">
 			</File>
 			<File
-				RelativePath=".\PipeClient.h"
-				>
+				RelativePath=".\PipeClient.h">
 			</File>
 			<File
-				RelativePath=".\PipeServer.h"
-				>
+				RelativePath=".\PipeServer.h">
 			</File>
 			<File
-				RelativePath=".\Process.h"
-				>
+				RelativePath=".\Process.h">
 			</File>
 			<File
-				RelativePath=".\Registry.h"
-				>
+				RelativePath=".\Registry.h">
 			</File>
 			<File
-				RelativePath=".\RegistryKey.h"
-				>
+				RelativePath=".\RegistryKey.h">
 			</File>
 			<File
-				RelativePath=".\SCMClient.h"
-				>
+				RelativePath=".\SCMClient.h">
 			</File>
 			<File
-				RelativePath=".\SecurityAttributes.h"
-				>
+				RelativePath=".\SecurityAttributes.h">
 			</File>
 			<File
-				RelativePath=".\security\SecurityDescriptor.h"
-				>
+				RelativePath=".\security\SecurityDescriptor.h">
 			</File>
 			<File
-				RelativePath=".\security\SecurityIdentifier.h"
-				>
+				RelativePath=".\security\SecurityIdentifier.h">
 			</File>
 			<File
-				RelativePath=".\Service.h"
-				>
+				RelativePath=".\Service.h">
 			</File>
 			<File
-				RelativePath=".\SharedMemory.h"
-				>
+				RelativePath=".\SharedMemory.h">
 			</File>
 			<File
-				RelativePath=".\Shell.h"
-				>
+				RelativePath=".\Shell.h">
 			</File>
 			<File
-				RelativePath=".\SystemException.h"
-				>
+				RelativePath=".\SystemException.h">
 			</File>
 			<File
-				RelativePath=".\UipiControl.h"
-				>
+				RelativePath=".\UipiControl.h">
 			</File>
 			<File
-				RelativePath=".\VersionInfo.h"
-				>
+				RelativePath=".\VersionInfo.h">
 			</File>
 			<File
-				RelativePath=".\WindowsApplication.h"
-				>
+				RelativePath=".\WindowsApplication.h">
 			</File>
 			<File
-				RelativePath=".\WindowsEvent.h"
-				>
+				RelativePath=".\WindowsEvent.h">
 			</File>
 			<File
-				RelativePath=".\WinStaLibrary.h"
-				>
+				RelativePath=".\WinStaLibrary.h">
 			</File>
 			<File
-				RelativePath=".\WinTimeMillis.h"
-				>
+				RelativePath=".\WinTimeMillis.h">
 			</File>
 			<File
-				RelativePath=".\Workstation.h"
-				>
+				RelativePath=".\Workstation.h">
 			</File>
 			<File
-				RelativePath=".\WTS.h"
-				>
+				RelativePath=".\WTS.h">
 			</File>
 		</Filter>
 	</Files>

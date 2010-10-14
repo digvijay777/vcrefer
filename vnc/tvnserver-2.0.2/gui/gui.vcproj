@@ -1,211 +1,137 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7,10"
+	Version="7.10"
 	Name="gui"
 	ProjectGUID="{97D4F12A-916C-4CB2-B4D9-F0D35128065A}"
 	RootNamespace="gui"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
-	>
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="DebugNoUnicode|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="0"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="ReleaseNoUnicode|Win32"
@@ -213,64 +139,41 @@
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -279,288 +182,218 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\BalloonTip.cpp"
-				>
+				RelativePath=".\BalloonTip.cpp">
 			</File>
 			<File
-				RelativePath=".\BaseDialog.cpp"
-				>
+				RelativePath=".\BaseDialog.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\Bitmap.cpp"
-				>
+				RelativePath=".\drawing\Bitmap.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\BitmapGraphics.cpp"
-				>
+				RelativePath=".\drawing\BitmapGraphics.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\Brush.cpp"
-				>
+				RelativePath=".\drawing\Brush.cpp">
 			</File>
 			<File
-				RelativePath=".\CheckBox.cpp"
-				>
+				RelativePath=".\CheckBox.cpp">
 			</File>
 			<File
-				RelativePath=".\ComboBox.cpp"
-				>
+				RelativePath=".\ComboBox.cpp">
 			</File>
 			<File
-				RelativePath=".\CommonControlsEx.cpp"
-				>
+				RelativePath=".\CommonControlsEx.cpp">
 			</File>
 			<File
-				RelativePath=".\Control.cpp"
-				>
+				RelativePath=".\Control.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\DeviceContext.cpp"
-				>
+				RelativePath=".\drawing\DeviceContext.cpp">
 			</File>
 			<File
-				RelativePath=".\FilteredTextBox.cpp"
-				>
+				RelativePath=".\FilteredTextBox.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\Graphics.cpp"
-				>
+				RelativePath=".\drawing\Graphics.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\Icon.cpp"
-				>
+				RelativePath=".\drawing\Icon.cpp">
 			</File>
 			<File
-				RelativePath=".\ImagedButton.cpp"
-				>
+				RelativePath=".\ImagedButton.cpp">
 			</File>
 			<File
-				RelativePath=".\ListBox.cpp"
-				>
+				RelativePath=".\ListBox.cpp">
 			</File>
 			<File
-				RelativePath=".\ListView.cpp"
-				>
+				RelativePath=".\ListView.cpp">
 			</File>
 			<File
-				RelativePath=".\Menu.cpp"
-				>
+				RelativePath=".\Menu.cpp">
 			</File>
 			<File
-				RelativePath=".\NotifyIcon.cpp"
-				>
+				RelativePath=".\NotifyIcon.cpp">
 			</File>
 			<File
-				RelativePath=".\NotifyIconWindow.cpp"
-				>
+				RelativePath=".\NotifyIconWindow.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\Pen.cpp"
-				>
+				RelativePath=".\drawing\Pen.cpp">
 			</File>
 			<File
-				RelativePath=".\ProgressBar.cpp"
-				>
+				RelativePath=".\ProgressBar.cpp">
 			</File>
 			<File
-				RelativePath=".\drawing\SolidBrush.cpp"
-				>
+				RelativePath=".\drawing\SolidBrush.cpp">
 			</File>
 			<File
-				RelativePath=".\SpinControl.cpp"
-				>
+				RelativePath=".\SpinControl.cpp">
 			</File>
 			<File
-				RelativePath=".\StringFilter.cpp"
-				>
+				RelativePath=".\StringFilter.cpp">
 			</File>
 			<File
-				RelativePath=".\Tab.cpp"
-				>
+				RelativePath=".\Tab.cpp">
 			</File>
 			<File
-				RelativePath=".\TabControl.cpp"
-				>
+				RelativePath=".\TabControl.cpp">
 			</File>
 			<File
-				RelativePath=".\TextBox.cpp"
-				>
+				RelativePath=".\TextBox.cpp">
 			</File>
 			<File
-				RelativePath=".\ThemeLib.cpp"
-				>
+				RelativePath=".\ThemeLib.cpp">
 			</File>
 			<File
-				RelativePath=".\Tooltip.cpp"
-				>
+				RelativePath=".\Tooltip.cpp">
 			</File>
 			<File
-				RelativePath=".\Trackbar.cpp"
-				>
+				RelativePath=".\Trackbar.cpp">
 			</File>
 			<File
-				RelativePath=".\Window.cpp"
-				>
+				RelativePath=".\Window.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowFinder.cpp"
-				>
+				RelativePath=".\WindowFinder.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowProcHolder.cpp"
-				>
+				RelativePath=".\WindowProcHolder.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\BalloonTip.h"
-				>
+				RelativePath=".\BalloonTip.h">
 			</File>
 			<File
-				RelativePath=".\BaseDialog.h"
-				>
+				RelativePath=".\BaseDialog.h">
 			</File>
 			<File
-				RelativePath=".\drawing\Bitmap.h"
-				>
+				RelativePath=".\drawing\Bitmap.h">
 			</File>
 			<File
-				RelativePath=".\drawing\BitmapGraphics.h"
-				>
+				RelativePath=".\drawing\BitmapGraphics.h">
 			</File>
 			<File
-				RelativePath=".\drawing\Brush.h"
-				>
+				RelativePath=".\drawing\Brush.h">
 			</File>
 			<File
-				RelativePath=".\CheckBox.h"
-				>
+				RelativePath=".\CheckBox.h">
 			</File>
 			<File
-				RelativePath=".\ComboBox.h"
-				>
+				RelativePath=".\ComboBox.h">
 			</File>
 			<File
-				RelativePath=".\CommonControlsEx.h"
-				>
+				RelativePath=".\CommonControlsEx.h">
 			</File>
 			<File
-				RelativePath=".\Control.h"
-				>
+				RelativePath=".\Control.h">
 			</File>
 			<File
-				RelativePath=".\drawing\DeviceContext.h"
-				>
+				RelativePath=".\drawing\DeviceContext.h">
 			</File>
 			<File
-				RelativePath=".\FilteredTextBox.h"
-				>
+				RelativePath=".\FilteredTextBox.h">
 			</File>
 			<File
-				RelativePath=".\drawing\Graphics.h"
-				>
+				RelativePath=".\drawing\Graphics.h">
 			</File>
 			<File
-				RelativePath=".\drawing\Icon.h"
-				>
+				RelativePath=".\drawing\Icon.h">
 			</File>
 			<File
-				RelativePath=".\ImagedButton.h"
-				>
+				RelativePath=".\ImagedButton.h">
 			</File>
 			<File
-				RelativePath=".\ListBox.h"
-				>
+				RelativePath=".\ListBox.h">
 			</File>
 			<File
-				RelativePath=".\ListView.h"
-				>
+				RelativePath=".\ListView.h">
 			</File>
 			<File
-				RelativePath=".\Menu.h"
-				>
+				RelativePath=".\Menu.h">
 			</File>
 			<File
-				RelativePath=".\NotifyIcon.h"
-				>
+				RelativePath=".\NotifyIcon.h">
 			</File>
 			<File
-				RelativePath=".\NotifyIconWindow.h"
-				>
+				RelativePath=".\NotifyIconWindow.h">
 			</File>
 			<File
-				RelativePath=".\drawing\Pen.h"
-				>
+				RelativePath=".\drawing\Pen.h">
 			</File>
 			<File
-				RelativePath=".\ProgressBar.h"
-				>
+				RelativePath=".\ProgressBar.h">
 			</File>
 			<File
-				RelativePath=".\drawing\SolidBrush.h"
-				>
+				RelativePath=".\drawing\SolidBrush.h">
 			</File>
 			<File
-				RelativePath=".\SpinControl.h"
-				>
+				RelativePath=".\SpinControl.h">
 			</File>
 			<File
-				RelativePath=".\StringFilter.h"
-				>
+				RelativePath=".\StringFilter.h">
 			</File>
 			<File
-				RelativePath=".\Tab.h"
-				>
+				RelativePath=".\Tab.h">
 			</File>
 			<File
-				RelativePath=".\TabContainer.h"
-				>
+				RelativePath=".\TabContainer.h">
 			</File>
 			<File
-				RelativePath=".\TabControl.h"
-				>
+				RelativePath=".\TabControl.h">
 			</File>
 			<File
-				RelativePath=".\TextBox.h"
-				>
+				RelativePath=".\TextBox.h">
 			</File>
 			<File
-				RelativePath=".\ThemeLib.h"
-				>
+				RelativePath=".\ThemeLib.h">
 			</File>
 			<File
-				RelativePath=".\Tooltip.h"
-				>
+				RelativePath=".\Tooltip.h">
 			</File>
 			<File
-				RelativePath=".\Trackbar.h"
-				>
+				RelativePath=".\Trackbar.h">
 			</File>
 			<File
-				RelativePath=".\Window.h"
-				>
+				RelativePath=".\Window.h">
 			</File>
 			<File
-				RelativePath=".\WindowFinder.h"
-				>
+				RelativePath=".\WindowFinder.h">
 			</File>
 			<File
-				RelativePath=".\WindowProcHolder.h"
-				>
+				RelativePath=".\WindowProcHolder.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 		</Filter>
 	</Files>
 	<Globals>

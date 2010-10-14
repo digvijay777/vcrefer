@@ -1,208 +1,137 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7,10"
+	Version="7.10"
 	Name="desktop"
 	ProjectGUID="{5E03D1B4-243D-4200-8714-0FFD67C69E02}"
 	RootNamespace="desktop"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
-	>
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="DebugNoUnicode|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="0"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="ReleaseNoUnicode|Win32"
@@ -210,63 +139,41 @@
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"
-			/>
+				Name="VCLibrarianTool"/>
 			<Tool
-				Name="VCPreLinkEventTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCResourceCompilerTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -275,265 +182,200 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\ClipboardListener.cpp"
-				>
+				RelativePath=".\ClipboardListener.cpp">
 			</File>
 			<File
-				RelativePath=".\ConsolePoller.cpp"
-				>
+				RelativePath=".\ConsolePoller.cpp">
 			</File>
 			<File
-				RelativePath=".\CopyRectDetector.cpp"
-				>
+				RelativePath=".\CopyRectDetector.cpp">
 			</File>
 			<File
-				RelativePath=".\DesktopConfigLocal.cpp"
-				>
+				RelativePath=".\DesktopConfigLocal.cpp">
 			</File>
 			<File
-				RelativePath=".\DesktopServerWatcher.cpp"
-				>
+				RelativePath=".\DesktopServerWatcher.cpp">
 			</File>
 			<File
-				RelativePath=".\HooksUpdateDetector.cpp"
-				>
+				RelativePath=".\HooksUpdateDetector.cpp">
 			</File>
 			<File
-				RelativePath=".\HookUpdateTimer.cpp"
-				>
+				RelativePath=".\HookUpdateTimer.cpp">
 			</File>
 			<File
-				RelativePath=".\InputBlocker.cpp"
-				>
+				RelativePath=".\InputBlocker.cpp">
 			</File>
 			<File
-				RelativePath=".\KeyEvent.cpp"
-				>
+				RelativePath=".\KeyEvent.cpp">
 			</File>
 			<File
-				RelativePath=".\LocalUpdateHandler.cpp"
-				>
+				RelativePath=".\LocalUpdateHandler.cpp">
 			</File>
 			<File
-				RelativePath=".\MouseDetector.cpp"
-				>
+				RelativePath=".\MouseDetector.cpp">
 			</File>
 			<File
-				RelativePath=".\MouseGrabber.cpp"
-				>
+				RelativePath=".\MouseGrabber.cpp">
 			</File>
 			<File
-				RelativePath=".\MouseShapeDetector.cpp"
-				>
+				RelativePath=".\MouseShapeDetector.cpp">
 			</File>
 			<File
-				RelativePath=".\Poller.cpp"
-				>
+				RelativePath=".\Poller.cpp">
 			</File>
 			<File
-				RelativePath=".\SasUserInput.cpp"
-				>
+				RelativePath=".\SasUserInput.cpp">
 			</File>
 			<File
-				RelativePath=".\ScreenGrabber.cpp"
-				>
+				RelativePath=".\ScreenGrabber.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateContainer.cpp"
-				>
+				RelativePath=".\UpdateContainer.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateDetector.cpp"
-				>
+				RelativePath=".\UpdateDetector.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateFilter.cpp"
-				>
+				RelativePath=".\UpdateFilter.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateHandler.cpp"
-				>
+				RelativePath=".\UpdateHandler.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateKeeper.cpp"
-				>
+				RelativePath=".\UpdateKeeper.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateListener.cpp"
-				>
+				RelativePath=".\UpdateListener.cpp">
 			</File>
 			<File
-				RelativePath=".\UpdateSendingListener.cpp"
-				>
+				RelativePath=".\UpdateSendingListener.cpp">
 			</File>
 			<File
-				RelativePath=".\UserInput.cpp"
-				>
+				RelativePath=".\UserInput.cpp">
 			</File>
 			<File
-				RelativePath=".\WallpaperUtil.cpp"
-				>
+				RelativePath=".\WallpaperUtil.cpp">
 			</File>
 			<File
-				RelativePath=".\WinDesktop.cpp"
-				>
+				RelativePath=".\WinDesktop.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsClipboard.cpp"
-				>
+				RelativePath=".\WindowsClipboard.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsInputBlocker.cpp"
-				>
+				RelativePath=".\WindowsInputBlocker.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsMouseGrabber.cpp"
-				>
+				RelativePath=".\WindowsMouseGrabber.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsScreenGrabber.cpp"
-				>
+				RelativePath=".\WindowsScreenGrabber.cpp">
 			</File>
 			<File
-				RelativePath=".\WindowsUserInput.cpp"
-				>
+				RelativePath=".\WindowsUserInput.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\AbnormDeskTermListener.h"
-				>
+				RelativePath=".\AbnormDeskTermListener.h">
 			</File>
 			<File
-				RelativePath=".\ClipboardListener.h"
-				>
+				RelativePath=".\ClipboardListener.h">
 			</File>
 			<File
-				RelativePath=".\ConsolePoller.h"
-				>
+				RelativePath=".\ConsolePoller.h">
 			</File>
 			<File
-				RelativePath=".\CopyRectDetector.h"
-				>
+				RelativePath=".\CopyRectDetector.h">
 			</File>
 			<File
-				RelativePath=".\DesktopConfigLocal.h"
-				>
+				RelativePath=".\DesktopConfigLocal.h">
 			</File>
 			<File
-				RelativePath=".\DesktopServerWatcher.h"
-				>
+				RelativePath=".\DesktopServerWatcher.h">
 			</File>
 			<File
-				RelativePath=".\HooksUpdateDetector.h"
-				>
+				RelativePath=".\HooksUpdateDetector.h">
 			</File>
 			<File
-				RelativePath=".\HookUpdateTimer.h"
-				>
+				RelativePath=".\HookUpdateTimer.h">
 			</File>
 			<File
-				RelativePath=".\InputBlocker.h"
-				>
+				RelativePath=".\InputBlocker.h">
 			</File>
 			<File
-				RelativePath=".\KeyEvent.h"
-				>
+				RelativePath=".\KeyEvent.h">
 			</File>
 			<File
-				RelativePath=".\LocalUpdateHandler.h"
-				>
+				RelativePath=".\LocalUpdateHandler.h">
 			</File>
 			<File
-				RelativePath=".\MouseDetector.h"
-				>
+				RelativePath=".\MouseDetector.h">
 			</File>
 			<File
-				RelativePath=".\MouseGrabber.h"
-				>
+				RelativePath=".\MouseGrabber.h">
 			</File>
 			<File
-				RelativePath=".\MouseShapeDetector.h"
-				>
+				RelativePath=".\MouseShapeDetector.h">
 			</File>
 			<File
-				RelativePath=".\Poller.h"
-				>
+				RelativePath=".\Poller.h">
 			</File>
 			<File
-				RelativePath=".\SasUserInput.h"
-				>
+				RelativePath=".\SasUserInput.h">
 			</File>
 			<File
-				RelativePath=".\ScreenGrabber.h"
-				>
+				RelativePath=".\ScreenGrabber.h">
 			</File>
 			<File
-				RelativePath=".\UpdateContainer.h"
-				>
+				RelativePath=".\UpdateContainer.h">
 			</File>
 			<File
-				RelativePath=".\UpdateDetector.h"
-				>
+				RelativePath=".\UpdateDetector.h">
 			</File>
 			<File
-				RelativePath=".\UpdateFilter.h"
-				>
+				RelativePath=".\UpdateFilter.h">
 			</File>
 			<File
-				RelativePath=".\UpdateHandler.h"
-				>
+				RelativePath=".\UpdateHandler.h">
 			</File>
 			<File
-				RelativePath=".\UpdateKeeper.h"
-				>
+				RelativePath=".\UpdateKeeper.h">
 			</File>
 			<File
-				RelativePath=".\UpdateListener.h"
-				>
+				RelativePath=".\UpdateListener.h">
 			</File>
 			<File
-				RelativePath=".\UpdateSendingListener.h"
-				>
+				RelativePath=".\UpdateSendingListener.h">
 			</File>
 			<File
-				RelativePath=".\UserInput.h"
-				>
+				RelativePath=".\UserInput.h">
 			</File>
 			<File
-				RelativePath=".\WallpaperUtil.h"
-				>
+				RelativePath=".\WallpaperUtil.h">
 			</File>
 			<File
-				RelativePath=".\WinDesktop.h"
-				>
+				RelativePath=".\WinDesktop.h">
 			</File>
 			<File
-				RelativePath=".\WindowsClipboard.h"
-				>
+				RelativePath=".\WindowsClipboard.h">
 			</File>
 			<File
-				RelativePath=".\WindowsInputBlocker.h"
-				>
+				RelativePath=".\WindowsInputBlocker.h">
 			</File>
 			<File
-				RelativePath=".\WindowsMouseGrabber.h"
-				>
+				RelativePath=".\WindowsMouseGrabber.h">
 			</File>
 			<File
-				RelativePath=".\WindowsScreenGrabber.h"
-				>
+				RelativePath=".\WindowsScreenGrabber.h">
 			</File>
 			<File
-				RelativePath=".\WindowsUserInput.h"
-				>
+				RelativePath=".\WindowsUserInput.h">
 			</File>
 		</Filter>
 	</Files>

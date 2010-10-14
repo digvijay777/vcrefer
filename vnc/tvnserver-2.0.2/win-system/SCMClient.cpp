@@ -23,6 +23,7 @@
 //
 
 #include "SCMClient.h"
+#include <assert.h>
 
 #include "thread/Thread.h"
 
@@ -36,7 +37,7 @@ SCMClientException::SCMClientException(int scmErrCode)
   case ERROR_START_TIMEOUT:
     break;
   default:
-    _ASSERT(FALSE);
+    assert(FALSE);
   };
 
   m_scmErrCode = scmErrCode;

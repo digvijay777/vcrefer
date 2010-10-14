@@ -25,6 +25,7 @@
 #include "TabControl.h"
 #include "util/CommonHeader.h"
 #include <commctrl.h>
+#include <assert.h>
 
 TabControl::TabControl()
 {
@@ -74,7 +75,7 @@ void TabControl::showTab(const BaseDialog *dialog)
       return;
     }
   }
-  _ASSERT(FALSE);
+  assert(FALSE);
 }
 
 void TabControl::deleteAllTabs()

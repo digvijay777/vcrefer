@@ -1,217 +1,140 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7,10"
+	Version="7.10"
 	Name="util"
 	ProjectGUID="{E45BF60D-C8FD-4F07-A307-25596BE1D256}"
 	RootNamespace="util"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
-	>
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="V:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine=""
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="version.lib"
-			/>
+				AdditionalDependencies="version.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
+			IntermediateDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine=""
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="version.lib"
-			/>
+				AdditionalDependencies="version.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="DebugNoUnicode|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="0"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="4"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine=""
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="version.lib"
-			/>
+				AdditionalDependencies="version.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="ReleaseNoUnicode|Win32"
@@ -219,66 +142,42 @@
 			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
+				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".;.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
-				UseFullPaths="true"
-			/>
+				DebugInformationFormat="3"/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine=""
-			/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="version.lib"
-			/>
+				AdditionalDependencies="version.lib"/>
 			<Tool
-				Name="VCALinkTool"
-			/>
+				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCXDCMakeTool"
-			/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCBscMakeTool"
-			/>
+				Name="VCPreBuildEventTool"/>
 			<Tool
-				Name="VCFxCopTool"
-			/>
+				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -287,197 +186,149 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\Command.cpp"
-				>
+				RelativePath=".\Command.cpp">
 			</File>
 			<File
-				RelativePath=".\CommandLine.cpp"
-				>
+				RelativePath=".\CommandLine.cpp">
 			</File>
 			<File
-				RelativePath=".\DateTime.cpp"
-				>
+				RelativePath=".\DateTime.cpp">
 			</File>
 			<File
-				RelativePath=".\Deflater.cpp"
-				>
+				RelativePath=".\Deflater.cpp">
 			</File>
 			<File
-				RelativePath=".\DesCrypt.cpp"
-				>
+				RelativePath=".\DesCrypt.cpp">
 			</File>
 			<File
-				RelativePath=".\Exception.cpp"
-				>
+				RelativePath=".\Exception.cpp">
 			</File>
 			<File
-				RelativePath=".\FileLog.cpp"
-				>
+				RelativePath=".\FileLog.cpp">
 			</File>
 			<File
-				RelativePath=".\Inflater.cpp"
-				>
+				RelativePath=".\Inflater.cpp">
 			</File>
 			<File
-				RelativePath=".\Keymap.cpp"
-				>
+				RelativePath=".\Keymap.cpp">
 			</File>
 			<File
-				RelativePath=".\Log.cpp"
-				>
+				RelativePath=".\Log.cpp">
 			</File>
 			<File
-				RelativePath=".\MacroCommand.cpp"
-				>
+				RelativePath=".\MacroCommand.cpp">
 			</File>
 			<File
-				RelativePath=".\md5.cpp"
-				>
+				RelativePath=".\md5.cpp">
 			</File>
 			<File
-				RelativePath=".\ResourceLoader.cpp"
-				>
+				RelativePath=".\ResourceLoader.cpp">
 			</File>
 			<File
-				RelativePath=".\StringParser.cpp"
-				>
+				RelativePath=".\StringParser.cpp">
 			</File>
 			<File
-				RelativePath=".\StringStorage.cpp"
-				>
+				RelativePath=".\StringStorage.cpp">
 			</File>
 			<File
-				RelativePath=".\StringTable.cpp"
-				>
+				RelativePath=".\StringTable.cpp">
 			</File>
 			<File
-				RelativePath=".\Unicode.cpp"
-				>
+				RelativePath=".\Unicode.cpp">
 			</File>
 			<File
-				RelativePath=".\VncPassCrypt.cpp"
-				>
+				RelativePath=".\VncPassCrypt.cpp">
 			</File>
 			<File
-				RelativePath=".\ZLibBase.cpp"
-				>
+				RelativePath=".\ZLibBase.cpp">
 			</File>
 			<File
-				RelativePath=".\ZlibException.cpp"
-				>
+				RelativePath=".\ZlibException.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\Command.h"
-				>
+				RelativePath=".\Command.h">
 			</File>
 			<File
-				RelativePath=".\CommandLine.h"
-				>
+				RelativePath=".\CommandLine.h">
 			</File>
 			<File
-				RelativePath=".\CommonHeader.h"
-				>
+				RelativePath=".\CommonHeader.h">
 			</File>
 			<File
-				RelativePath=".\DateTime.h"
-				>
+				RelativePath=".\DateTime.h">
 			</File>
 			<File
-				RelativePath=".\Deflater.h"
-				>
+				RelativePath=".\Deflater.h">
 			</File>
 			<File
-				RelativePath=".\DesCrypt.h"
-				>
+				RelativePath=".\DesCrypt.h">
 			</File>
 			<File
-				RelativePath=".\Exception.h"
-				>
+				RelativePath=".\Exception.h">
 			</File>
 			<File
-				RelativePath=".\FileLog.h"
-				>
+				RelativePath=".\FileLog.h">
 			</File>
 			<File
-				RelativePath=".\Inflater.h"
-				>
+				RelativePath=".\Inflater.h">
 			</File>
 			<File
-				RelativePath=".\inttypes.h"
-				>
+				RelativePath=".\inttypes.h">
 			</File>
 			<File
-				RelativePath=".\Keymap.h"
-				>
+				RelativePath=".\Keymap.h">
 			</File>
 			<File
-				RelativePath=".\ListenerContainer.h"
-				>
+				RelativePath=".\ListenerContainer.h">
 			</File>
 			<File
-				RelativePath=".\Log.h"
-				>
+				RelativePath=".\Log.h">
 			</File>
 			<File
-				RelativePath=".\MacroCommand.h"
-				>
+				RelativePath=".\MacroCommand.h">
 			</File>
 			<File
-				RelativePath=".\md5.h"
-				>
+				RelativePath=".\md5.h">
 			</File>
 			<File
-				RelativePath=".\ResourceLoader.h"
-				>
+				RelativePath=".\ResourceLoader.h">
 			</File>
 			<File
-				RelativePath=".\Singleton.h"
-				>
+				RelativePath=".\Singleton.h">
 			</File>
 			<File
-				RelativePath=".\StringParser.h"
-				>
+				RelativePath=".\StringParser.h">
 			</File>
 			<File
-				RelativePath=".\StringStorage.h"
-				>
+				RelativePath=".\StringStorage.h">
 			</File>
 			<File
-				RelativePath=".\StringTable.h"
-				>
+				RelativePath=".\StringTable.h">
 			</File>
 			<File
-				RelativePath=".\StringVector.h"
-				>
+				RelativePath=".\StringVector.h">
 			</File>
 			<File
-				RelativePath=".\Unicode.h"
-				>
+				RelativePath=".\Unicode.h">
 			</File>
 			<File
-				RelativePath=".\VncPassCrypt.h"
-				>
+				RelativePath=".\VncPassCrypt.h">
 			</File>
 			<File
-				RelativePath=".\winhdr.h"
-				>
+				RelativePath=".\winhdr.h">
 			</File>
 			<File
-				RelativePath=".\ZLibBase.h"
-				>
+				RelativePath=".\ZLibBase.h">
 			</File>
 			<File
-				RelativePath=".\ZlibException.h"
-				>
+				RelativePath=".\ZlibException.h">
 			</File>
 		</Filter>
 	</Files>
