@@ -412,7 +412,7 @@ Configurator::loadIpAccessControlContainer(SettingsManager *sm, IpAccessControl 
   } else {
     size_t maxBufSize = storage.getLength() + 1;
     ipacStringBuffer = new TCHAR[maxBufSize + 1];
-    _tcscpy_s(ipacStringBuffer, maxBufSize, storage.getString());
+    _tcsncpy(ipacStringBuffer, storage.getString(), maxBufSize);
     TCHAR *pch = _tcstok(&ipacStringBuffer[0], _T(","));
     while (pch != NULL) {
       if (IpAccessRule::parse(pch, NULL)) {

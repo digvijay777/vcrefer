@@ -109,7 +109,7 @@ void Service::run()
 {
   TCHAR name[1024];
 
-  _tcscpy_s(name, 1024, m_name.getString());
+  _tcsncpy(name, m_name.getString(), 1024);
 
   SERVICE_TABLE_ENTRY dispatchTable[] =  {{name, (LPSERVICE_MAIN_FUNCTION)ServiceMain }, { NULL, NULL }};
 

@@ -43,7 +43,7 @@ AppletParameter::AppletParameter(const char *name, const char *value)
 
     m_formattedString = new char[len];
 
-    sprintf_s(m_formattedString, (size_t)(len), format, name, value);
+    _snprintf(m_formattedString, (size_t)(len), format, name, value);
   }
 }
 

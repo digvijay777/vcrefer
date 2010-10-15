@@ -63,7 +63,7 @@ void CharString::format(const char *format, ...)
   char *buffer = new char[size];
 
   va_start(vl, format);
-  vsprintf_s(buffer, size, format, vl);
+  _vsnprintf(buffer, size, format, vl);
   va_end(vl);
 
   m_buffer.setBytes(buffer, size);

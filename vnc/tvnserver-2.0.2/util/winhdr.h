@@ -37,11 +37,14 @@
 
 #define _WIN32_WINNT 0x0501
 
+#define _WIN32_IE 0x600
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <wspiapi.h>
 #include <windows.h>
 #include <tchar.h>
 #include <commctrl.h>
+#include <crtdbg.h>
 
 #endif 

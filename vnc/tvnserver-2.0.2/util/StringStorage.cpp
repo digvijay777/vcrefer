@@ -474,7 +474,7 @@ void StringStorage::format(const TCHAR *format, ...)
   m_length = (size_t)count;
 
   va_start(vl, format);
-  _vstprintf_s(m_buffer, count + 1, format, vl);
+  _vsntprintf(m_buffer, count + 1, format, vl);
   va_end(vl);
 }
 
