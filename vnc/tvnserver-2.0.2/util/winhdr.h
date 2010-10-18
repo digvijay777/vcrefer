@@ -37,6 +37,9 @@
 
 #define _WIN32_WINNT 0x0501
 
+#ifdef _WIN32_IE
+	#undef _WIN32_IE
+#endif	// #ifdef _WIN32_IE
 #define _WIN32_IE 0x600
 
 #include <winsock2.h>

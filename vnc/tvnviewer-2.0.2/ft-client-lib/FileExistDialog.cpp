@@ -163,7 +163,7 @@ void FileExistDialog::onCancelButtonClick()
 void FileExistDialog::updateGui(FileInfo *fileInfo, Control *sizeLabel, Control *modTimeLabel)
 {
   TCHAR buffer[255];
-  _stprintf_s(&buffer[0], 255, _T("%ld bytes"), fileInfo->getSize());
+  _sntprintf(&buffer[0], 255, _T("%ld bytes"), fileInfo->getSize());
   sizeLabel->setText(&buffer[0]);
 
   DateTime dateTime(fileInfo->lastModified());

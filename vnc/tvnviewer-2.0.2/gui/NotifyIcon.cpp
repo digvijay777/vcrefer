@@ -92,7 +92,7 @@ void NotifyIcon::setText(const TCHAR *text)
   m_nid.uFlags = NIF_TIP;
 
   const size_t BUFFER_SIZE_TCHARS = sizeof(m_nid.szTip) / sizeof(TCHAR);
-  _tcsncpy_s(m_nid.szTip, BUFFER_SIZE_TCHARS, text, _TRUNCATE);
+  _tcsncpy(m_nid.szTip, text, BUFFER_SIZE_TCHARS);
 
   Shell_NotifyIcon(NIM_MODIFY, &m_nid);
 }
@@ -102,8 +102,8 @@ NotifyIcon::showBalloon(const TCHAR *message, const TCHAR *caption,
                       DWORD timeoutMillis)
 {
   m_nid.uFlags = NIF_INFO;
-  _tcsncpy_s(m_nid.szInfo, 255, message, _TRUNCATE);
-  _tcsncpy_s(m_nid.szInfoTitle, 63, caption, _TRUNCATE);
+  _tcsncpy(m_nid.szInfo, message, 255);
+  _tcsncpy(m_nid.szInfoTitle, caption, 63);
   m_nid.dwInfoFlags = NIIF_INFO;
   m_nid.uTimeout = timeoutMillis;
   Shell_NotifyIcon(NIM_MODIFY, &m_nid);

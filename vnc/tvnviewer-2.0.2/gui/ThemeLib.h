@@ -28,7 +28,8 @@
 #include "util/CommonHeader.h"
 
 #include <uxtheme.h>
-#include <vssym32.h>
+//#include <vssym32.h>
+#include <Tmschema.h> 
 
 typedef HRESULT (__stdcall *PFNCLOSETHEMEDATA)(HTHEME hTheme);
 
