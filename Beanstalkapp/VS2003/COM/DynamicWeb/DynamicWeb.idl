@@ -1,0 +1,41 @@
+// DynamicWeb.idl : IDL source for DynamicWeb.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DynamicWeb.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+#include "olectl.h"
+	
+
+	[
+		object,
+		uuid(460A70A9-2429-4D89-B588-6E99BA2A1AF7),
+		dual,
+		helpstring("IWebForm Interface"),
+		pointer_default(unique)
+	]
+	interface IWebForm : IDispatch
+	{
+	};
+	
+[
+	uuid(9D379A8B-4067-40D8-815C-50646C2D7A3E),
+	version(1.0),
+	helpstring("DynamicWeb 1.0 Type Library")
+]
+library DYNAMICWEBLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(7386AC8E-F309-4600-A3D0-591F40192721),
+		helpstring("WebForm Class")
+	]
+	coclass WebForm
+	{
+		[default] interface IWebForm;
+	};
+};

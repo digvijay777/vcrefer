@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'IEExtendBar'
+		'IEExtendBar.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

@@ -1,0 +1,222 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\SendMsg.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\SendMsg.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SENDMSG_DIALOG DIALOGEX 0, 0, 234, 226
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | 
+    WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "发送窗口消息"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "窗口标题:",IDC_STATIC,7,7,31,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_WND_TITLE,48,7,179,14
+    LTEXT           "窗口类名:",IDC_STATIC,7,30,31,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_WND_CLASS,48,30,179,14
+    LTEXT           "窗口名柄:",IDC_STATIC,7,53,31,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_WND_HANDLE,47,53,120,14
+    PUSHBUTTON      "查找窗口",IDC_WND_FIND,184,78,43,14
+    PUSHBUTTON      "发送消息",IDC_WND_SEND,169,198,50,14
+    EDITTEXT        IDC_WND_MSG,42,198,73,14,ES_AUTOHSCROLL
+    LTEXT           "消息ID：",IDC_STATIC,15,198,26,14,SS_CENTERIMAGE
+    GROUPBOX        "发送消息",IDC_STATIC,7,95,220,124
+    CONTROL         "十六进制",IDC_WND_HANDLE_HEX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,184,53,43,14
+    LTEXT           "显示结果",IDC_RT_MSG,7,77,124,14,SS_CENTERIMAGE
+    LTEXT           "窗口标题:",IDC_STATIC,15,115,31,8
+    LTEXT           "Static",IDC_RT_TITLE,51,115,167,8
+    LTEXT           "窗口类名:",IDC_STATIC,15,131,31,8
+    LTEXT           "Static",IDC_RT_CLASS,51,131,167,8
+    LTEXT           "窗口句柄:",IDC_STATIC,15,163,31,8
+    LTEXT           "Static",IDC_RT_HANDLE,50,163,167,8
+    LTEXT           "窗口状态:",IDC_STATIC,15,147,31,8
+    LTEXT           "Static",IDC_RT_STATUS,51,147,167,8
+    CONTROL         "十六进制",IDC_RT_HANDLE_HEX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,118,198,43,14
+    EDITTEXT        IDC_RT_WPARAM,71,179,40,14,ES_NUMBER
+    LTEXT           "wParam:",IDC_STATIC,43,179,28,14,SS_CENTERIMAGE
+    LTEXT           "lParam:",IDC_STATIC,127,178,23,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_RT_LPARAM,150,178,40,14,ES_NUMBER
+    PUSHBUTTON      "进程列表",IDC_BT_LIST,139,78,43,14
+END
+
+IDD_PROCESSWND DIALOGEX 0, 0, 219, 221
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "显示进程-窗口列表"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "选择窗口",IDC_BT_SELECTWND,55,200,50,14
+    PUSHBUTTON      "刷新",IDC_BT_REFRUSH,114,200,50,14
+    CONTROL         "",IDC_TR_PROCESSWND,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | WS_BORDER | WS_TABSTOP,
+                    7,7,205,186
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "TODO: <公司名>"
+            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "SendMsg.exe"
+            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
+            VALUE "OriginalFilename", "SendMsg.exe"
+            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "翻译", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SENDMSG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 227
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 219
+    END
+
+    IDD_PROCESSWND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 212
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 214
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "res\\tree.bmp"
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\SendMsg.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"         // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

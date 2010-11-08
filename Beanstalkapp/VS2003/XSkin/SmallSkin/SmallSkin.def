@@ -1,0 +1,9 @@
+; SmallSkin.def : Declares the module parameters for the DLL.
+
+LIBRARY      "SmallSkin"
+
+EXPORTS
+    ; Explicit exports can go here
+	InstallSmallSkin
+	UninstallSmallSkin
+	

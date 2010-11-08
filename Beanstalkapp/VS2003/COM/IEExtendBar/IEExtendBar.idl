@@ -1,0 +1,36 @@
+// IEExtendBar.idl : IDL source for IEExtendBar
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (IEExtendBar.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(0AB45B53-7B12-4012-883F-1DC8B0847B05),
+	dual,
+	nonextensible,
+	helpstring("ICookiesLook Interface"),
+	pointer_default(unique)
+]
+interface ICookiesLook : IDispatch{
+};
+[
+	uuid(B2F16470-5304-43C5-8745-13F711E52E6D),
+	version(1.0),
+	helpstring("IEExtendBar 1.0 Type Library")
+]
+library IEExtendBarLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(82AE3FB7-CDA9-4F46-B6CB-939DDD14613A),
+		helpstring("CookiesLook Class")
+	]
+	coclass CookiesLook
+	{
+		[default] interface ICookiesLook;
+	};
+};

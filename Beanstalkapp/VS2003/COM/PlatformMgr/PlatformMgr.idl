@@ -1,0 +1,49 @@
+// PlatformMgr.idl : IDL source for PlatformMgr
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (PlatformMgr.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(58E8A06E-8BBB-4B60-B84A-5B5612D1FF80),
+	dual,
+	nonextensible,
+	helpstring("ICloudCenter Interface"),
+	pointer_default(unique)
+]
+interface ICloudCenter : IDispatch{
+	[id(1), helpstring("method Login")] HRESULT Login([in] BSTR strCookie, [out, retval] VARIANT_BOOL *pbSuccess);
+};
+[
+	uuid(80B7EA49-F6CE-488E-9A57-903BB4926487),
+	version(1.0),
+	helpstring("PlatformMgr 1.0 Type Library")
+]
+library PlatformMgrLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(9E56D3B3-D26E-4217-9791-10928F7A34A6),
+		helpstring("_ICloudCenterEvents Interface")
+	]
+	dispinterface _ICloudCenterEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnLogin")] HRESULT OnLogin([in] VARIANT_BOOL bFailed);
+		[id(2), helpstring("method OnBreak")] HRESULT OnBreak([in] BSTR strErr);
+	};
+	[
+		uuid(AA14C6A7-7568-4E1C-81DD-390B26FE5837),
+		helpstring("CloudCenter Class")
+	]
+	coclass CloudCenter
+	{
+		[default] interface ICloudCenter;
+		[default, source] dispinterface _ICloudCenterEvents;
+	};
+};

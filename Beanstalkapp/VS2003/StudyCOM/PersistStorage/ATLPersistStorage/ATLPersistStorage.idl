@@ -1,0 +1,38 @@
+// ATLPersistStorage.idl : ATLPersistStorage 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(ATLPersistStorage.tlb)和封送处理代码。
+
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(E1D5BC33-1082-4F0D-A0E2-4A73E9D9BD74),
+	dual,
+	nonextensible,
+	helpstring("IIStorageTest 接口"),
+	pointer_default(unique)
+]
+interface IIStorageTest : IDispatch{
+};
+
+[
+	uuid(C29680D5-8786-44E9-811B-5CC7C35B24E7),
+	version(1.0),
+	helpstring("ATLPersistStorage 1.0 类型库")
+]
+library ATLPersistStorageLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(8D37A1C8-18E4-48D8-90E9-9AC5DAEDA1CE),
+		helpstring("IStorageTest Class")
+	]
+	coclass IStorageTest
+	{
+		[default] interface IIStorageTest;
+	};
+};

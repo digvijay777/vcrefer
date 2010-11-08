@@ -1,0 +1,1467 @@
+// Generated .IDL file (by the OLE/COM Object Viewer)
+// 
+// typelib filename: SysLeakRepair.dll
+
+[
+  uuid(B596CC9F-56E5-419E-A622-E01BB457431E),
+  version(2.0),
+  helpstring("WUAPI 2.0 Type Library")
+]
+library WUApiLib
+{
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+    importlib("stdole2.tlb");
+
+    // Forward declare all types defined in this typelib
+    interface IUpdateException;
+    interface IInvalidProductLicenseException;
+    interface IUpdate;
+    interface IUpdateCollection;
+    interface ICategoryCollection;
+    interface ICategory;
+    interface IImageInformation;
+    interface IUpdateIdentity;
+    interface IInstallationBehavior;
+    interface IStringCollection;
+    interface IUpdateDownloadContentCollection;
+    interface IUpdateDownloadContent;
+    interface IWindowsDriverUpdate;
+    interface ISearchCompletedCallback;
+    interface ISearchJob;
+    interface ISearchCompletedCallbackArgs;
+    interface IDownloadCompletedCallback;
+    interface IDownloadJob;
+    interface IDownloadProgress;
+    interface IUpdateDownloadResult;
+    interface IDownloadCompletedCallbackArgs;
+    interface IDownloadProgressChangedCallback;
+    interface IDownloadProgressChangedCallbackArgs;
+    interface IInstallationCompletedCallback;
+    interface IInstallationJob;
+    interface IInstallationProgress;
+    interface IUpdateInstallationResult;
+    interface IInstallationCompletedCallbackArgs;
+    interface IInstallationProgressChangedCallback;
+    interface IInstallationProgressChangedCallbackArgs;
+    interface IUpdateSearcher;
+    interface ISearchResult;
+    interface IUpdateExceptionCollection;
+    interface IUpdateHistoryEntryCollection;
+    interface IUpdateHistoryEntry;
+    interface IWebProxy;
+    interface ISystemInformation;
+    interface IAutomaticUpdates;
+    interface IAutomaticUpdatesSettings;
+    interface IUpdateDownloader;
+    interface IDownloadResult;
+    interface IUpdateInstaller;
+    interface IInstallationResult;
+    interface IUpdateSession;
+    interface IUpdateServiceManager;
+    interface IUpdateServiceCollection;
+    interface IUpdateService;
+
+	typedef [helpstring("Defines contexts under which an UpdateException can be raised."),public]
+    tagUpdateExceptionContext UpdateExceptionContext;
+
+    typedef [helpstring("Defines contexts under which an UpdateException can be raised.")]
+    enum {
+        uecGeneral = 1,
+        uecWindowsDriver = 2,
+        uecWindowsInstaller = 3
+    } tagUpdateExceptionContext;
+
+    [
+      odl,
+      uuid(A376DD5E-09D4-427F-AF7C-FED5B6E1C1D6),
+      helpstring("IUpdateException Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateException : IDispatch {
+        [id(00000000), propget, helpstring("Gets a message that describes the current exception.")]
+        HRESULT Message([out, retval] BSTR* retval);
+        [id(0x60020001), propget, helpstring("Gets HRESULT, a coded numerical value that is assigned to a specific exception.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets a numerical value that indicates the context of the current exception.")]
+        HRESULT Context([out, retval] UpdateExceptionContext* retval);
+    };
+
+    [
+      odl,
+      uuid(A37D00F5-7BB0-4953-B414-F9E98326F2E8),
+      helpstring("IInvalidProductLicenseException Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInvalidProductLicenseException : IUpdateException {
+        [id(0x60030001), propget, helpstring("Gets the language-invariant name of the product")]
+        HRESULT Product([out, retval] BSTR* retval);
+    };
+
+    [
+      odl,
+      uuid(6A92B07A-D821-4682-B423-5C805022CC4D),
+      helpstring("IUpdate Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdate : IDispatch {
+        [id(00000000), propget, helpstring("Gets the localized title of the Update.")]
+        HRESULT Title([out, retval] BSTR* retval);
+        [id(0x60020001), propget, helpstring("Gets a value indicating whether the Update is flagged to be automatically selected by web sites such as Windows Update or Microsoft Update.")]
+        HRESULT AutoSelectOnWebSites([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020002), propget, helpstring("Gets information on the ordered list of bundled updates of the Update.")]
+        HRESULT BundledUpdates([out, retval] IUpdateCollection** retval);
+        [id(0x60020003), propget, helpstring("Indicates whether the source media of the Update is potentially required for (un)installation.")]
+        HRESULT CanRequireSource([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020004), propget, helpstring("Gets the categories that the update belongs to.")]
+        HRESULT Categories([out, retval] ICategoryCollection** retval);
+        [id(0x60020005), propget, helpstring("Gets the date by which the Update must be installed.")]
+        HRESULT Deadline([out, retval] VARIANT* retval);
+        [id(0x60020006), propget, helpstring("Indicates whether delta-compressed content is available on the server for the Update.")]
+        HRESULT DeltaCompressedContentAvailable([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020007), propget, helpstring("Indicates whether to prefer delta-compressed content when downloading and/or (un)installing the Update, if such content is available.")]
+        HRESULT DeltaCompressedContentPreferred([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020008), propget, helpstring("Gets the localized description of the Update.")]
+        HRESULT Description([out, retval] BSTR* retval);
+        [id(0x60020009), propget, helpstring("Indicates whether the end-user license agreement associated with the Update has been accepted for the target computer.")]
+        HRESULT EulaAccepted([out, retval] VARIANT_BOOL* retval);
+        [id(0x6002000a), propget, helpstring("Gets the full, localized text of the end-user license agreement associated with the Update.")]
+        HRESULT EulaText([out, retval] BSTR* retval);
+        [id(0x6002000b), propget, helpstring("Gets a value specifying the install handler of the Update.")]
+        HRESULT HandlerID([out, retval] BSTR* retval);
+        [id(0x6002000c), propget, helpstring("Gets the globally-unique identity of the Update.")]
+        HRESULT Identity([out, retval] IUpdateIdentity** retval);
+        [id(0x6002000d), propget, helpstring("Gets information on the image associated with the Update.")]
+        HRESULT Image([out, retval] IImageInformation** retval);
+        [id(0x6002000e), propget, helpstring("Gets the installation options of the Update.")]
+        HRESULT InstallationBehavior([out, retval] IInstallationBehavior** retval);
+        [id(0x6002000f), propget, helpstring("Gets a value indicating whether the Update is a beta release.")]
+        HRESULT IsBeta([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020010), propget, helpstring("Indicates whether all of the Update's content is cached on the target computer.")]
+        HRESULT IsDownloaded([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020011), propget, helpstring("Indicates whether the Update has been hidden by the user for installation.")]
+        HRESULT IsHidden([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020011), propput, helpstring("Indicates whether the Update has been hidden by the user for installation.")]
+        HRESULT IsHidden([in] VARIANT_BOOL retval);
+        [id(0x60020012), propget, helpstring("Indicates whether the Update was installed on the target computer when the search was performed.")]
+        HRESULT IsInstalled([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020013), propget, helpstring("Gets a value indicating whether installation of the Update is mandatory.")]
+        HRESULT IsMandatory([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020014), propget, helpstring("Indicates whether the caller can uninstall the Update, if installed, from the target computer.")]
+        HRESULT IsUninstallable([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020015), propget, helpstring("Gets the languages that the Update supports.")]
+        HRESULT Languages([out, retval] IStringCollection** retval);
+        [id(0x60020016), propget, helpstring("Gets the published date of the Update.")]
+        HRESULT LastDeploymentChangeTime([out, retval] DATE* retval);
+        [id(0x60020017), propget, helpstring("Gets the maximum download size of the Update.")]
+        HRESULT MaxDownloadSize([out, retval] wchar_t* retval);
+        [id(0x60020018), propget, helpstring("Gets the minimum download size of the Update.")]
+        HRESULT MinDownloadSize([out, retval] wchar_t* retval);
+        [id(0x60020019), propget, helpstring("Gets language-specific strings specifying the hyperlinks to more info on the Update.")]
+        HRESULT MoreInfoUrls([out, retval] IStringCollection** retval);
+        [id(0x6002001a), propget, helpstring("Gets the Microsoft Security Response Center severity rating of the Update.")]
+        HRESULT MsrcSeverity([out, retval] BSTR* retval);
+        [id(0x6002001b), propget, helpstring("Gets the recommended CPU speed, in megahertz, for installing the Update.")]
+        HRESULT RecommendedCpuSpeed([out, retval] long* retval);
+        [id(0x6002001c), propget, helpstring("Gets the recommended hard disk free space, in megabytes, for installing the Update.")]
+        HRESULT RecommendedHardDiskSpace([out, retval] long* retval);
+        [id(0x6002001d), propget, helpstring("Gets the recommended physical memory size, in megabytes, for installing the Update.")]
+        HRESULT RecommendedMemory([out, retval] long* retval);
+        [id(0x6002001e), propget, helpstring("Gets the localized release notes of the Update.")]
+        HRESULT ReleaseNotes([out, retval] BSTR* retval);
+        [id(0x6002001f), propget, helpstring("Gets the security bulletin IDs associated with the Update.")]
+        HRESULT SecurityBulletinIDs([out, retval] IStringCollection** retval);
+        [id(0x60020021), propget, helpstring("Gets a collection of update IDs specifying the Updates that the Update supersedes.")]
+        HRESULT SupersededUpdateIDs([out, retval] IStringCollection** retval);
+        [id(0x60020022), propget, helpstring("Gets the language-specific hyperlink to the support information on the Update.")]
+        HRESULT SupportUrl([out, retval] BSTR* retval);
+        [id(0x60020023), propget, helpstring("Gets the type of the Update.")]
+        HRESULT Type([out, retval] UpdateType* retval);
+        [id(0x60020024), propget, helpstring("Gets the uninstallation notes of the Update.")]
+        HRESULT UninstallationNotes([out, retval] BSTR* retval);
+        [id(0x60020025), propget, helpstring("Gets the uninstallation options of the Update.")]
+        HRESULT UninstallationBehavior([out, retval] IInstallationBehavior** retval);
+        [id(0x60020026), propget, helpstring("Gets the uninstallation steps of the Update.")]
+        HRESULT UninstallationSteps([out, retval] IStringCollection** retval);
+        [id(0x60020028), propget, helpstring("Gets the knowledge base article IDs associated with the Update.")]
+        HRESULT KBArticleIDs([out, retval] IStringCollection** retval);
+        [id(0x60020027), helpstring("Accepts the end-user license agreement associated with the Update.")]
+        HRESULT AcceptEula();
+        [id(0x60020029), propget, helpstring("Indicates the action an Update is deployed for.")]
+        HRESULT DeploymentAction([out, retval] DeploymentAction* retval);
+        [id(0x6002002a), helpstring("Copies the contents of the Update into a specified path.")]
+        HRESULT CopyFromCache(
+                        [in] BSTR path, 
+                        [in] VARIANT_BOOL toExtractCabFiles);
+        [id(0x6002002b), propget, helpstring("Indicates the suggested download priority of the Update.")]
+        HRESULT DownloadPriority([out, retval] DownloadPriority* retval);
+        [id(0x6002002c), propget, helpstring("Gets file information on the immediate download contents of the Update.")]
+        HRESULT DownloadContents([out, retval] IUpdateDownloadContentCollection** retval);
+    };
+
+    [
+      odl,
+      uuid(07F7438C-7709-4CA5-B518-91279288134E),
+      helpstring("IUpdateCollection Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] IUpdate** retval);
+        [id(00000000), propput, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [in] IUpdate* retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets a boolean value indicating whether the collection is read-only.")]
+        HRESULT ReadOnly([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), helpstring("Adds an item to the collection.")]
+        HRESULT Add(
+                        [in] IUpdate* value, 
+                        [out, retval] long* retval);
+        [id(0x60020004), helpstring("Removes all elements from the collection.")]
+        HRESULT Clear();
+        [id(0x60020005), helpstring("Creates a shallow read-writable copy of the collection.")]
+        HRESULT Copy([out, retval] IUpdateCollection** retval);
+        [id(0x60020006), helpstring("Inserts an item to the collection at the specified position.")]
+        HRESULT Insert(
+                        [in] long index, 
+                        [in] IUpdate* value);
+        [id(0x60020007), helpstring("Removes the item at the specified index from the collection.")]
+        HRESULT RemoveAt([in] long index);
+    };
+
+    [
+      odl,
+      uuid(3A56BFB8-576C-43F7-9335-FE4838FD7E37),
+      helpstring("ICategoryCollection Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ICategoryCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] ICategory** retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(81DDC1B8-9D35-47A6-B471-5B80F519223B),
+      helpstring("ICategory Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ICategory : IDispatch {
+        [id(00000000), propget, helpstring("Gets the localized name of the Category.")]
+        HRESULT Name([out, retval] BSTR* retval);
+        [id(0x60020001), propget, helpstring("Gets the category ID of the Category.")]
+        HRESULT CategoryID([out, retval] BSTR* retval);
+        [id(0x60020002), propget, helpstring("Gets the children of the Category.")]
+        HRESULT Children([out, retval] ICategoryCollection** retval);
+        [id(0x60020003), propget, helpstring("Gets the description of the Category.")]
+        HRESULT Description([out, retval] BSTR* retval);
+        [id(0x60020004), propget, helpstring("Gets information on the image associated with the Category.")]
+        HRESULT Image([out, retval] IImageInformation** retval);
+        [id(0x60020005), propget, helpstring("Gets the recommended display order of the Category among its siblings.")]
+        HRESULT Order([out, retval] long* retval);
+        [id(0x60020006), propget, helpstring("Gets the parent of the Category.")]
+        HRESULT Parent([out, retval] ICategory** retval);
+        [id(0x60020007), propget, helpstring("Gets the type of the Category.")]
+        HRESULT Type([out, retval] BSTR* retval);
+        [id(0x60020008), propget, helpstring("Gets the updates which immediately belong to the Category.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+    };
+
+    [
+      odl,
+      uuid(7C907864-346C-4AEB-8F3F-57DA289F969F),
+      helpstring("IImageInformation Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IImageInformation : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the ATL text of the image.")]
+        HRESULT AltText([out, retval] BSTR* retval);
+        [id(0x60020002), propget, helpstring("Gets the height of the image, in pixels.")]
+        HRESULT Height([out, retval] long* retval);
+        [id(0x60020003), propget, helpstring("Gets the source location of the image.")]
+        HRESULT Source([out, retval] BSTR* retval);
+        [id(0x60020004), propget, helpstring("Gets the width of the image, in pixels.")]
+        HRESULT Width([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(46297823-9940-4C09-AED9-CD3EA6D05968),
+      helpstring("IUpdateIdentity Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateIdentity : IDispatch {
+        [id(0x60020002), propget, helpstring("Gets the revision number of the Update.")]
+        HRESULT RevisionNumber([out, retval] long* retval);
+        [id(0x60020003), propget, helpstring("Gets a string identifying the Update in a globally-unique manner.")]
+        HRESULT UpdateID([out, retval] BSTR* retval);
+    };
+
+    [
+      odl,
+      uuid(D9A59339-E245-4DBD-9686-4D5763E39624),
+      helpstring("IInstallationBehavior Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationBehavior : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets a value indicating whether (un)installation of the Update can request user input.")]
+        HRESULT CanRequestUserInput([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020002), propget, helpstring("Gets a value assessing how (un)installation of the Update will impact the target computer.")]
+        HRESULT Impact([out, retval] InstallationImpact* retval);
+        [id(0x60020003), propget, helpstring("Gets a value specifying the reboot behavior exhibited by (un)installing the Update.")]
+        HRESULT RebootBehavior([out, retval] InstallationRebootBehavior* retval);
+        [id(0x60020004), propget, helpstring("Gets a value indicating whether (un)installation of the Update requires network connectivity.")]
+        HRESULT RequiresNetworkConnectivity([out, retval] VARIANT_BOOL* retval);
+    };
+
+    typedef [helpstring("Defines possible levels of impact that may be caused by (un)installing an Update.")public]
+    tagInstallationImpact InstallationImpact;
+
+    typedef [helpstring("Defines possible levels of impact that may be caused by (un)installing an Update.")]
+    enum {
+        iiNormal = 0,
+        iiMinor = 1,
+        iiRequiresExclusiveHandling = 2
+    } tagInstallationImpact;
+
+    typedef [helpstring("Defines possible reboot behaviors exhibited by an Update during (un)installation.")public]
+    tagInstallationRebootBehavior InstallationRebootBehavior;
+
+    typedef [helpstring("Defines possible reboot behaviors exhibited by an Update during (un)installation.")]
+    enum {
+        irbNeverReboots = 0,
+        irbAlwaysRequiresReboot = 1,
+        irbCanRequestReboot = 2
+    } tagInstallationRebootBehavior;
+
+	typedef [helpstring("Defines possible types of an update.") public]
+    tagUpdateType UpdateType;
+
+    typedef [helpstring("Defines possible types of an update.")]
+    enum {
+        utSoftware = 1,
+        utDriver = 2
+    } tagUpdateType;
+
+    [
+      odl,
+      uuid(EFF90582-2DDC-480F-A06D-60F3FBC362C3),
+      helpstring("IStringCollection Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IStringCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] BSTR* retval);
+        [id(00000000), propput, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [in] BSTR retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets a boolean value indicating whether the collection is read-only.")]
+        HRESULT ReadOnly([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), helpstring("Adds an item to the collection.")]
+        HRESULT Add(
+                        [in] BSTR value, 
+                        [out, retval] long* retval);
+        [id(0x60020004), helpstring("Removes all elements from the collection.")]
+        HRESULT Clear();
+        [id(0x60020005), helpstring("Creates a deep read-writable copy of the collection.")]
+        HRESULT Copy([out, retval] IStringCollection** retval);
+        [id(0x60020006), helpstring("Inserts an item to the collection at the specified position.")]
+        HRESULT Insert(
+                        [in] long index, 
+                        [in] BSTR value);
+        [id(0x60020007), helpstring("Removes the item at the specified index from the collection.")]
+        HRESULT RemoveAt([in] long index);
+    };
+
+
+
+    typedef [helpstring("Defines actions an Update can be explicitly deployed for.")public]
+    tagDeploymentAction DeploymentAction;
+
+    typedef [helpstring("Defines actions an Update can be explicitly deployed for.")]
+    enum {
+        daNone = 0,
+        daInstallation = 1,
+        daUninstallation = 2
+    } tagDeploymentAction;
+
+    typedef [helpstring("Defines possible priorities for a download operation.")public]
+    tagDownloadPriority DownloadPriority;
+
+    typedef [helpstring("Defines possible priorities for a download operation.")]
+    enum {
+        dpLow = 1,
+        dpNormal = 2,
+        dpHigh = 3
+    } tagDownloadPriority;
+
+    [
+      odl,
+      uuid(BC5513C8-B3B8-4BF7-A4D4-361C0D8C88BA),
+      helpstring("IUpdateDownloadContentCollection Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateDownloadContentCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] IUpdateDownloadContent** retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(54A2CB2D-9A0C-48B6-8A50-9ABB69EE2D02),
+      helpstring("IUpdateDownloadContent Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateDownloadContent : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the location of the download content on the hosting server.")]
+        HRESULT DownloadUrl([out, retval] BSTR* retval);
+    };
+
+    [
+      odl,
+      uuid(B383CD1A-5CE9-4504-9F63-764B1236F191),
+      helpstring("IWindowsDriverUpdate Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IWindowsDriverUpdate : IUpdate {
+        [id(0x60030001), propget, helpstring("Specifes the class of the WindowsDriverUpdate.")]
+        HRESULT DriverClass([out, retval] BSTR* retval);
+        [id(0x60030002), propget, helpstring("Specifies the hardware ID or compatible ID that the WindowsDriverUpdate must match to be installable.")]
+        HRESULT DriverHardwareID([out, retval] BSTR* retval);
+        [id(0x60030003), propget, helpstring("Specifies the language-invariant name of the manufacturer of the WindowsDriverUpdate.")]
+        HRESULT DriverManufacturer([out, retval] BSTR* retval);
+        [id(0x60030004), propget, helpstring("Specifies the language-invariant model name of the device for which the WindowsDriverUpdate is intended.")]
+        HRESULT DriverModel([out, retval] BSTR* retval);
+        [id(0x60030005), propget, helpstring("Specifies the language-invariant name of the provider of theWindowsDriverUpdate.")]
+        HRESULT DriverProvider([out, retval] BSTR* retval);
+        [id(0x60030006), propget, helpstring("Specifies the driver version date of the WindowsDriverUpdate.")]
+        HRESULT DriverVerDate([out, retval] DATE* retval);
+        [id(0x60030007), propget, helpstring("Returns the problem number of the matching device for the WindowsDriverUpdate.")]
+        HRESULT DeviceProblemNumber([out, retval] long* retval);
+        [id(0x60030008), propget, helpstring("Returns the status of the matching device for the WindowsDriverUpdate.")]
+        HRESULT DeviceStatus([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(88AEE058-D4B0-4725-A2F1-814A67AE964C),
+      helpstring("ISearchCompletedCallback Interface"),
+      nonextensible,
+      oleautomation
+    ]
+    interface ISearchCompletedCallback : IUnknown {
+        [helpstring("Handles the notification about the completion of an asynchronous search initiated by calling UpdateSearcher.BeginSearch.")]
+        HRESULT _stdcall Invoke(
+                        [in] ISearchJob* searchJob, 
+                        [in] ISearchCompletedCallbackArgs* callbackArgs);
+    };
+
+    [
+      odl,
+      uuid(7366EA16-7A1A-4EA2-B042-973D3E9CD99B),
+      helpstring("ISearchJob Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ISearchJob : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the caller-specified state object passed to the UpdateSearcher.BeginSearch method.")]
+        HRESULT AsyncState([out, retval] VARIANT* retval);
+        [id(0x60020002), propget, helpstring("Gets a value indicating whether the call has been completely processed.")]
+        HRESULT IsCompleted([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), helpstring("Waits for asynchronous operation to complete and releases all callbacks, if any.")]
+        HRESULT CleanUp();
+        [id(0x60020004), helpstring("Requests to abort the asynchronous search.")]
+        HRESULT RequestAbort();
+    };
+
+    [
+      odl,
+      uuid(A700A634-2850-4C47-938A-9E4B6E5AF9A6),
+      helpstring("ISearchCompletedCallbackArgs Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ISearchCompletedCallbackArgs : IDispatch {
+    };
+
+    [
+      odl,
+      uuid(77254866-9F5B-4C8E-B9E2-C77A8530D64B),
+      helpstring("IDownloadCompletedCallback Interface"),
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadCompletedCallback : IUnknown {
+        [helpstring("Handles the notification about the completion of an asynchronous download initiated by calling UpdateDownloader.BeginDownload.")]
+        HRESULT _stdcall Invoke(
+                        [in] IDownloadJob* downloadJob, 
+                        [in] IDownloadCompletedCallbackArgs* callbackArgs);
+    };
+
+    [
+      odl,
+      uuid(C574DE85-7358-43F6-AAE8-8697E62D8BA7),
+      helpstring("IDownloadJob Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadJob : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the caller-specified state object passed to the UpdateDownloader.BeginDownload method.")]
+        HRESULT AsyncState([out, retval] VARIANT* retval);
+        [id(0x60020002), propget, helpstring("Gets a value indicating whether the call has been completely processed.")]
+        HRESULT IsCompleted([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Gets a read-only collection of the updates specified in the download.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+        [id(0x60020004), helpstring("Waits for asynchronous operation to complete and releases all callbacks, if any.")]
+        HRESULT CleanUp();
+        [id(0x60020005), helpstring("Gets the current progress of the download.")]
+        HRESULT GetProgress([out, retval] IDownloadProgress** retval);
+        [id(0x60020006), helpstring("Requests to abort the asynchronous download.")]
+        HRESULT RequestAbort();
+    };
+
+    [
+      odl,
+      uuid(D31A5BAC-F719-4178-9DBB-5E2CB47FD18A),
+      helpstring("IDownloadProgress Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadProgress : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets a value specifying how much data has been transferred for the content file(s) of the update being downloaded, in bytes.")]
+        HRESULT CurrentUpdateBytesDownloaded([out, retval] wchar_t* retval);
+        [id(0x60020002), propget, helpstring("Gets a value approximating how much data should be transferred for the content file(s) of the update being downloaded, in bytes.")]
+        HRESULT CurrentUpdateBytesToDownload([out, retval] wchar_t* retval);
+        [id(0x60020003), propget, helpstring("Gets a zero-based index value into the updates specified in the download for the one which content file(s) are being downloaded.")]
+        HRESULT CurrentUpdateIndex([out, retval] long* retval);
+        [id(0x60020004), propget, helpstring("Gets a value estimating how far the download has progressed, in percents.")]
+        HRESULT PercentComplete([out, retval] long* retval);
+        [id(0x60020005), propget, helpstring("Gets a value specifying how much overall data has been transferred by the download, in bytes.")]
+        HRESULT TotalBytesDownloaded([out, retval] wchar_t* retval);
+        [id(0x60020006), propget, helpstring("Gets a value approximating how much data should be transferred over all updates by the download, in bytes.")]
+        HRESULT TotalBytesToDownload([out, retval] wchar_t* retval);
+        [id(0x60020007), helpstring("Gets the result of the download on a specified update.")]
+        HRESULT GetUpdateResult(
+                        [in] long updateIndex, 
+                        [out, retval] IUpdateDownloadResult** retval);
+        [id(0x60020008), propget, helpstring("Gets a DownloadPhase enumeration value specifying the current phase of the download in progress.")]
+        HRESULT CurrentUpdateDownloadPhase([out, retval] DownloadPhase* retval);
+        [id(0x60020009), propget, helpstring("Gets a value estimating how far the download of the current update has progressed, in percents.")]
+        HRESULT CurrentUpdatePercentComplete([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(BF99AF76-B575-42AD-8AA4-33CBB5477AF1),
+      helpstring("IUpdateDownloadResult Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateDownloadResult : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the HRESULT value returned from the operation on the update.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets an OperationResultCode enumeration value specifying the result of the operation on the update.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+    };
+
+    typedef [helpstring("Defines possible results of a download, (un)install, or verification operation on an update.")public]
+    tagOperationResultCode OperationResultCode;
+
+    typedef [helpstring("Defines possible results of a download, (un)install, or verification operation on an update.")]
+    enum {
+        orcNotStarted = 0,
+        orcInProgress = 1,
+        orcSucceeded = 2,
+        orcSucceededWithErrors = 3,
+        orcFailed = 4,
+        orcAborted = 5
+    } tagOperationResultCode;
+
+    typedef [helpstring("Defines the possible phases during a download operation.")public]
+    tagDownloadPhase DownloadPhase;
+
+    typedef [helpstring("Defines the possible phases during a download operation.")]
+    enum {
+        dphInitializing = 1,
+        dphDownloading = 2,
+        dphVerifying = 3
+    } tagDownloadPhase;
+
+    [
+      odl,
+      uuid(FA565B23-498C-47A0-979D-E7D5B1813360),
+      helpstring("IDownloadCompletedCallbackArgs Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadCompletedCallbackArgs : IDispatch {
+    };
+
+    [
+      odl,
+      uuid(8C3F1CDD-6173-4591-AEBD-A56A53CA77C1),
+      helpstring("IDownloadProgressChangedCallback Interface"),
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadProgressChangedCallback : IUnknown {
+        [helpstring("Handles the notification about the change of progress of an asynchronous download initiated by calling UpdateDownloader.BeginDownload.")]
+        HRESULT _stdcall Invoke(
+                        [in] IDownloadJob* downloadJob, 
+                        [in] IDownloadProgressChangedCallbackArgs* callbackArgs);
+    };
+
+    [
+      odl,
+      uuid(324FF2C6-4981-4B04-9412-57481745AB24),
+      helpstring("IDownloadProgressChangedCallbackArgs Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadProgressChangedCallbackArgs : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the progress of the asynchronous download at the time the callback was made.")]
+        HRESULT Progress([out, retval] IDownloadProgress** retval);
+    };
+
+    [
+      odl,
+      uuid(45F4F6F3-D602-4F98-9A8A-3EFA152AD2D3),
+      helpstring("IInstallationCompletedCallback Interface"),
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationCompletedCallback : IUnknown {
+        [helpstring("Handles the notification about the completion of an asynchronous (un)installation initiated by the corresponding UpdateInstaller.BeginInstall or UpdateInstaller.BeginUninstall call.")]
+        HRESULT _stdcall Invoke(
+                        [in] IInstallationJob* installationJob, 
+                        [in] IInstallationCompletedCallbackArgs* callbackArgs);
+    };
+
+    [
+      odl,
+      uuid(5C209F0B-BAD5-432A-9556-4699BED2638A),
+      helpstring("IInstallationJob Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationJob : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the caller-specified state object passed to the corresponding UpdateInstaller.BeginInstall or UpdateInstaller.BeginUninstall methods.")]
+        HRESULT AsyncState([out, retval] VARIANT* retval);
+        [id(0x60020002), propget, helpstring("Gets a value indicating whether the call has been completely processed.")]
+        HRESULT IsCompleted([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Gets a read-only collection of the updates specified in the (un)installation.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+        [id(0x60020004), helpstring("Waits for asynchronous operation to complete and releases all callbacks, if any.")]
+        HRESULT CleanUp();
+        [id(0x60020005), helpstring("Gets the current progress of the (un)installation.")]
+        HRESULT GetProgress([out, retval] IInstallationProgress** retval);
+        [id(0x60020006), helpstring("Requests to abort the asynchronous (un)installation.")]
+        HRESULT RequestAbort();
+    };
+
+    [
+      odl,
+      uuid(345C8244-43A3-4E32-A368-65F073B76F36),
+      helpstring("IInstallationProgress Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationProgress : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets a zero-based index value into the updates specified in the (un)installation for the one which content file(s) are being (un)installed.")]
+        HRESULT CurrentUpdateIndex([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets a value specifying how much the (un)installation has completed upon the update being (un)installed, in percents.")]
+        HRESULT CurrentUpdatePercentComplete([out, retval] long* retval);
+        [id(0x60020003), propget, helpstring("Gets a value specifying how much overall the (un)installation has completed, in percents.")]
+        HRESULT PercentComplete([out, retval] long* retval);
+        [id(0x60020004), helpstring("Gets the result of the (un)installation on a specified update.")]
+        HRESULT GetUpdateResult(
+                        [in] long updateIndex, 
+                        [out, retval] IUpdateInstallationResult** retval);
+    };
+
+    [
+      odl,
+      uuid(D940F0F8-3CBB-4FD0-993F-471E7F2328AD),
+      helpstring("IUpdateInstallationResult Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateInstallationResult : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the HRESULT value from the operation on the update.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Indicates whether system reboot is required on the target computer to complete the installation on the Update.")]
+        HRESULT RebootRequired([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Gets an OperationResultCode enumeration value specifying the result of the operation on the update.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+    };
+
+    [
+      odl,
+      uuid(250E2106-8EFB-4705-9653-EF13C581B6A1),
+      helpstring("IInstallationCompletedCallbackArgs Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationCompletedCallbackArgs : IDispatch {
+    };
+
+    [
+      odl,
+      uuid(E01402D5-F8DA-43BA-A012-38894BD048F1),
+      helpstring("IInstallationProgressChangedCallback Interface"),
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationProgressChangedCallback : IUnknown {
+        [helpstring("Handles the notification about the change of progress of an asynchronous (un)installation initiated by the corresponding UpdateInstaller.BeginInstall or Update.BeginUninstall call.")]
+        HRESULT _stdcall Invoke(
+                        [in] IInstallationJob* installationJob, 
+                        [in] IInstallationProgressChangedCallbackArgs* callbackArgs);
+    };
+
+    [
+      odl,
+      uuid(E4F14E1E-689D-4218-A0B9-BC189C484A01),
+      helpstring("IInstallationProgressChangedCallbackArgs Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationProgressChangedCallbackArgs : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the progress of the asynchronous (un)installation at the time the callback was made.")]
+        HRESULT Progress([out, retval] IInstallationProgress** retval);
+    };
+
+    [
+      uuid(72C97D74-7C3B-40AE-B77D-ABDB22EBA6FB),
+      helpstring("StringCollection Class")
+    ]
+    coclass StringCollection {
+        [default] interface IStringCollection;
+    };
+
+    [
+      uuid(B699E5E8-67FF-4177-88B0-3684A3388BFB),
+      helpstring("UpdateSearcher Class")
+    ]
+    coclass UpdateSearcher {
+        [default] interface IUpdateSearcher;
+    };
+
+    [
+      odl,
+      uuid(8F45ABF1-F9AE-4B95-A933-F0F66E5056EA),
+      helpstring("IUpdateSearcher Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateSearcher : IDispatch {
+        [id(0x60020001), propget, helpstring("Indicates whether future calls to BeginSearch and Search can automatically upgrade the MSUS client as a side-effect.")]
+        HRESULT CanAutomaticallyUpgradeService([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020001), propput, helpstring("Indicates whether future calls to BeginSearch and Search can automatically upgrade the MSUS client as a side-effect.")]
+        HRESULT CanAutomaticallyUpgradeService([in] VARIANT_BOOL retval);
+        [id(0x60020003), propget, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([out, retval] BSTR* retval);
+        [id(0x60020003), propput, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([in] BSTR retval);
+        [id(0x60020004), propget, helpstring("Indicates whether to include, in the search results, updates that are superseded by any other updates in the results.")]
+        HRESULT IncludePotentiallySupersededUpdates([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020004), propput, helpstring("Indicates whether to include, in the search results, updates that are superseded by any other updates in the results.")]
+        HRESULT IncludePotentiallySupersededUpdates([in] VARIANT_BOOL retval);
+        [id(0x60020007), propget, helpstring("Specifies which server to search")]
+        HRESULT ServerSelection([out, retval] ServerSelection* retval);
+        [id(0x60020007), propput, helpstring("Specifies which server to search")]
+        HRESULT ServerSelection([in] ServerSelection retval);
+        [id(0x60020008), helpstring("Starts an asynchronous search using the currently configured search options.")]
+        HRESULT BeginSearch(
+                        [in] BSTR criteria, 
+                        [in] IUnknown* onCompleted, 
+                        [in] VARIANT state, 
+                        [out, retval] ISearchJob** retval);
+        [id(0x60020009), helpstring("Completes an asynchronous search.")]
+        HRESULT EndSearch(
+                        [in] ISearchJob* searchJob, 
+                        [out, retval] ISearchResult** retval);
+        [id(0x6002000a), helpstring("Convert string into one that can be used as a literal value in a search criteria string.")]
+        HRESULT EscapeString(
+                        [in] BSTR unescaped, 
+                        [out, retval] BSTR* retval);
+        [id(0x6002000b), helpstring("Synchronously queries the target computer for the history of update events.")]
+        HRESULT QueryHistory(
+                        [in] long startIndex, 
+                        [in] long Count, 
+                        [out, retval] IUpdateHistoryEntryCollection** retval);
+        [id(0x6002000c), helpstring("Perform a synchronous search using the currently configured search options.")]
+        HRESULT Search(
+                        [in] BSTR criteria, 
+                        [out, retval] ISearchResult** retval);
+        [id(0x6002000d), propget, helpstring("Indicates whether the UpdateSearcher goes online when searching for updates.")]
+        HRESULT Online([out, retval] VARIANT_BOOL* retval);
+        [id(0x6002000d), propput, helpstring("Indicates whether the UpdateSearcher goes online when searching for updates.")]
+        HRESULT Online([in] VARIANT_BOOL retval);
+        [id(0x6002000e), helpstring("Get number of update events on the target computer.")]
+        HRESULT GetTotalHistoryCount([out, retval] long* retval);
+        [id(0x6002000f), propget, helpstring("Specifies Non-Windows Updates Service to search.")]
+        HRESULT ServiceID([out, retval] BSTR* retval);
+        [id(0x6002000f), propput, helpstring("Specifies Non-Windows Updates Service to search.")]
+        HRESULT ServiceID([in] BSTR retval);
+    };
+
+    typedef [helpstring("Defines possible server selections the Searcher can search against.")public]
+    tagServerSelection ServerSelection;
+
+    typedef [helpstring("Defines possible server selections the Searcher can search against.")]
+    enum {
+        ssDefault = 0,
+        ssManagedServer = 1,
+        ssWindowsUpdate = 2,
+        ssOthers = 3
+    } tagServerSelection;
+
+    [
+      odl,
+      uuid(D40CFF62-E08C-4498-941A-01E25F0FD33C),
+      helpstring("ISearchResult Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ISearchResult : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets an OperationResultCode enumeration value specifying the overall result of the search.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+        [id(0x60020002), propget, helpstring("Gets the root categories currently available on the target  computer.")]
+        HRESULT RootCategories([out, retval] ICategoryCollection** retval);
+        [id(0x60020003), propget, helpstring("Gets a collection of Updates resulted from the search.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+        [id(0x60020004), propget, helpstring("Gets a collection of warnings resulted from the search.")]
+        HRESULT Warnings([out, retval] IUpdateExceptionCollection** retval);
+    };
+
+    [
+      odl,
+      uuid(503626A3-8E14-4729-9355-0FE664BD2321),
+      helpstring("IUpdateExceptionCollection Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateExceptionCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] IUpdateException** retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(A7F04F3C-A290-435B-AADF-A116C3357A5C),
+      helpstring("IUpdateHistoryEntryCollection Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateHistoryEntryCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] IUpdateHistoryEntry** retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(BE56A644-AF0E-4E0E-A311-C1D8E695CBFF),
+      helpstring("IUpdateHistoryEntry Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateHistoryEntry : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets an Operation enumeration value specifying the the operation on the update.")]
+        HRESULT Operation([out, retval] UpdateOperation* retval);
+        [id(0x60020002), propget, helpstring("Gets an OperationResultCode enumeration value specifying the result of the operation on the update.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+        [id(0x60020003), propget, helpstring("Gets the HRESULT value returned from the operation on the update.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020004), propget, helpstring("Gets the date and time when the update was applied.")]
+        HRESULT Date([out, retval] DATE* retval);
+        [id(0x60020005), propget, helpstring("Gets the globally-unique identity of the update.")]
+        HRESULT UpdateIdentity([out, retval] IUpdateIdentity** retval);
+        [id(0x60020006), propget, helpstring("Gets the title of the update.")]
+        HRESULT Title([out, retval] BSTR* retval);
+        [id(0x60020007), propget, helpstring("Gets the description of the update.")]
+        HRESULT Description([out, retval] BSTR* retval);
+        [id(0x60020008), propget, helpstring("Gets the unmapped result code returned from the operation on the update.")]
+        HRESULT UnmappedResultCode([out, retval] long* retval);
+        [id(0x60020009), propget, helpstring("Gets the identifier of the client application that processed the update.")]
+        HRESULT ClientApplicationID([out, retval] BSTR* retval);
+        [id(0x6002000a), propget, helpstring("Gets where the update came from.")]
+        HRESULT ServerSelection([out, retval] ServerSelection* retval);
+        [id(0x6002000b), propget, helpstring("Gets Non-Windows Updates Service ID.")]
+        HRESULT ServiceID([out, retval] BSTR* retval);
+        [id(0x6002000c), propget, helpstring("Gets steps to uninstall update.")]
+        HRESULT UninstallationSteps([out, retval] IStringCollection** retval);
+        [id(0x6002000d), propget, helpstring("Gets uninstallation notes.")]
+        HRESULT UninstallationNotes([out, retval] BSTR* retval);
+        [id(0x6002000e), propget, helpstring("Gets support URL.")]
+        HRESULT SupportUrl([out, retval] BSTR* retval);
+    };
+
+    typedef [helpstring("Defines operations that can be attempted on an Update.")public]
+    tagUpdateOperation UpdateOperation;
+
+    typedef [helpstring("Defines operations that can be attempted on an Update.")]
+    enum {
+        uoInstallation = 1,
+        uoUninstallation = 2
+    } tagUpdateOperation;
+
+    [
+      uuid(650503CF-9108-4DDC-A2CE-6C2341E1C582),
+      helpstring("WebProxy Class")
+    ]
+    coclass WebProxy {
+        [default] interface IWebProxy;
+    };
+
+    [
+      odl,
+      uuid(174C81FE-AECD-4DAE-B8A0-2C6318DD86A8),
+      helpstring("IWebProxy Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IWebProxy : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the address of the proxy server.")]
+        HRESULT Address([out, retval] BSTR* retval);
+        [id(0x60020001), propput, helpstring("Gets the address of the proxy server.")]
+        HRESULT Address([in] BSTR retval);
+        [id(0x60020002), propget, helpstring("Gets a collection of addresses that do not use the proxy server.")]
+        HRESULT BypassList([out, retval] IStringCollection** retval);
+        [id(0x60020002), propput, helpstring("Gets a collection of addresses that do not use the proxy server.")]
+        HRESULT BypassList([in] IStringCollection* retval);
+        [id(0x60020003), propget, helpstring("Gets a value indicating whether to bypass the proxy server for local addresses.")]
+        HRESULT BypassProxyOnLocal([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propput, helpstring("Gets a value indicating whether to bypass the proxy server for local addresses.")]
+        HRESULT BypassProxyOnLocal([in] VARIANT_BOOL retval);
+        [id(0x60020004), propget, helpstring("Gets a boolean value indicating whether the WebProxy object is read-only.")]
+        HRESULT ReadOnly([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020005), propget, helpstring("Gets the user name to submit to the proxy server for authentication.")]
+        HRESULT UserName([out, retval] BSTR* retval);
+        [id(0x60020005), propput, helpstring("Gets the user name to submit to the proxy server for authentication.")]
+        HRESULT UserName([in] BSTR retval);
+        [id(0x60020006), helpstring("Sets the password to submit to the proxy server for authentication.")]
+        HRESULT SetPassword([in] BSTR value);
+        [id(0x60020007), helpstring("Launches the Credentials UI to prompt user for password for proxy authentication.")]
+        HRESULT PromptForCredentials(
+                        [in] IUnknown* pParentWindow, 
+                        [in] BSTR bstrTitle);
+        [id(0x60020008), restricted, helpstring("Launches the Credentials UI to prompt user for password for proxy authentication.")]
+        HRESULT PromptForCredentialsFromHwnd(
+                        [in] wireHWND hwndParent, 
+                        [in] BSTR bstrTitle);
+        [id(0x60020009), propget, helpstring("Indicates whether to automatically detect proxy settings.")]
+        HRESULT AutoDetect([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020009), propput, helpstring("Indicates whether to automatically detect proxy settings.")]
+        HRESULT AutoDetect([in] VARIANT_BOOL retval);
+    };
+
+    typedef [public]
+    _RemotableHandle* wireHWND;
+
+    typedef struct tag_RemotableHandle {
+                
+long fContext;
+                
+__MIDL_IWinTypes_0009 u;
+    } _RemotableHandle;
+
+    typedef union tag__MIDL_IWinTypes_0009 {
+                
+long hInproc;
+                
+long hRemote;
+    } __MIDL_IWinTypes_0009;
+
+    [
+      uuid(C01B9BA0-BEA7-41BA-B604-D0A36F469133),
+      helpstring("SystemInformation Class")
+    ]
+    coclass SystemInformation {
+        [default] interface ISystemInformation;
+    };
+
+    [
+      odl,
+      uuid(ADE87BF7-7B56-4275-8FAB-B9B0E591844B),
+      helpstring("ISystemInformation Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface ISystemInformation : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the hyperlink to the support infomation on the OEM hardware.")]
+        HRESULT OemHardwareSupportLink([out, retval] BSTR* retval);
+        [id(0x60020002), propget, helpstring("Gets a value indicating whether a system reboot is required to complete (un)installation of one or more Updates.")]
+        HRESULT RebootRequired([out, retval] VARIANT_BOOL* retval);
+    };
+
+    [
+      uuid(BFE18E9C-6D87-4450-B37C-E02F0B373803),
+      helpstring("AutomaticUpdates Class")
+    ]
+    coclass AutomaticUpdates {
+        [default] interface IAutomaticUpdates;
+    };
+
+    [
+      odl,
+      uuid(673425BF-C082-4C7C-BDFD-569464B8E0CE),
+      helpstring("IAutomaticUpdates Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IAutomaticUpdates : IDispatch {
+        [id(0x60020001), helpstring("Triggers automatic updating now if it is not yet started.")]
+        HRESULT DetectNow();
+        [id(0x60020002), helpstring("Pauses automatic updating.")]
+        HRESULT Pause();
+        [id(0x60020003), helpstring("Resumes automatic updating if paused.")]
+        HRESULT Resume();
+        [id(0x60020004), helpstring("Display a dialog box showing settings for Automatic Updates.")]
+        HRESULT ShowSettingsDialog();
+        [id(0x60020005), propget, helpstring("Returns the settings to configure Automatic Updates.")]
+        HRESULT Settings([out, retval] IAutomaticUpdatesSettings** retval);
+        [id(0x60020006), propget, helpstring("Indicates whether all the components that Automatic Updates requires are up and running.")]
+        HRESULT ServiceEnabled([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020007), helpstring("Enables all the components that Automatic Updates requires.")]
+        HRESULT EnableService();
+    };
+
+    [
+      odl,
+      uuid(2EE48F22-AF3C-405F-8970-F71BE12EE9A2),
+      helpstring("IAutomaticUpdatesSettings Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IAutomaticUpdatesSettings : IDispatch {
+        [id(0x60020001), propget, helpstring("Indicates how elevated users will be notified about Automatic Updates events.")]
+        HRESULT NotificationLevel([out, retval] AutomaticUpdatesNotificationLevel* retval);
+        [id(0x60020001), propput, helpstring("Indicates how elevated users will be notified about Automatic Updates events.")]
+        HRESULT NotificationLevel([in] AutomaticUpdatesNotificationLevel retval);
+        [id(0x60020002), propget, helpstring("Indicates whether the settings are read-only.")]
+        HRESULT ReadOnly([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Indicates whether the Automatic Updates service is required by Group Policy.")]
+        HRESULT Required([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020004), propget, helpstring("Indicates which day(s) of week Automatic Updates may (un)install updates.")]
+        HRESULT ScheduledInstallationDay([out, retval] AutomaticUpdatesScheduledInstallationDay* retval);
+        [id(0x60020004), propput, helpstring("Indicates which day(s) of week Automatic Updates may (un)install updates.")]
+        HRESULT ScheduledInstallationDay([in] AutomaticUpdatesScheduledInstallationDay retval);
+        [id(0x60020005), propget, helpstring("Indicates the time when Automatic Updates may (un)install updates.")]
+        HRESULT ScheduledInstallationTime([out, retval] long* retval);
+        [id(0x60020005), propput, helpstring("Indicates the time when Automatic Updates may (un)install updates.")]
+        HRESULT ScheduledInstallationTime([in] long retval);
+        [id(0x60020006), helpstring("Gets the up-to-date settings.")]
+        HRESULT Refresh();
+        [id(0x60020007), helpstring("Applies the settings.")]
+        HRESULT Save();
+    };
+
+    typedef [helpstring("Defines possible ways in which elevated users will be notified about Automatic Updates events.")public]
+    tagAutomaticUpdatesNotificationLevel AutomaticUpdatesNotificationLevel;
+
+    typedef [helpstring("Defines possible ways in which elevated users will be notified about Automatic Updates events.")]
+    enum {
+        aunlNotConfigured = 0,
+        aunlDisabled = 1,
+        aunlNotifyBeforeDownload = 2,
+        aunlNotifyBeforeInstallation = 3,
+        aunlScheduledInstallation = 4
+    } tagAutomaticUpdatesNotificationLevel;
+
+    typedef [helpstring("Defines possible day(s) of week when Automatic Updates may (un)install updates.")public]
+    tagAutomaticUpdatesScheduledInstallationDay AutomaticUpdatesScheduledInstallationDay;
+
+    typedef [helpstring("Defines possible day(s) of week when Automatic Updates may (un)install updates.")]
+    enum {
+        ausidEveryDay = 0,
+        ausidEverySunday = 1,
+        ausidEveryMonday = 2,
+        ausidEveryTuesday = 3,
+        ausidEveryWednesday = 4,
+        ausidEveryThursday = 5,
+        ausidEveryFriday = 6,
+        ausidEverySaturday = 7
+    } tagAutomaticUpdatesScheduledInstallationDay;
+
+    [
+      uuid(13639463-00DB-4646-803D-528026140D88),
+      helpstring("UpdateCollection Class")
+    ]
+    coclass UpdateCollection {
+        [default] interface IUpdateCollection;
+    };
+
+    [
+      uuid(5BAF654A-5A07-4264-A255-9FF54C7151E7),
+      helpstring("UpdateDownloader Class")
+    ]
+    coclass UpdateDownloader {
+        [default] interface IUpdateDownloader;
+    };
+
+    [
+      odl,
+      uuid(68F1C6F9-7ECC-4666-A464-247FE12496C3),
+      helpstring("IUpdateDownloader Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateDownloader : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([out, retval] BSTR* retval);
+        [id(0x60020001), propput, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([in] BSTR retval);
+        [id(0x60020002), propget, helpstring("Indicates whether to forcefully download the specified updates.")]
+        HRESULT IsForced([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020002), propput, helpstring("Indicates whether to forcefully download the specified updates.")]
+        HRESULT IsForced([in] VARIANT_BOOL retval);
+        [id(0x60020003), propget, helpstring("Gets the desired priority level of the download.")]
+        HRESULT Priority([out, retval] DownloadPriority* retval);
+        [id(0x60020003), propput, helpstring("Gets the desired priority level of the download.")]
+        HRESULT Priority([in] DownloadPriority retval);
+        [id(0x60020004), propget, helpstring("Gets the updates to download.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+        [id(0x60020004), propput, helpstring("Gets the updates to download.")]
+        HRESULT Updates([in] IUpdateCollection* retval);
+        [id(0x60020005), helpstring("Begins an asynchronous operation to download the content file(s) associated with the updates.")]
+        HRESULT BeginDownload(
+                        [in] IUnknown* onProgressChanged, 
+                        [in] IUnknown* onCompleted, 
+                        [in] VARIANT state, 
+                        [out, retval] IDownloadJob** retval);
+        [id(0x60020006), helpstring("Synchronously downloads the content file(s) of the update(s) to the local cache on the target computer.")]
+        HRESULT Download([out, retval] IDownloadResult** retval);
+        [id(0x60020007), helpstring("Completes an asynchronous download.")]
+        HRESULT EndDownload(
+                        [in] IDownloadJob* value, 
+                        [out, retval] IDownloadResult** retval);
+    };
+
+    [
+      odl,
+      uuid(DAA4FDD0-4727-4DBE-A1E7-745DCA317144),
+      helpstring("IDownloadResult Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IDownloadResult : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the HRESULT value returned from the download.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Gets an OperationResultCode enumeration value specifying the overall result of the download.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+        [id(0x60020003), helpstring("Gets the result of the download on a specified update.")]
+        HRESULT GetUpdateResult(
+                        [in] long updateIndex, 
+                        [out, retval] IUpdateDownloadResult** retval);
+    };
+
+    [
+      uuid(D2E0FE7F-D23E-48E1-93C0-6FA8CC346474),
+      helpstring("UpdateInstaller Class")
+    ]
+    coclass UpdateInstaller {
+        [default] interface IUpdateInstaller;
+    };
+
+    [
+      odl,
+      uuid(7B929C68-CCDC-4226-96B1-8724600B54C2),
+      helpstring("IUpdateInstaller Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateInstaller : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([out, retval] BSTR* retval);
+        [id(0x60020001), propput, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([in] BSTR retval);
+        [id(0x60020002), propget, helpstring("Indicates whether to forcefully (un)install the specified updates.")]
+        HRESULT IsForced([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020002), propput, helpstring("Indicates whether to forcefully (un)install the specified updates.")]
+        HRESULT IsForced([in] VARIANT_BOOL retval);
+        [id(0x60020003), propget, restricted, helpstring("Gets the window on top of which the wizard dialog box should be shown.")]
+        HRESULT ParentHwnd([out, retval] wireHWND* retval);
+        [id(0x60020003), propput, restricted, helpstring("Gets the window on top of which the wizard dialog box should be shown.")]
+        HRESULT ParentHwnd([in] wireHWND retval);
+        [id(0x60020004), propput, helpstring("Sets the web browser window on top of which the wizard dialog box should be shown.")]
+        HRESULT ParentWindow([in] IUnknown* retval);
+        [id(0x60020004), propget, helpstring("Sets the web browser window on top of which the wizard dialog box should be shown.")]
+        HRESULT ParentWindow([out, retval] IUnknown** retval);
+        [id(0x60020005), propget, helpstring("Gets the updates to (un)install.")]
+        HRESULT Updates([out, retval] IUpdateCollection** retval);
+        [id(0x60020005), propput, helpstring("Gets the updates to (un)install.")]
+        HRESULT Updates([in] IUpdateCollection* retval);
+        [id(0x60020006), helpstring("Begins an asynchronous operation to install the updates.")]
+        HRESULT BeginInstall(
+                        [in] IUnknown* onProgressChanged, 
+                        [in] IUnknown* onCompleted, 
+                        [in] VARIANT state, 
+                        [out, retval] IInstallationJob** retval);
+        [id(0x60020007), helpstring("Begins an asynchronous operation to uninstall the updates.")]
+        HRESULT BeginUninstall(
+                        [in] IUnknown* onProgressChanged, 
+                        [in] IUnknown* onCompleted, 
+                        [in] VARIANT state, 
+                        [out, retval] IInstallationJob** retval);
+        [id(0x60020008), helpstring("Completes an asynchronous installation.")]
+        HRESULT EndInstall(
+                        [in] IInstallationJob* value, 
+                        [out, retval] IInstallationResult** retval);
+        [id(0x60020009), helpstring("Completes an asynchronous uninstallation.")]
+        HRESULT EndUninstall(
+                        [in] IInstallationJob* value, 
+                        [out, retval] IInstallationResult** retval);
+        [id(0x6002000a), helpstring("Synchronously installs updates onto the target computer.")]
+        HRESULT Install([out, retval] IInstallationResult** retval);
+        [id(0x6002000b), helpstring("Interactively guides the local user to go through the steps to install updates.")]
+        HRESULT RunWizard(
+                        [in, optional, defaultvalue("")] BSTR dialogTitle, 
+                        [out, retval] IInstallationResult** retval);
+        [id(0x6002000c), propget, helpstring("Indicates whether (un)installation can be performed on the target computer at this moment.")]
+        HRESULT IsBusy([out, retval] VARIANT_BOOL* retval);
+        [id(0x6002000d), helpstring("Synchronously uninstalls the updates from the target computer.")]
+        HRESULT Uninstall([out, retval] IInstallationResult** retval);
+        [id(0x6002000e), propget, helpstring("Indicates whether to show source prompts to the user, when needed, while installing updates.")]
+        HRESULT AllowSourcePrompts([out, retval] VARIANT_BOOL* retval);
+        [id(0x6002000e), propput, helpstring("Indicates whether to show source prompts to the user, when needed, while installing updates.")]
+        HRESULT AllowSourcePrompts([in] VARIANT_BOOL retval);
+        [id(0x6002000f), propget, helpstring("Gets a value indicating whether a system reboot is required before (un)installing updates.")]
+        HRESULT RebootRequiredBeforeInstallation([out, retval] VARIANT_BOOL* retval);
+    };
+
+    [
+      odl,
+      uuid(A43C56D6-7451-48D4-AF96-B6CD2D0D9B7A),
+      helpstring("IInstallationResult Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IInstallationResult : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the HRESULT returned from the (un)installation.")]
+        HRESULT HResult([out, retval] long* retval);
+        [id(0x60020002), propget, helpstring("Indicates whether a system reboot is required on the target computer to complete the (un)installation.")]
+        HRESULT RebootRequired([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Gets an OperationResultCode enumeration value specifying the overall result of the (un)installation.")]
+        HRESULT ResultCode([out, retval] OperationResultCode* retval);
+        [id(0x60020004), helpstring("Gets the result of the (un)installation on a specified update.")]
+        HRESULT GetUpdateResult(
+                        [in] long updateIndex, 
+                        [out, retval] IUpdateInstallationResult** retval);
+    };
+
+    [
+      uuid(4CB43D7F-7EEE-4906-8698-60DA1C38F2FE),
+      helpstring("UpdateSession Class")
+    ]
+    coclass UpdateSession {
+        [default] interface IUpdateSession;
+    };
+
+    [
+      odl,
+      uuid(816858A4-260D-4260-933A-2585F1ABC76B),
+      helpstring("IUpdateSession Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateSession : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([out, retval] BSTR* retval);
+        [id(0x60020001), propput, helpstring("Gets the identifier of the current client application.")]
+        HRESULT ClientApplicationID([in] BSTR retval);
+        [id(0x60020002), propget, helpstring("Gets a boolean value indicating whether the UpdateSession object is read-only.")]
+        HRESULT ReadOnly([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020003), propget, helpstring("Gets the proxy settings required to reaching the server for future operations in the UpdateSession.")]
+        HRESULT WebProxy([out, retval] IWebProxy** retval);
+        [id(0x60020003), propput, helpstring("Gets the proxy settings required to reaching the server for future operations in the UpdateSession.")]
+        HRESULT WebProxy([in] IWebProxy* retval);
+        [id(0x60020004), helpstring("Creates an UpdateSearcher within the UpdateSession.")]
+        HRESULT CreateUpdateSearcher([out, retval] IUpdateSearcher** retval);
+        [id(0x60020005), helpstring("Creates an UpdateDownloader within the UpdateSession.")]
+        HRESULT CreateUpdateDownloader([out, retval] IUpdateDownloader** retval);
+        [id(0x60020006), helpstring("Creates an UpdateInstaller within the UpdateSession.")]
+        HRESULT CreateUpdateInstaller([out, retval] IUpdateInstaller** retval);
+    };
+
+    [
+      uuid(91353063-774C-4F84-B05B-498FEC7FBE25),
+      helpstring("UpdateServiceManager Class")
+    ]
+    coclass UpdateServiceManager {
+        [default] interface IUpdateServiceManager;
+    };
+
+    [
+      odl,
+      uuid(C165FA56-6F87-43AA-9D92-6CEBCC7BCFE4),
+      helpstring("IUpdateServiceManager Interface"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateServiceManager : IDispatch {
+        [id(0x60020001), propget, helpstring("Gets the services registered with the SUS Client.")]
+        HRESULT Services([out, retval] IUpdateServiceCollection** retval);
+        [id(0x60020002), helpstring("Registers a service with SUS Client.")]
+        HRESULT AddService(
+                        [in] BSTR ServiceID, 
+                        [in] BSTR authorizationCabPath, 
+                        [out, retval] IUpdateService** retval);
+        [id(0x60020003), helpstring("Registers the service with AU.")]
+        HRESULT RegisterServiceWithAU([in] BSTR ServiceID);
+        [id(0x60020004), helpstring("Removes a service registration from SUS Client.")]
+        HRESULT RemoveService([in] BSTR ServiceID);
+        [id(0x60020005), helpstring("Unregisters the service with AU.")]
+        HRESULT UnregisterServiceWithAU([in] BSTR ServiceID);
+    };
+
+    [
+      odl,
+      uuid(9B0353AA-0E52-44FF-B8B0-1F7FA0437F88),
+      helpstring("IUpdateServiceCollection Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateServiceCollection : IDispatch {
+        [id(00000000), propget, helpstring("Gets an element in the collection.")]
+        HRESULT Item(
+                        [in] long index, 
+                        [out, retval] IUpdateService** retval);
+        [id(0xfffffffc), propget, helpstring("Gets an IEnumVARIANT interface on an object that can be used to enumerate the collection.")]
+        HRESULT _NewEnum([out, retval] IUnknown** retval);
+        [id(0x60020001), propget, helpstring("Gets the number of elements contained in the collection.")]
+        HRESULT Count([out, retval] long* retval);
+    };
+
+    [
+      odl,
+      uuid(9F95119D-2FE8-4A9F-BF1E-D5ACB4699F3C),
+      helpstring("IUpdateService Interface"),
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface IUpdateService : IDispatch {
+        [id(00000000), propget, helpstring("Name of the Service.")]
+        HRESULT Name([out, retval] BSTR* retval);
+        [id(0x60020001), propget, helpstring("SHA1 hash of the certificate used to sign contents.")]
+        HRESULT ContentValidationCert([out, retval] VARIANT* retval);
+        [id(0x60020002), propget, helpstring("Gets the date on which the Authorization Cab expires.")]
+        HRESULT ExpirationDate([out, retval] DATE* retval);
+        [id(0x60020003), propget, helpstring("Indicates whether the Service is a managed service.")]
+        HRESULT IsManaged([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020004), propget, helpstring("Indicates whether the Service is registered with Automatic Updates.")]
+        HRESULT IsRegisteredWithAU([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020005), propget, helpstring("Gets the date on which the Authorization Cab was issued.")]
+        HRESULT IssueDate([out, retval] DATE* retval);
+        [id(0x60020006), propget, helpstring("Indicates whether the Service offers Windows updates.")]
+        HRESULT OffersWindowsUpdates([out, retval] VARIANT_BOOL* retval);
+        [id(0x60020007), propget, helpstring("URL for the redirector cab.")]
+        HRESULT RedirectUrl([out, retval] BSTR* retval);
+        [id(0x60020008), propget, helpstring("Gets the identifier of the Service.")]
+        HRESULT ServiceID([out, retval] BSTR* retval);
+        [id(0x60020009), propget, helpstring("Returns the CLSID registered by the Service to provide the user interface.")]
+        HRESULT UIPluginClsid([out, retval] BSTR* retval);
+    };
+};

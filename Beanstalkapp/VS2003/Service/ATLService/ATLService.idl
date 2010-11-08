@@ -1,0 +1,18 @@
+// ATLService.idl : ATLService 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(ATLService.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(B38DE4B1-F083-427D-AC49-ABEDB591E2F3),
+	version(1.0),
+	helpstring("ATLService 1.0 类型库")
+]
+library ATLServiceLib
+{
+	importlib("stdole2.tlb");
+};

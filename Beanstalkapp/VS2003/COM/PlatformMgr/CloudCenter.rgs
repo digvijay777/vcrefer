@@ -1,0 +1,27 @@
+HKCR
+{
+	PlatformMgr.CloudCenter.1 = s 'CloudCenter Class'
+	{
+		CLSID = s '{AA14C6A7-7568-4E1C-81DD-390B26FE5837}'
+	}
+	PlatformMgr.CloudCenter = s 'CloudCenter Class'
+	{
+		CLSID = s '{AA14C6A7-7568-4E1C-81DD-390B26FE5837}'
+		CurVer = s 'PlatformMgr.CloudCenter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {AA14C6A7-7568-4E1C-81DD-390B26FE5837} = s 'CloudCenter Class'
+		{
+			ProgID = s 'PlatformMgr.CloudCenter.1'
+			VersionIndependentProgID = s 'PlatformMgr.CloudCenter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{80B7EA49-F6CE-488E-9A57-903BB4926487}'
+		}
+	}
+}

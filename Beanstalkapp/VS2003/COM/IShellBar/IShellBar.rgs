@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'IShellBar'
+		'IShellBar.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

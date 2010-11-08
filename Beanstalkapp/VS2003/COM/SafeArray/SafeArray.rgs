@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'SafeArray'
+		'SafeArray.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

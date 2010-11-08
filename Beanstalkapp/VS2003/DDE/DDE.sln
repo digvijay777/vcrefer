@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DDEServer", "DDEServer\DDEServer.vcproj", "{F6DC8E4A-5640-432E-B3F3-2B10419DEE02}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DDEClient", "DDEClient\DDEClient.vcproj", "{6A7C6431-6E87-475F-ADAD-5F868075BF67}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F6DC8E4A-5640-432E-B3F3-2B10419DEE02}.Debug.ActiveCfg = Debug|Win32
+		{F6DC8E4A-5640-432E-B3F3-2B10419DEE02}.Debug.Build.0 = Debug|Win32
+		{F6DC8E4A-5640-432E-B3F3-2B10419DEE02}.Release.ActiveCfg = Release|Win32
+		{F6DC8E4A-5640-432E-B3F3-2B10419DEE02}.Release.Build.0 = Release|Win32
+		{6A7C6431-6E87-475F-ADAD-5F868075BF67}.Debug.ActiveCfg = Debug|Win32
+		{6A7C6431-6E87-475F-ADAD-5F868075BF67}.Debug.Build.0 = Debug|Win32
+		{6A7C6431-6E87-475F-ADAD-5F868075BF67}.Release.ActiveCfg = Release|Win32
+		{6A7C6431-6E87-475F-ADAD-5F868075BF67}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

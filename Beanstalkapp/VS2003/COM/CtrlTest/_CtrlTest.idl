@@ -1,0 +1,38 @@
+import "C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\include\prsht.idl";
+import "C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\include\mshtml.idl";
+import "c:\program files\microsoft visual studio .net 2003\vc7\platformsdk\include\dimm.idl";
+import "C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\include\mshtmhst.idl";
+import "c:\program files\microsoft visual studio .net 2003\vc7\platformsdk\include\docobj.idl";
+import "C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\include\exdisp.idl";
+import "C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\include\objsafe.idl";
+
+[
+	object,
+	uuid(D547D663-850A-4B83-9FE5-F73C59B26812),
+	dual,
+	helpstring("IMyTree 接口"),
+	pointer_default(unique)
+] 
+#line 15 "x:\\vs2003\\com\\ctrltest\\mytree.h"
+interface IMyTree : IDispatch {
+};
+
+
+[ version(1.0), uuid(7CD9CA88-71EA-47D6-8CB7-A51D5DABC382), helpstring("CtrlTest 1.0 类型库") ]
+library CtrlTest
+{
+	importlib("stdole2.tlb");
+	importlib("olepro32.dll");
+
+	[
+		version(1.0),
+		uuid(87997FC7-8A7A-4354-9712-F6F4C6100E69),
+		helpstring("MyTree Class")
+	] 
+#line 32 "x:\\vs2003\\com\\ctrltest\\mytree.h"
+	coclass CMyTree {
+		interface IMyTree;
+	};
+
+}
+

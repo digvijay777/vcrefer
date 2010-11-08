@@ -1,0 +1,24 @@
+HKCR
+{
+	DCOMServer.FirstDCOM.1 = s 'FirstDCOM Class'
+	{
+		CLSID = s '{42D6559F-6472-4A84-B8B0-53938B18CCB4}'
+	}
+	DCOMServer.FirstDCOM = s 'FirstDCOM Class'
+	{
+		CLSID = s '{42D6559F-6472-4A84-B8B0-53938B18CCB4}'
+		CurVer = s 'DCOMServer.FirstDCOM.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {42D6559F-6472-4A84-B8B0-53938B18CCB4} = s 'FirstDCOM Class'
+		{
+			ProgID = s 'DCOMServer.FirstDCOM.1'
+			VersionIndependentProgID = s 'DCOMServer.FirstDCOM'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{A36647C3-C0AD-473B-AF30-CB9357D251ED}'
+		}
+	}
+}

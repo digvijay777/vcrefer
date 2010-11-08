@@ -1,0 +1,37 @@
+// ExeCom.idl : ExeCom 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(ExeCom.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(4D9F8A60-140C-4D3A-AB33-C531FE7F470B),
+	dual,
+	nonextensible,
+	helpstring("IExeComTest 接口"),
+	pointer_default(unique)
+]
+interface IExeComTest : IDispatch{
+	[id(1), helpstring("方法GetMsg")] HRESULT GetMsg([out,retval] BSTR* lpVal);
+};
+[
+	uuid(6BE03C6E-CEB6-45AB-9C95-1314A782E316),
+	version(1.0),
+	helpstring("ExeCom 1.0 类型库")
+]
+library ExeComLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(E4B570D0-EB62-4574-9BF5-28CD175147FC),
+		helpstring("ExeComTest Class")
+	]
+	coclass ExeComTest
+	{
+		[default] interface IExeComTest;
+	};
+};

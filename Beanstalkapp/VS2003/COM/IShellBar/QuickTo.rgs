@@ -1,0 +1,44 @@
+HKCR
+{
+	IShellBar.QuickTo.1 = s 'QuickTo Class'
+	{
+		CLSID = s '{06D75A0C-3872-4CE1-8973-D62514BF9A2B}'
+	}
+	IShellBar.QuickTo = s 'QuickTo Class'
+	{
+		CLSID = s '{06D75A0C-3872-4CE1-8973-D62514BF9A2B}'
+		CurVer = s 'IShellBar.QuickTo.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {06D75A0C-3872-4CE1-8973-D62514BF9A2B} = s 'QuickTo Class'
+		{
+			ProgID = s 'IShellBar.QuickTo.1'
+			VersionIndependentProgID = s 'IShellBar.QuickTo'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{654B0254-6E14-4B03-9BA1-1A0A563C75A9}'
+		}
+	}
+}
+
+HKLM
+{
+	Software
+	{
+		Microsoft
+		{
+			'Internet Explorer'
+			{
+				NoRemove Toolbar
+				{
+					ForceRemove val '{06D75A0C-3872-4CE1-8973-D62514BF9A2B}' = s '¿ìËÙµ¼º½'
+				}
+			}
+		}
+	}
+}

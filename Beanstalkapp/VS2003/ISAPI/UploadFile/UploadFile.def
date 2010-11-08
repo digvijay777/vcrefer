@@ -1,0 +1,8 @@
+; UploadFile.def : declares the module parameters for the DLL.
+
+LIBRARY	     "UploadFile"
+
+EXPORTS
+	HttpExtensionProc
+	GetExtensionVersion
+	TerminateExtension

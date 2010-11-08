@@ -1,0 +1,37 @@
+// SvrCom.idl : SvrCom 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(SvrCom.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(E9E109BA-458E-441A-85FB-4E9C815D2565),
+	dual,
+	nonextensible,
+	helpstring("ITest 接口"),
+	pointer_default(unique)
+]
+interface ITest : IDispatch{
+	[id(1), helpstring("方法GetMsg")] HRESULT GetMsg([out,retval] BSTR* lpVal);
+};
+[
+	uuid(BBEF2ED4-5945-4069-9D77-2E5858B14DD0),
+	version(1.0),
+	helpstring("SvrCom 1.0 类型库")
+]
+library SvrComLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(18098047-EA36-4D93-BF53-752D6F8826F6),
+		helpstring("Test Class")
+	]
+	coclass Test
+	{
+		[default] interface ITest;
+	};
+};

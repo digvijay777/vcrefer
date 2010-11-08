@@ -1,0 +1,57 @@
+// SafeArray.idl : SafeArray 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(SafeArray.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(E131B8EE-A6BE-4045-B5CB-8A86E9E0D23E),
+	dual,
+	nonextensible,
+	helpstring("IArrayTest 接口"),
+	pointer_default(unique)
+]
+interface IArrayTest : IDispatch{
+	[id(1), helpstring("方法TestBSTRArray")] HRESULT TestBSTRArray([out,retval] VARIANT* pVal);
+	[id(2), helpstring("method GetObject")] HRESULT GetObject([in]VARIANT vScript, [out,retval] VARIANT* lpVal);
+};
+[
+	object,
+	uuid(4C4C3A14-975A-44D1-A990-81C4D02BDE9C),
+	dual,
+	nonextensible,
+	helpstring("ISTAtest Interface"),
+	pointer_default(unique)
+]
+interface ISTAtest : IDispatch{
+	[id(1), helpstring("method GetID")] HRESULT GetID([out,retval] LONG* pVal);
+};
+[
+	uuid(EE7C5E7A-3721-48B2-990F-C8D27101360B),
+	version(1.0),
+	helpstring("SafeArray 1.0 类型库")
+]
+library SafeArrayLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(D731B46C-2575-4014-AF65-687DA0534B43),
+		helpstring("ArrayTest Class")
+	]
+	coclass ArrayTest
+	{
+		[default] interface IArrayTest;
+	};
+	[
+		uuid(10820A32-D879-4A48-AD53-3AEF68CEF04B),
+		helpstring("STAtest Class")
+	]
+	coclass STAtest
+	{
+		[default] interface ISTAtest;
+	};
+};

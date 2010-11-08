@@ -1,0 +1,37 @@
+// DCOMTest.idl : IDL source for DCOMTest
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DCOMTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(C2AEA4E4-7BB2-40FA-B03C-2AAFF559EDA5),
+	dual,
+	nonextensible,
+	helpstring("ITestDCOM Interface"),
+	pointer_default(unique)
+]
+interface ITestDCOM : IDispatch{
+	[id(1), helpstring("method MessageBox")] HRESULT MessageBox([in] BSTR pMsg);
+};
+[
+	uuid(C5D51866-15B4-4280-B0E4-0D49D5FF1A0C),
+	version(1.0),
+	helpstring("DCOMTest 1.0 Type Library")
+]
+library DCOMTestLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(DDA496E3-72E8-4EB4-8184-2DC6247C79DA),
+		helpstring("TestDCOM Class")
+	]
+	coclass TestDCOM
+	{
+		[default] interface ITestDCOM;
+	};
+};

@@ -1,0 +1,103 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LeakCheck", "LeakCheck\LeakCheck.vcproj", "{DD196D5B-CC12-49E9-BCE7-2105FD82D9E1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UserTest", "UserTest\UserTest.vcproj", "{D63B8548-7761-4400-A4BA-8B81D06120BB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllTest", "DllTest\DllTest.vcproj", "{9FEA359B-1C01-4608-980B-102BB39D2DCD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileSystemTest", "FileSystemTest\FileSystemTest.vcproj", "{12C38780-8E58-4DD4-BDB7-0876B2D8FD1A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HideProcess", "HideProcess\HideProcess.vcproj", "{7DF3D3F9-7373-4017-AF6C-7234E838AC7C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DeskAssist", "DeskAssist\DeskAssist.vcproj", "{FDF5A0B5-8151-425F-9649-0C70948D9DCB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SystemInfo", "SystemInfo\SystemInfo.vcproj", "{B2FBD0E7-FDDC-4E12-AC0E-63F32B6581EF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SetWndDPI", "SetWndDPI\SetWndDPI.vcproj", "{23D850C1-59DA-4F99-8EEC-32FF16AE222F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DPITest", "DPITest\DPITest.vcproj", "{AA4160A4-8C73-4A9B-AC8D-797DFC4741BA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RunAs", "RunAs\RunAs.vcproj", "{FC391552-382B-45E1-A413-5CA90EC88DF8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InjectDll", "InjectDll\InjectDll.vcproj", "{F4EA850A-2864-40FE-BAF2-9F161F1D4E2D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestDll", "TestDll\TestDll.vcproj", "{4226BF2D-4867-4D1B-A59B-9BFEB2488997}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{DD196D5B-CC12-49E9-BCE7-2105FD82D9E1}.Debug.ActiveCfg = Debug|Win32
+		{DD196D5B-CC12-49E9-BCE7-2105FD82D9E1}.Release.ActiveCfg = Release|Win32
+		{DD196D5B-CC12-49E9-BCE7-2105FD82D9E1}.Release.Build.0 = Release|Win32
+		{D63B8548-7761-4400-A4BA-8B81D06120BB}.Debug.ActiveCfg = Debug|Win32
+		{D63B8548-7761-4400-A4BA-8B81D06120BB}.Release.ActiveCfg = Release|Win32
+		{D63B8548-7761-4400-A4BA-8B81D06120BB}.Release.Build.0 = Release|Win32
+		{9FEA359B-1C01-4608-980B-102BB39D2DCD}.Debug.ActiveCfg = Debug|Win32
+		{9FEA359B-1C01-4608-980B-102BB39D2DCD}.Release.ActiveCfg = Release|Win32
+		{9FEA359B-1C01-4608-980B-102BB39D2DCD}.Release.Build.0 = Release|Win32
+		{12C38780-8E58-4DD4-BDB7-0876B2D8FD1A}.Debug.ActiveCfg = Debug|Win32
+		{12C38780-8E58-4DD4-BDB7-0876B2D8FD1A}.Release.ActiveCfg = Release|Win32
+		{12C38780-8E58-4DD4-BDB7-0876B2D8FD1A}.Release.Build.0 = Release|Win32
+		{7DF3D3F9-7373-4017-AF6C-7234E838AC7C}.Debug.ActiveCfg = Debug|Win32
+		{7DF3D3F9-7373-4017-AF6C-7234E838AC7C}.Release.ActiveCfg = Release|Win32
+		{7DF3D3F9-7373-4017-AF6C-7234E838AC7C}.Release.Build.0 = Release|Win32
+		{FDF5A0B5-8151-425F-9649-0C70948D9DCB}.Debug.ActiveCfg = Debug|Win32
+		{FDF5A0B5-8151-425F-9649-0C70948D9DCB}.Release.ActiveCfg = Release|Win32
+		{FDF5A0B5-8151-425F-9649-0C70948D9DCB}.Release.Build.0 = Release|Win32
+		{B2FBD0E7-FDDC-4E12-AC0E-63F32B6581EF}.Debug.ActiveCfg = Debug|Win32
+		{B2FBD0E7-FDDC-4E12-AC0E-63F32B6581EF}.Debug.Build.0 = Debug|Win32
+		{B2FBD0E7-FDDC-4E12-AC0E-63F32B6581EF}.Release.ActiveCfg = Release|Win32
+		{B2FBD0E7-FDDC-4E12-AC0E-63F32B6581EF}.Release.Build.0 = Release|Win32
+		{23D850C1-59DA-4F99-8EEC-32FF16AE222F}.Debug.ActiveCfg = Debug|Win32
+		{23D850C1-59DA-4F99-8EEC-32FF16AE222F}.Debug.Build.0 = Debug|Win32
+		{23D850C1-59DA-4F99-8EEC-32FF16AE222F}.Release.ActiveCfg = Release|Win32
+		{23D850C1-59DA-4F99-8EEC-32FF16AE222F}.Release.Build.0 = Release|Win32
+		{AA4160A4-8C73-4A9B-AC8D-797DFC4741BA}.Debug.ActiveCfg = Debug|Win32
+		{AA4160A4-8C73-4A9B-AC8D-797DFC4741BA}.Debug.Build.0 = Debug|Win32
+		{AA4160A4-8C73-4A9B-AC8D-797DFC4741BA}.Release.ActiveCfg = Release|Win32
+		{AA4160A4-8C73-4A9B-AC8D-797DFC4741BA}.Release.Build.0 = Release|Win32
+		{FC391552-382B-45E1-A413-5CA90EC88DF8}.Debug.ActiveCfg = Debug|Win32
+		{FC391552-382B-45E1-A413-5CA90EC88DF8}.Debug.Build.0 = Debug|Win32
+		{FC391552-382B-45E1-A413-5CA90EC88DF8}.Release.ActiveCfg = Release|Win32
+		{FC391552-382B-45E1-A413-5CA90EC88DF8}.Release.Build.0 = Release|Win32
+		{F4EA850A-2864-40FE-BAF2-9F161F1D4E2D}.Debug.ActiveCfg = Debug|Win32
+		{F4EA850A-2864-40FE-BAF2-9F161F1D4E2D}.Debug.Build.0 = Debug|Win32
+		{F4EA850A-2864-40FE-BAF2-9F161F1D4E2D}.Release.ActiveCfg = Release|Win32
+		{F4EA850A-2864-40FE-BAF2-9F161F1D4E2D}.Release.Build.0 = Release|Win32
+		{4226BF2D-4867-4D1B-A59B-9BFEB2488997}.Debug.ActiveCfg = Debug|Win32
+		{4226BF2D-4867-4D1B-A59B-9BFEB2488997}.Debug.Build.0 = Debug|Win32
+		{4226BF2D-4867-4D1B-A59B-9BFEB2488997}.Release.ActiveCfg = Release|Win32
+		{4226BF2D-4867-4D1B-A59B-9BFEB2488997}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,33 @@
+HKCR
+{
+	DynamicWeb.WebForm.1 = s 'WebForm Class'
+	{
+		CLSID = s '{7386AC8E-F309-4600-A3D0-591F40192721}'
+	}
+	DynamicWeb.WebForm = s 'WebForm Class'
+	{
+		CLSID = s '{7386AC8E-F309-4600-A3D0-591F40192721}'
+		CurVer = s 'DynamicWeb.WebForm.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7386AC8E-F309-4600-A3D0-591F40192721} = s 'WebForm Class'
+		{
+			ProgID = s 'DynamicWeb.WebForm.1'
+			VersionIndependentProgID = s 'DynamicWeb.WebForm'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 101'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '131473'
+			}
+			'TypeLib' = s '{9D379A8B-4067-40D8-815C-50646C2D7A3E}'
+			'Version' = s '1.0'
+		}
+	}
+}

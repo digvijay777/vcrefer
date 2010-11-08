@@ -1,0 +1,51 @@
+// WebTest.idl : IDL source for WebTest
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (WebTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(C5315687-7FBE-4168-AEE3-F48C8B21954A),
+	dual,
+	nonextensible,
+	helpstring("IThreadEvent Interface"),
+	pointer_default(unique)
+]
+interface IThreadEvent : IDispatch{
+	[id(1), helpstring("method Start")] HRESULT Start(void);
+	[id(2), helpstring("method Stop")] HRESULT Stop(void);
+	[id(3), helpstring("method SetPos")] HRESULT SetPos([in] ULONG nPos);
+};
+
+[
+	uuid(F42060E2-B894-477F-8A1F-96FDD088051A),
+	version(1.0),
+	helpstring("WebTest 1.0 Type Library")
+]
+library WebTestLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(D99756EA-6CDD-438D-AD50-E90608FDBDAB),
+		helpstring("_IThreadEventEvents interface")
+	]
+	dispinterface _IThreadEventEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnProgress")] HRESULT OnProgress([in] ULONG nPos);
+	}
+	[
+		uuid(FCD3826B-72C0-423A-B792-37EF54B3B62D),
+		helpstring("ThreadEvent Class")
+	]
+	coclass ThreadEvent
+	{
+		[default] interface IThreadEvent;
+		[default, source] dispinterface _IThreadEventEvents;
+	};
+};

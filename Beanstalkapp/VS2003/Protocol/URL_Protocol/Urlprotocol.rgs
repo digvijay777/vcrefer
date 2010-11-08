@@ -1,0 +1,15 @@
+HKCR
+{
+	yj = s 'yuan jie protocol'
+	{
+		val 'URL Protocol' = s '%MODULE%'
+		DefaultIcon = s '%MODULE%, 128'
+		ForceRemove shell
+		{
+			ForceRemove open
+			{
+				command = s '"%MODULE%" "%%1"'
+			}
+		}
+	}
+}

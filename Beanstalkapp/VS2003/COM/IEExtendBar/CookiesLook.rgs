@@ -1,0 +1,44 @@
+HKCR
+{
+	IEExtendBar.CookiesLook.1 = s 'CookiesLook Class'
+	{
+		CLSID = s '{82AE3FB7-CDA9-4F46-B6CB-939DDD14613A}'
+	}
+	IEExtendBar.CookiesLook = s 'CookiesLook Class'
+	{
+		CLSID = s '{82AE3FB7-CDA9-4F46-B6CB-939DDD14613A}'
+		CurVer = s 'IEExtendBar.CookiesLook.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {82AE3FB7-CDA9-4F46-B6CB-939DDD14613A} = s 'CookiesLook Class'
+		{
+			ProgID = s 'IEExtendBar.CookiesLook.1'
+			VersionIndependentProgID = s 'IEExtendBar.CookiesLook'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{B2F16470-5304-43C5-8745-13F711E52E6D}'
+		}
+	}
+}
+
+HKLM
+{
+	Software
+	{
+		Microsoft
+		{
+			'Internet Explorer'
+			{
+				NoRemove Toolbar
+				{
+					ForceRemove val '{82AE3FB7-CDA9-4F46-B6CB-939DDD14613A}' = s 'Cookies look bar'
+				}
+			}
+		}
+	}
+}

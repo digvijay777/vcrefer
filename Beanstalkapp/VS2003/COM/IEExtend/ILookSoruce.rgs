@@ -1,0 +1,57 @@
+HKCR
+{
+	IEExtend.ILookSoruce.1 = s 'ILookSoruce Class'
+	{
+		CLSID = s '{37EF2A4D-C80A-44FC-A678-6DF2F22D1794}'
+	}
+	IEExtend.ILookSoruce = s 'ILookSoruce Class'
+	{
+		CLSID = s '{37EF2A4D-C80A-44FC-A678-6DF2F22D1794}'
+		CurVer = s 'IEExtend.ILookSoruce.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {37EF2A4D-C80A-44FC-A678-6DF2F22D1794} = s 'ILookSoruce Class'
+		{
+			ProgID = s 'IEExtend.ILookSoruce.1'
+			VersionIndependentProgID = s 'IEExtend.ILookSoruce'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 102'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{7CFBB639-59B2-478D-A24D-10E216DD045E}'
+			'Version' = s '1.0'
+		}
+	}
+}
+
+HKLM
+{
+	SOFTWARE
+	{
+		Microsoft
+		{
+			Windows
+			{
+				CurrentVersion
+				{
+					Explorer
+					{
+						'Browser Helper Objects'
+						{
+							ForceRemove {37EF2A4D-C80A-44FC-A678-6DF2F22D1794} = s 'LookSource'
+						}
+					}
+				}
+			}
+		}
+	}
+}

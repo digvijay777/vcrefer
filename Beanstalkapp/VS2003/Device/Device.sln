@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestDevice", "TestDevice\TestDevice.vcproj", "{AB8A6AEB-3059-400D-98A0-808F1AA7A4B0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adapter", "Adapter\Adapter.vcproj", "{97DB232F-3CED-4A1D-8CC3-737DC59BA32B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UDiskTest", "UDiskTest\UDiskTest.vcproj", "{508EE994-0D33-4EFC-BD51-896CCA212190}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AB8A6AEB-3059-400D-98A0-808F1AA7A4B0}.Debug.ActiveCfg = Debug|Win32
+		{AB8A6AEB-3059-400D-98A0-808F1AA7A4B0}.Debug.Build.0 = Debug|Win32
+		{AB8A6AEB-3059-400D-98A0-808F1AA7A4B0}.Release.ActiveCfg = Release|Win32
+		{AB8A6AEB-3059-400D-98A0-808F1AA7A4B0}.Release.Build.0 = Release|Win32
+		{97DB232F-3CED-4A1D-8CC3-737DC59BA32B}.Debug.ActiveCfg = Debug|Win32
+		{97DB232F-3CED-4A1D-8CC3-737DC59BA32B}.Debug.Build.0 = Debug|Win32
+		{97DB232F-3CED-4A1D-8CC3-737DC59BA32B}.Release.ActiveCfg = Release|Win32
+		{97DB232F-3CED-4A1D-8CC3-737DC59BA32B}.Release.Build.0 = Release|Win32
+		{508EE994-0D33-4EFC-BD51-896CCA212190}.Debug.ActiveCfg = Debug|Win32
+		{508EE994-0D33-4EFC-BD51-896CCA212190}.Debug.Build.0 = Debug|Win32
+		{508EE994-0D33-4EFC-BD51-896CCA212190}.Release.ActiveCfg = Release|Win32
+		{508EE994-0D33-4EFC-BD51-896CCA212190}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

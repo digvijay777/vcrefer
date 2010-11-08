@@ -1,0 +1,27 @@
+HKCR
+{
+	WebTest.ThreadEvent.1 = s 'ThreadEvent Class'
+	{
+		CLSID = s '{FCD3826B-72C0-423A-B792-37EF54B3B62D}'
+	}
+	WebTest.ThreadEvent = s 'ThreadEvent Class'
+	{
+		CLSID = s '{FCD3826B-72C0-423A-B792-37EF54B3B62D}'
+		CurVer = s 'WebTest.ThreadEvent.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FCD3826B-72C0-423A-B792-37EF54B3B62D} = s 'ThreadEvent Class'
+		{
+			ProgID = s 'WebTest.ThreadEvent.1'
+			VersionIndependentProgID = s 'WebTest.ThreadEvent'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{F42060E2-B894-477F-8A1F-96FDD088051A}'
+		}
+	}
+}

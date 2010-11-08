@@ -1,0 +1,9 @@
+[sln空文件结构]
+Microsoft Visual Studio Solution File, Format Version 8.00
+
+[BUILD路径]
+输出目录 = X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)
+中间目录 = X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)
+
+输出文件 = X:\BUILD\$(ConfigurationName)\$(SolutionName)\$(ProjectName).dll
+输出文件 = X:\BUILD\$(ConfigurationName)\$(SolutionName)\$(ProjectName).exe

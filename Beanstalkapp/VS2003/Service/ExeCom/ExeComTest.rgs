@@ -1,0 +1,24 @@
+HKCR
+{
+	ExeCom.ExeComTest.1 = s 'ExeComTest Class'
+	{
+		CLSID = s '{E4B570D0-EB62-4574-9BF5-28CD175147FC}'
+	}
+	ExeCom.ExeComTest = s 'ExeComTest Class'
+	{
+		CLSID = s '{E4B570D0-EB62-4574-9BF5-28CD175147FC}'
+		CurVer = s 'ExeCom.ExeComTest.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E4B570D0-EB62-4574-9BF5-28CD175147FC} = s 'ExeComTest Class'
+		{
+			ProgID = s 'ExeCom.ExeComTest.1'
+			VersionIndependentProgID = s 'ExeCom.ExeComTest'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{6BE03C6E-CEB6-45AB-9C95-1314A782E316}'
+		}
+	}
+}

@@ -1,0 +1,367 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\ControlDraw.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\ControlDraw.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "关于 ControlDraw"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "ControlDraw Version 1.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2009",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_CONTROLDRAW_DIALOG DIALOGEX 0, 0, 438, 265
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "ControlDraw"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,381,0,50,16
+    PUSHBUTTON      "取消",IDCANCEL,381,25,50,16
+    CONTROL         "",IDC_STATIC_TAB,"Static",SS_OWNERDRAW,0,28,200,24
+    LTEXT           "静态",IDC_STATIC_TABSEL,83,0,68,16
+    PUSHBUTTON      "Button1",IDC_BUTTON1,381,48,50,14
+    CONTROL         "Radio1",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,18,65,37,10
+    CONTROL         "Radio2",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,16,89,37,
+                    10
+    LISTBOX         IDC_LIST1,114,138,258,108,LBS_OWNERDRAWFIXED | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Button2",IDC_BUTTON2,380,149,50,14
+    PUSHBUTTON      "Button3",IDC_BUTTON3,381,173,50,14
+    PUSHBUTTON      "全选",IDC_BUTTON4,381,197,50,14
+    PUSHBUTTON      "Button5",IDC_BUTTON5,381,221,50,14
+END
+
+IDD_SysRepair DIALOGEX 0, 0, 363, 204
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,306,7,50,14
+    PUSHBUTTON      "Cancel",IDC_BTNTEST,306,24,50,14
+    LISTBOX         IDC_LIST1,7,7,279,161,LBS_OWNERDRAWFIXED | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_TREECTRL DIALOGEX 0, 0, 442, 221
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,385,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,385,24,50,14
+    CONTROL         "",IDC_TREE1,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_NOSCROLL | WS_BORDER | WS_TABSTOP,7,7,
+                    166,207
+    PUSHBUTTON      "Button1",IDC_BUTTON1,385,49,50,14
+    CONTROL         "",IDC_TREE2,"SysTreeView32",WS_BORDER | WS_TABSTOP,186,
+                    7,186,207
+    PUSHBUTTON      " 全选",IDC_BUTTON2,385,71,50,14
+    PUSHBUTTON      "我的文档",IDC_BUTTON3,385,90,50,14
+    PUSHBUTTON      "内存",IDC_BUTTON4,385,109,50,14
+    PUSHBUTTON      "是否选中内存",IDC_BUTTON5,385,131,50,14
+    PUSHBUTTON      "得到目录",IDC_BUTTON6,385,152,50,14
+END
+
+IDD_CHECKLISTBOXDLG DIALOGEX 0, 0, 369, 225
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,312,7,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,312,26,50,16
+    LISTBOX         IDC_LIST1,7,7,275,211,LBS_OWNERDRAWFIXED | 
+                    LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
+END
+
+IDD_TREELISTDLG DIALOGEX 0, 0, 297, 187
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,240,7,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,240,26,50,16
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_ALIGNLEFT | 
+                    LVS_OWNERDATA | WS_BORDER | WS_TABSTOP,7,7,225,173
+    PUSHBUTTON      "CheckAll",IDC_BUTTON4,240,166,50,14
+    PUSHBUTTON      "UnCheckAll",IDC_BUTTON2,240,147,50,14
+    PUSHBUTTON      "Check(3)",IDC_BUTTON3,240,126,50,14
+END
+
+IDD_CTRLLISTBOXDLG DIALOGEX 0, 0, 274, 217
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,217,7,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,217,26,50,16
+    LISTBOX         IDC_LIST1,7,7,201,203,LBS_OWNERDRAWVARIABLE | 
+                    LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_FILETREETESTDLG DIALOGEX 0, 0, 337, 227
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,280,7,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,280,26,50,16
+    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_TABSTOP,7,7,
+                    205,167
+    GROUPBOX        "拖动文件到这里,显示文件图标",IDC_ST_GROUP,7,180,323,40,
+                    BS_NOTIFY,WS_EX_ACCEPTFILES
+    ICON            "",IDC_ST_ICON,17,193,20,20
+    LTEXT           "",IDC_ST_PATH,39,193,278,18
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "TODO: <公司名>"
+            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "ControlDraw.exe"
+            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
+            VALUE "OriginalFilename", "ControlDraw.exe"
+            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "翻译", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_CONTROLDRAW_DIALOG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 431
+        BOTTOMMARGIN, 258
+    END
+
+    IDD_SysRepair, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 356
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 197
+    END
+
+    IDD_TREECTRL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 435
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 214
+    END
+
+    IDD_CHECKLISTBOXDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 362
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 218
+    END
+
+    IDD_TREELISTDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 180
+    END
+
+    IDD_CTRLLISTBOXDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 267
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 210
+    END
+
+    IDD_FILETREETESTDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 330
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 220
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_TABBAK       BITMAP                  "res\\bitmap1.bmp"
+IDB_BITMAP_BK           BITMAP                  "res\\200882214474796213.bmp"
+IDB_RADIO               BITMAP                  "res\\radio.bmp"
+IDB_CHECK               BITMAP                  "res\\check.bmp"
+IDB_PROMPT              BITMAP                  "res\\prompt.bmp"
+IDB_SAFESTATE           BITMAP                  "res\\safestate.bmp"
+IDB_BUTTON              BITMAP                  "res\\button.bmp"
+IDB_FOLDERICON          BITMAP                  "res\\FolderTree.bmp"
+IDB_TREEICON            BITMAP                  "res\\FolderTreeChecked.bmp"
+IDB_CHECKINGSTATE       BITMAP                  "res\\checkingstate.bmp"
+IDB_LISTSELBK           BITMAP                  "res\\selbk.bmp"
+IDB_LISTSTATEMIN        BITMAP                  "res\\listsatemin.bmp"
+IDB_LISTSTATEMAX        BITMAP                  "res\\listsatemax.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "关于 ControlDraw(&A)..."
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\ControlDraw.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"         // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

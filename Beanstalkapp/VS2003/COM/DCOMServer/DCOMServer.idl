@@ -1,0 +1,37 @@
+// DCOMServer.idl : DCOMServer 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(DCOMServer.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(FC2FCA1B-EA4B-4BAA-A7EB-2A219DBF8550),
+	dual,
+	nonextensible,
+	helpstring("IFirstDCOM 接口"),
+	pointer_default(unique)
+]
+interface IFirstDCOM : IDispatch{
+	[id(1), helpstring("方法GetServerName")] HRESULT GetServerName([out,retval] BSTR* lpServer);
+};
+[
+	uuid(A36647C3-C0AD-473B-AF30-CB9357D251ED),
+	version(1.0),
+	helpstring("DCOMServer 1.0 类型库")
+]
+library DCOMServerLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(42D6559F-6472-4A84-B8B0-53938B18CCB4),
+		helpstring("FirstDCOM Class")
+	]
+	coclass FirstDCOM
+	{
+		[default] interface IFirstDCOM;
+	};
+};

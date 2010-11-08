@@ -1,0 +1,27 @@
+HKCR
+{
+	SafeArray.ErrTest.1 = s 'ErrTest Class'
+	{
+		CLSID = s '{30CAED47-BE89-45E3-B75E-E4E08D5B374C}'
+	}
+	SafeArray.ErrTest = s 'ErrTest Class'
+	{
+		CLSID = s '{30CAED47-BE89-45E3-B75E-E4E08D5B374C}'
+		CurVer = s 'SafeArray.ErrTest.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {30CAED47-BE89-45E3-B75E-E4E08D5B374C} = s 'ErrTest Class'
+		{
+			ProgID = s 'SafeArray.ErrTest.1'
+			VersionIndependentProgID = s 'SafeArray.ErrTest'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{EE7C5E7A-3721-48B2-990F-C8D27101360B}'
+		}
+	}
+}

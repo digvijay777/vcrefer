@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>WebTest.ThreadEvent</title>
+<script language="javascript">
+<!--
+function OnUnload()
+{
+	window.event.returnValue="<font color=red>确定离开当前页面吗？</font>";
+	// alert('refresh');
+	return false;
+}
+-->
+</script>
+</head>
+<body>
+<h1>WebTest.ThreadEvent</h1>
+<object classid="clsid:{FCD3826B-72C0-423A-B792-37EF54B3B62D}" id="objThreadEvent"></object>
+<script language="javascript" for="objThreadEvent" event="OnProgress(nPos)">
+labelProgress.innerHTML = ":&nbsp;" + nPos;
+</script>
+<button onClick="objThreadEvent.Start()">Start</button>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<button onClick="objThreadEvent.Stop()">Stop</button>
+<br /><br />
+当前进度<label style="color:red" id="labelProgress"></label>
+</body>
+</html>

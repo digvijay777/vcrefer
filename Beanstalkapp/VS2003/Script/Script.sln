@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JScript", "JScript\JScript.vcproj", "{5E24D255-53A6-46CC-96DF-07920705D770}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ATLJScript", "ATLJScript\ATLJScript.vcproj", "{90A93228-45D7-4698-B5B2-484E91BF33C7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ATLJScriptPS", "ATLJScript\ATLJScriptPS.vcproj", "{3D5DECB0-0060-4765-9B25-1973D1370F4A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{90A93228-45D7-4698-B5B2-484E91BF33C7} = {90A93228-45D7-4698-B5B2-484E91BF33C7}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5E24D255-53A6-46CC-96DF-07920705D770}.Debug.ActiveCfg = Debug|Win32
+		{5E24D255-53A6-46CC-96DF-07920705D770}.Debug.Build.0 = Debug|Win32
+		{5E24D255-53A6-46CC-96DF-07920705D770}.Release.ActiveCfg = Release|Win32
+		{5E24D255-53A6-46CC-96DF-07920705D770}.Release.Build.0 = Release|Win32
+		{90A93228-45D7-4698-B5B2-484E91BF33C7}.Debug.ActiveCfg = Debug|Win32
+		{90A93228-45D7-4698-B5B2-484E91BF33C7}.Debug.Build.0 = Debug|Win32
+		{90A93228-45D7-4698-B5B2-484E91BF33C7}.Release.ActiveCfg = Release|Win32
+		{90A93228-45D7-4698-B5B2-484E91BF33C7}.Release.Build.0 = Release|Win32
+		{3D5DECB0-0060-4765-9B25-1973D1370F4A}.Debug.ActiveCfg = Debug|Win32
+		{3D5DECB0-0060-4765-9B25-1973D1370F4A}.Release.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

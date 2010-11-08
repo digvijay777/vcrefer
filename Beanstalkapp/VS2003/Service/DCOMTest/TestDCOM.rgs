@@ -1,0 +1,24 @@
+HKCR
+{
+	DCOMTest.TestDCOM.1 = s 'TestDCOM Class'
+	{
+		CLSID = s '{DDA496E3-72E8-4EB4-8184-2DC6247C79DA}'
+	}
+	DCOMTest.TestDCOM = s 'TestDCOM Class'
+	{
+		CLSID = s '{DDA496E3-72E8-4EB4-8184-2DC6247C79DA}'
+		CurVer = s 'DCOMTest.TestDCOM.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DDA496E3-72E8-4EB4-8184-2DC6247C79DA} = s 'TestDCOM Class'
+		{
+			ProgID = s 'DCOMTest.TestDCOM.1'
+			VersionIndependentProgID = s 'DCOMTest.TestDCOM'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{C5D51866-15B4-4280-B0E4-0D49D5FF1A0C}'
+		}
+	}
+}

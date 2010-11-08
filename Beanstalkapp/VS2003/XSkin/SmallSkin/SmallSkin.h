@@ -1,0 +1,6 @@
+#pragma once
+
+// ≥ı ºªØSkin
+BOOL __stdcall InstallSmallSkin();
+// ”˘‘ÿSkin
+BOOL __stdcall UninstallSmallSkin();

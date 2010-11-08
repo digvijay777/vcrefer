@@ -1,0 +1,27 @@
+HKCR
+{
+	SafeArray.STAtest.1 = s 'STAtest Class'
+	{
+		CLSID = s '{10820A32-D879-4A48-AD53-3AEF68CEF04B}'
+	}
+	SafeArray.STAtest = s 'STAtest Class'
+	{
+		CLSID = s '{10820A32-D879-4A48-AD53-3AEF68CEF04B}'
+		CurVer = s 'SafeArray.STAtest.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {10820A32-D879-4A48-AD53-3AEF68CEF04B} = s 'STAtest Class'
+		{
+			ProgID = s 'SafeArray.STAtest.1'
+			VersionIndependentProgID = s 'SafeArray.STAtest'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{EE7C5E7A-3721-48B2-990F-C8D27101360B}'
+		}
+	}
+}

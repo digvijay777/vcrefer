@@ -1,0 +1,34 @@
+HKCR
+{
+	MFCCtrlTest.MyTree.1 = s 'MyTree Class'
+	{
+		CLSID = s '{ABA6CF9C-13C4-4D2D-8A37-D265E1562A85}'
+	}
+	MFCCtrlTest.MyTree = s 'MyTree Class'
+	{
+		CLSID = s '{ABA6CF9C-13C4-4D2D-8A37-D265E1562A85}'
+		CurVer = s 'MFCCtrlTest.MyTree.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {ABA6CF9C-13C4-4D2D-8A37-D265E1562A85} = s 'MyTree Class'
+		{
+			ProgID = s 'MFCCtrlTest.MyTree.1'
+			VersionIndependentProgID = s 'MFCCtrlTest.MyTree'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 103'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{1DA3E8EE-6332-4EE5-8AF1-E1C42CEF75C0}'
+			'Version' = s '1.0'
+		}
+	}
+}

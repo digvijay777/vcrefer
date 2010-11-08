@@ -1,0 +1,38 @@
+// IEExtend.idl : IDL source for IEExtend
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (IEExtend.tlb) and marshalling code.
+
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(D45540F7-9CD7-4F21-A660-D5582BA12598),
+	dual,
+	nonextensible,
+	helpstring("IILookSoruce Interface"),
+	pointer_default(unique)
+]
+interface IILookSoruce : IDispatch{
+};
+
+[
+	uuid(7CFBB639-59B2-478D-A24D-10E216DD045E),
+	version(1.0),
+	helpstring("IEExtend 1.0 Type Library")
+]
+library IEExtendLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(37EF2A4D-C80A-44FC-A678-6DF2F22D1794),
+		helpstring("ILookSoruce Class")
+	]
+	coclass ILookSoruce
+	{
+		[default] interface IILookSoruce;
+	};
+};

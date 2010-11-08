@@ -1,0 +1,24 @@
+HKCR
+{
+	SvrCom.Test.1 = s 'Test Class'
+	{
+		CLSID = s '{18098047-EA36-4D93-BF53-752D6F8826F6}'
+	}
+	SvrCom.Test = s 'Test Class'
+	{
+		CLSID = s '{18098047-EA36-4D93-BF53-752D6F8826F6}'
+		CurVer = s 'SvrCom.Test.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {18098047-EA36-4D93-BF53-752D6F8826F6} = s 'Test Class'
+		{
+			ProgID = s 'SvrCom.Test.1'
+			VersionIndependentProgID = s 'SvrCom.Test'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{BBEF2ED4-5945-4069-9D77-2E5858B14DD0}'
+		}
+	}
+}

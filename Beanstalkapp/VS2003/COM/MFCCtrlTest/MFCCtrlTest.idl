@@ -1,0 +1,38 @@
+// MFCCtrlTest.idl : MFCCtrlTest 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 产生类型库(MFCCtrlTest.tlb)和封送处理代码。
+
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(FE444EB4-EC36-49E1-B456-2349E83BE651),
+	dual,
+	nonextensible,
+	helpstring("IMyTree 接口"),
+	pointer_default(unique)
+]
+interface IMyTree : IDispatch{
+};
+
+[
+	uuid(1DA3E8EE-6332-4EE5-8AF1-E1C42CEF75C0),
+	version(1.0),
+	helpstring("MFCCtrlTest 1.0 类型库")
+]
+library MFCCtrlTestLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(ABA6CF9C-13C4-4D2D-8A37-D265E1562A85),
+		helpstring("MyTree Class")
+	]
+	coclass MyTree
+	{
+		[default] interface IMyTree;
+	};
+};
