@@ -1,0 +1,8 @@
+; WebTestIsapi.def : declares the module parameters for the DLL.
+
+LIBRARY	     "WebTestIsapi"
+
+EXPORTS
+	HttpExtensionProc
+	GetExtensionVersion
+	TerminateExtension

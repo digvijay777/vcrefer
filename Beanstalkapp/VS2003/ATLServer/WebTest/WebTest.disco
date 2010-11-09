@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<discovery xmlns="http://schemas.xmlsoap.org/disco/">
+	<contractRef xmlns="http://schemas.xmlsoap.org/disco/scl/" ref="http://MICROSOF-3F428C/WebTest/WebTest.dll?Handler=GenWebTestWSDL" docRef="http://MICROSOF-3F428C/WebTest/WebTest.htm"/>
+</discovery>

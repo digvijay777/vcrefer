@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!-- ATL Server generated Web Service Description -->
+<definitions 
+	xmlns:s="http://www.w3.org/2001/XMLSchema" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:s0="urn:WebTestService" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:atls="http://tempuri.org/vc/atl/server/"
+	targetNamespace="urn:WebTestService" 
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+>
+	<types>
+		<s:schema targetNamespace="urn:WebTestService" attributeFormDefault="qualified" elementFormDefault="qualified">
+			<s:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</s:schema>
+	</types>
+	<message name="HelloWorldIn">
+		<part name="bstrInput" type="s:string"/>
+	</message>
+	<message name="HelloWorldOut">
+		<part name="return" type="s:string"/>
+	</message>
+	<portType name="WebTestServiceSoap">
+		<operation name="HelloWorld">
+			<input message="s0:HelloWorldIn"/>
+			<output message="s0:HelloWorldOut"/>
+		</operation>
+	</portType>
+	<binding name="WebTestServiceSoap" type="s0:WebTestServiceSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+		<operation name="HelloWorld">
+			<soap:operation soapAction="#HelloWorld" style="rpc"/>
+			<input>
+				<soap:body use="encoded" namespace="urn:WebTestService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="urn:WebTestService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="WebTestService">
+		<port name="WebTestServiceSoap" binding="s0:WebTestServiceSoap">
+			<soap:address location="http://localhost:80/WebTest/WebTest.dll?Handler=Default"/>
+		</port>
+	</service>
+</definitions>

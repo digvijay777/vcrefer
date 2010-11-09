@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebTest", "WebTest.vcproj", "{2DFE8168-0B3A-4CC5-8148-20C00F0EE4C0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebTestIsapi", "..\WebTestIsapi\WebTestIsapi.vcproj", "{951020EF-5727-45E6-A5AD-373C00F1D181}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "..\Client\Client.vcproj", "{EBD3F166-05F9-4286-8704-96FB9F99CDD1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{2DFE8168-0B3A-4CC5-8148-20C00F0EE4C0}.Debug.ActiveCfg = Debug|Win32
+		{2DFE8168-0B3A-4CC5-8148-20C00F0EE4C0}.Debug.Build.0 = Debug|Win32
+		{2DFE8168-0B3A-4CC5-8148-20C00F0EE4C0}.Release.ActiveCfg = Release|Win32
+		{2DFE8168-0B3A-4CC5-8148-20C00F0EE4C0}.Release.Build.0 = Release|Win32
+		{951020EF-5727-45E6-A5AD-373C00F1D181}.Debug.ActiveCfg = Debug|Win32
+		{951020EF-5727-45E6-A5AD-373C00F1D181}.Debug.Build.0 = Debug|Win32
+		{951020EF-5727-45E6-A5AD-373C00F1D181}.Release.ActiveCfg = Release|Win32
+		{951020EF-5727-45E6-A5AD-373C00F1D181}.Release.Build.0 = Release|Win32
+		{EBD3F166-05F9-4286-8704-96FB9F99CDD1}.Debug.ActiveCfg = Debug|Win32
+		{EBD3F166-05F9-4286-8704-96FB9F99CDD1}.Debug.Build.0 = Debug|Win32
+		{EBD3F166-05F9-4286-8704-96FB9F99CDD1}.Release.ActiveCfg = Release|Win32
+		{EBD3F166-05F9-4286-8704-96FB9F99CDD1}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
