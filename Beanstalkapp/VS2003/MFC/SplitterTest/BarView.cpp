@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "SplitterTest.h"
 #include "BarView.h"
 #include ".\barview.h"
 
@@ -73,6 +72,19 @@ void CBarView::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+CWnd* CBarView::GetMainView()
+{
+	return m_pMainView;
+}
+
+CWnd* CBarView::GetBarView(int nNO)
+{
+	if(nNO < 0 || nNO >= m_vctBar.size())
+		return NULL;
+
+	return m_vctBar[nNO].pWnd;
+}
+
 BOOL CBarView::SetView(CRuntimeClass* pViewClass)
 {
 	ASSERT(NULL == m_pMainView);
@@ -84,6 +96,19 @@ BOOL CBarView::SetView(CRuntimeClass* pViewClass)
 		return FALSE;
 
 	m_pMainView->Create(NULL, NULL, WS_CHILD|WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_MAINVIEW);
+	return TRUE;
+}
+BOOL CBarView::SetBarHeight(int nNO, int nHeight, int nMaxHeight /* = -1 */, LPCSTR lpTitle /* = NULL */)
+{
+	if(nNO < 0 || nNO >= m_vctBar.size())
+		return FALSE;
+
+	m_vctBar[nNO].nHeight = nHeight;
+	if(-1 != nMaxHeight)
+		m_vctBar[nNO].nMaxHeight = nMaxHeight;
+	if(NULL != lpTitle)
+		m_vctBar[nNO].strTtile = lpTitle;
+
 	return TRUE;
 }
 
@@ -206,6 +231,8 @@ int CBarView::HitSpliter(CPoint& pt)
 		if(rtBar.PtInRect(pt))
 			return i;
 	}
+
+	return -1;
 }
 
 void CBarView::OnMouseMove(UINT nFlags, CPoint point)

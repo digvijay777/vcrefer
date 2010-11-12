@@ -30,9 +30,6 @@ private:
 
 	enum ID{ID_MAINVIEW = 1, ID_BARVIEW = 10};
 
-	CWnd*						m_pMainView;
-	std::vector<BARVIEWINFO>	m_vctBar;
-
 	HCURSOR		m_hSizeCursor;
 	HCURSOR		m_hDefCursor;
 	BOOL		m_bTracking;
@@ -40,7 +37,12 @@ private:
 	CRect		m_rectTracker;
 	CRect		m_rectLimt;
 	int			m_nTrackerBar;
+protected:
+	CWnd*						m_pMainView;
+	std::vector<BARVIEWINFO>	m_vctBar;
 public:
+	CWnd*		GetMainView();
+	CWnd*		GetBarView(int nNO);
 	BOOL		SetView(CRuntimeClass* pViewClass);
 	int			AddBarView(CRuntimeClass* pViewClass, LPCSTR lpTitle = NULL);
 	BOOL		DeleteBarView(int nNO);
