@@ -40,11 +40,17 @@ public:
 	[ soap_method ]
 	HRESULT HelloWorld(/*[in]*/ BSTR bstrInput, /*[out, retval]*/ BSTR *bstrOutput)
 	{
-		CComBSTR bstrOut(L"Hello ");
-		bstrOut += bstrInput;
-		bstrOut += L"!";
-		*bstrOutput = bstrOut.Detach();
+		CComBSTR bstrOut(L"服务器名为: ");
+		//bstrOut += bstrInput;
+		//bstrOut += L"!";
 		
+		WCHAR	sname[MAX_PATH]		= {0};
+		DWORD	dwSize				= sizeof(sname)/sizeof(WCHAR);
+
+		GetComputerNameW(sname, &dwSize);
+		bstrOut += sname;
+
+		*bstrOutput = bstrOut.Detach();
 		return S_OK;
 	}
 	// TODO: Add additional web service methods here

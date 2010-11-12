@@ -7,6 +7,8 @@
 
 #pragma comment(lib, "comsupp.lib")
 
+// sproxy.exe
+
 using namespace std;
 int main()
 {
@@ -15,6 +17,7 @@ int main()
 	WebTestService::CWebTestService		myServer;
 	_bstr_t				bstr;
 
+	myServer.SetUrl("http://192.168.1.61:80/WebTest/WebTest.dll?Handler=Default");
 	myServer.HelloWorld(L"", bstr.GetAddress());
 	cout << (char *)bstr << endl;
 
