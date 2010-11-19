@@ -167,6 +167,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="ATL"
+			Filter="">
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
