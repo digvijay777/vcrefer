@@ -183,6 +183,9 @@
 			RelativePath=".\res\ADSITest.manifest">
 		</File>
 		<File
+			RelativePath=".\res\dsuiext.dll">
+		</File>
+		<File
 			RelativePath=".\ReadMe.txt">
 		</File>
 	</Files>

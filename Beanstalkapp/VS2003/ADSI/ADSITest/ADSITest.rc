@@ -94,6 +94,7 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
     PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
     PUSHBUTTON      "Administrator是否空",IDC_BUTTON1,7,7,86,14
+    PUSHBUTTON      "DsBrowseForContainer",IDC_BUTTON2,7,29,86,14
 END
 
 

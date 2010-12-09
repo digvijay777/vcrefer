@@ -8,9 +8,12 @@
 
 #include <Iads.h>	// ADSIÍ·ÎÄ¼þ
 #include <Adshlp.h>	// ADsGetObject
+#include <Dsclient.h>
 
 #pragma comment(lib, "ActiveDS.lib")
 #pragma comment(lib, "Adsiid.lib")
+#pragma comment(lib, "Dsuiext.lib")
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -69,6 +72,7 @@ BEGIN_MESSAGE_MAP(CADSITestDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -166,5 +170,23 @@ void CADSITestDlg::OnBnClickedButton1()
 		hres = pADsUser->ChangePassword(L"", L"");
 
 		return ;
+	}
+}
+
+void CADSITestDlg::OnBnClickedButton2()
+{
+	DSBROWSEINFO dsbi = { 0 };
+	WCHAR wszResult[MAX_PATH];
+
+	dsbi.cbStruct = sizeof(dsbi);
+	dsbi.pszCaption = TEXT("The container picker");
+	dsbi.pszTitle = TEXT("Pick a container for this example. This will be returned if the user clicks ""OK""");
+	dsbi.pszPath = wszResult;
+	dsbi.cchPath = MAX_PATH;
+	dsbi.dwFlags = DSBI_ENTIREDIRECTORY;
+
+	if ( IDOK == DsBrowseForContainer(&dsbi) )
+	{
+		// wszResult contains the resulting path
 	}
 }
