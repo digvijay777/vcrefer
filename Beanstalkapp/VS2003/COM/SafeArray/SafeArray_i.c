@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Oct 15 10:01:27 2010
+/* at Thu Dec 16 15:42:01 2010
  */
 /* Compiler settings for .\SafeArray.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

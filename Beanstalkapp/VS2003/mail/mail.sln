@@ -3,6 +3,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SendMail", "SendMail\SendMa
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BatchEmail", "BatchEmail\BatchEmail.vcproj", "{F346BB0B-FACB-4951-B733-A675B2246377}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{F4C6ED45-EBB8-4E24-924E-F99BA8B74027}.Debug.Build.0 = Debug|Win32
 		{F4C6ED45-EBB8-4E24-924E-F99BA8B74027}.Release.ActiveCfg = Release|Win32
 		{F4C6ED45-EBB8-4E24-924E-F99BA8B74027}.Release.Build.0 = Release|Win32
+		{F346BB0B-FACB-4951-B733-A675B2246377}.Debug.ActiveCfg = Debug|Win32
+		{F346BB0B-FACB-4951-B733-A675B2246377}.Debug.Build.0 = Debug|Win32
+		{F346BB0B-FACB-4951-B733-A675B2246377}.Release.ActiveCfg = Release|Win32
+		{F346BB0B-FACB-4951-B733-A675B2246377}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

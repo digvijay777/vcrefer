@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="gb2312"?>
+<task>
+	<complete>
+		<allcompleted>0</allcompleted>
+		<lastsend></lastsend>
+	</complete>
+	<config>
+		<MailCharset></MailCharset>
+		<MailServer></MailServer>
+		<MailUser></MailUser>
+		<MailPasswd></MailPasswd>
+		<MailCC></MailCC>
+		<MailFrom></MailFrom>
+		<MailTemplate></MailTemplate>
+	</config>
+	<mail>
+		<name></name>
+		<title></title>
+		<address></address>
+		<issend></issend>
+		<extend></extend>
+	</mail>
+</task>
