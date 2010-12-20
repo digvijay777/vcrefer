@@ -24,7 +24,7 @@ public:
 	virtual BOOL InitInstance();
 
 // й╣ож
-
+	void	ReSetCurrentDir();
 public:
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()

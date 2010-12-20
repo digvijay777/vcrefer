@@ -2,9 +2,12 @@
 <task>
 	<complete>
 		<allcompleted>0</allcompleted>
-		<lastsend></lastsend>
+		<firsttime></firsttime>
+		<lasttime></lasttime>
 	</complete>
 	<config>
+		<TaskTime></TaskTime>
+		<TaskName>хннЯцШЁф</TaskName>
 		<MailCharset></MailCharset>
 		<MailServer></MailServer>
 		<MailUser></MailUser>

@@ -119,4 +119,16 @@ void CBatchEmailApp::OnAppAbout()
 
 
 // CBatchEmailApp 消息处理程序
+void CBatchEmailApp::ReSetCurrentDir()
+{
+	WCHAR		szFile[MAX_PATH]		= {0};
+	WCHAR*		pFile					= NULL;
 
+	GetModuleFileNameW(NULL, szFile, sizeof(szFile)/sizeof(WCHAR));
+	pFile = wcsrchr(szFile, L'\\');
+	if(NULL == pFile)
+		pFile = wcsrchr(szFile, L'/');
+	if(NULL != pFile)
+		*pFile = 0;
+	SetCurrentDirectoryW(szFile);
+}

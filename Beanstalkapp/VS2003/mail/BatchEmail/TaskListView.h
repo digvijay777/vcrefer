@@ -1,6 +1,5 @@
 #pragma once
 
-
 // CHistoryListView view
 
 class CTaskListView : public CListView
@@ -19,6 +18,12 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
+
+	afx_msg LRESULT	OnTlUpdate(WPARAM wParam, LPARAM lParam);
+public:
+	virtual void OnInitialUpdate();
+protected:
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 };
 
 

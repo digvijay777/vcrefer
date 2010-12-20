@@ -165,6 +165,9 @@
 				RelativePath=".\MainFrm.h">
 			</File>
 			<File
+				RelativePath=".\Mymsgdef.h">
+			</File>
+			<File
 				RelativePath=".\Resource.h">
 			</File>
 			<File
@@ -191,6 +194,9 @@
 		<Filter
 			Name="TaskList"
 			Filter="">
+			<File
+				RelativePath="..\..\..\ExtClass\QuickDomXml.h">
+			</File>
 			<File
 				RelativePath=".\TaskListView.cpp">
 			</File>
