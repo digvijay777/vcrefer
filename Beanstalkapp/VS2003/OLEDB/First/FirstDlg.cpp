@@ -5,15 +5,17 @@
 #include "First.h"
 #include "FirstDlg.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-#include <atlbase.h>
-#include <atldbcli.h>
-#include <atldbsch.h> // if you are using schema templates
+// #include <atlbase.h>
+// #include <atldbcli.h>
+// #include <atldbsch.h> // if you are using schema templates
 
-#include "license2.h"
+// #include "license2.h"
+#include ".\firstdlg.h"
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
 class CAboutDlg : public CDialog
@@ -65,6 +67,7 @@ BEGIN_MESSAGE_MAP(CFirstDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -148,4 +151,11 @@ void CFirstDlg::OnPaint()
 HCURSOR CFirstDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CFirstDlg::OnBnClickedButton1()
+{
+	CComQIPtr<IDBInitialize>		spIDBint;
+
+	spIDBint.CoCreateInstance(__uuidof(IDBInitialize));
 }

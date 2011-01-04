@@ -40,3 +40,15 @@
 #include <afxcmn.h>			// Windows 公共控件的 MFC 支持
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
+//////////////////////////////////////////////////////////////////////////
+// OLDdb定义
+#define DBINITCONSTANTS
+
+#define INITGUID
+
+#define OLEDBVER 0x0250
+
+#include <oledb.h>
+
+#include <oledberr.h>
+

@@ -3,6 +3,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "First", "First\First.vcproj
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ODBC", "ODBC\ODBC.vcproj", "{21A729EC-8B90-4864-86E7-99A1434687AC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{7EE7BA28-A605-4F11-BFA6-B737FBCF7B1D}.Debug.Build.0 = Debug|Win32
 		{7EE7BA28-A605-4F11-BFA6-B737FBCF7B1D}.Release.ActiveCfg = Release|Win32
 		{7EE7BA28-A605-4F11-BFA6-B737FBCF7B1D}.Release.Build.0 = Release|Win32
+		{21A729EC-8B90-4864-86E7-99A1434687AC}.Debug.ActiveCfg = Debug|Win32
+		{21A729EC-8B90-4864-86E7-99A1434687AC}.Debug.Build.0 = Debug|Win32
+		{21A729EC-8B90-4864-86E7-99A1434687AC}.Release.ActiveCfg = Release|Win32
+		{21A729EC-8B90-4864-86E7-99A1434687AC}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -59,7 +59,9 @@ BOOL CBatchEmailApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 	// 若要创建主窗口，此代码将创建新的框架窗口
 	// 对象，然后将其设置为应用程序的主窗口对象
-	CMainFrame* pFrame = new CMainFrame;
+	CMainFrame* pFrame		= NULL;
+	
+	pFrame = new CMainFrame;
 	if (!pFrame)
 		return FALSE;
 	m_pMainWnd = pFrame;

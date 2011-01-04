@@ -36,8 +36,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	mail.SetDirectory("mail/mail.html");
 	mail.SetMailServer("mail.txtws.com", "xiaxj@txtws.com", "xxj!@#06");
-	mail.SetMailFrom("xiaxj@txtws.com", "yuanjie");
-	mail.SetMailTo("yuanjie.xia@yahoo.com.cn;xiaxj@txtws.com;", "xiaxiangjun", "test");
+	mail.SetMailFrom("xiaxj@txtws.com", "txtw");
+	mail.SetMailTo("xiaxj@txtws.com;", "xiaxiangjun", "test");
 	mail.SetTemplate(pData, st.st_size+1);
 
 	mail.Send();
