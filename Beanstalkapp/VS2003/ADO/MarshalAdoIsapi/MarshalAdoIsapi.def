@@ -1,0 +1,8 @@
+; MarshalAdoIsapi.def : declares the module parameters for the DLL.
+
+LIBRARY	     "MarshalAdoIsapi"
+
+EXPORTS
+	HttpExtensionProc
+	GetExtensionVersion
+	TerminateExtension

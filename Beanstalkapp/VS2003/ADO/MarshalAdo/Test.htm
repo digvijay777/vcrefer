@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
+<TITLE></TITLE>
+<script type="text/javascript">
+<!--
+function WriteRecode(){
+	var res		= new ActiveXObject("ADODB.Recordset");
+	//var ajax	= new ActiveXObject("Msxml2.XMLHTTP");
+	
+	//ajax.open("GET", "http://localhost/ADO/MarshalAdo.dll", false);
+	//ajax.send();
+	
+	//alert(t, 3);
+	res.Open("http://192.168.1.204/ADO/MarshalAdo.dll", "Provider=MSPersist;", 2, 4, 256);
+	
+	
+	document.write("<table border=\"1\">\n");
+	document.write("<tr>");
+	for(var i=0; i < res.Fields.Count; i++)
+	{
+		document.write("<th>");
+		document.write(res.Fields.Item(i).name);
+		document.write("</th>");
+	}
+	document.write("</tr>");
+	for(; !res.EOF; res.MoveNext())
+	{
+		document.write("<tr>");
+		for(var i=0; i < res.Fields.Count; i++)
+		{
+			document.write("<td>");
+			document.write(res.Fields.Item(i).value);
+			document.write("\t");
+			document.write("</td>");
+		}
+		document.write("</tr>");
+	}
+	document.write("</table>\n");
+}
+-->
+</script>
+</HEAD>
+<BODY>
+<script type="text/javascript">
+WriteRecode();
+</script>
+
+</BODY>
+</HTML>

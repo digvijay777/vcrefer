@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarshalAdoIsapi", "MarshalAdoIsapi\MarshalAdoIsapi.vcproj", "{E4BBB48E-A1CB-41FD-86B5-240E0E3D7BD5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarshalAdo", "MarshalAdo\MarshalAdo.vcproj", "{38E534CF-250C-4191-8528-89D87B2B5DBC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{E4BBB48E-A1CB-41FD-86B5-240E0E3D7BD5}.Debug.ActiveCfg = Debug|Win32
+		{E4BBB48E-A1CB-41FD-86B5-240E0E3D7BD5}.Debug.Build.0 = Debug|Win32
+		{E4BBB48E-A1CB-41FD-86B5-240E0E3D7BD5}.Release.ActiveCfg = Release|Win32
+		{E4BBB48E-A1CB-41FD-86B5-240E0E3D7BD5}.Release.Build.0 = Release|Win32
+		{38E534CF-250C-4191-8528-89D87B2B5DBC}.Debug.ActiveCfg = Debug|Win32
+		{38E534CF-250C-4191-8528-89D87B2B5DBC}.Debug.Build.0 = Debug|Win32
+		{38E534CF-250C-4191-8528-89D87B2B5DBC}.Release.ActiveCfg = Release|Win32
+		{38E534CF-250C-4191-8528-89D87B2B5DBC}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
