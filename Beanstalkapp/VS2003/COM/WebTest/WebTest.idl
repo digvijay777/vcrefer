@@ -22,6 +22,20 @@ interface IThreadEvent : IDispatch{
 };
 
 [
+	object,
+	uuid(FBDC0BC5-2B90-4A27-A520-0C3E0654BDF8),
+	dual,
+	nonextensible,
+	helpstring("ICallBack Interface"),
+	pointer_default(unique)
+]
+interface ICallBack : IDispatch{
+	[propget, id(1), helpstring("property CallBack")] HRESULT CallBack([out, retval] VARIANT* pVal);
+	[propput, id(1), helpstring("property CallBack")] HRESULT CallBack([in] VARIANT newVal);
+	[id(2), helpstring("method DoWork")] HRESULT DoWork(void);
+	[id(3), helpstring("method SetCallBack")] HRESULT SetCallBack([in] VARIANT var);
+};
+[
 	uuid(F42060E2-B894-477F-8A1F-96FDD088051A),
 	version(1.0),
 	helpstring("WebTest 1.0 Type Library")
@@ -47,5 +61,13 @@ library WebTestLib
 	{
 		[default] interface IThreadEvent;
 		[default, source] dispinterface _IThreadEventEvents;
+	};
+	[
+		uuid(695E2785-111E-4E6A-9FF4-A3C24FD4D9C7),
+		helpstring("CallBack Class")
+	]
+	coclass CallBack
+	{
+		[default] interface ICallBack;
 	};
 };

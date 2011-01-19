@@ -93,6 +93,7 @@ END
 
 IDR_WEBTEST             REGISTRY                "WebTest.rgs"
 IDR_THREADEVENT         REGISTRY                "ThreadEvent.rgs"
+IDR_CALLBACK            REGISTRY                "CallBack.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //

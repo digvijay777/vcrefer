@@ -1,0 +1,27 @@
+HKCR
+{
+	WebTest.CallBack.1 = s 'CallBack Class'
+	{
+		CLSID = s '{695E2785-111E-4E6A-9FF4-A3C24FD4D9C7}'
+	}
+	WebTest.CallBack = s 'CallBack Class'
+	{
+		CLSID = s '{695E2785-111E-4E6A-9FF4-A3C24FD4D9C7}'
+		CurVer = s 'WebTest.CallBack.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {695E2785-111E-4E6A-9FF4-A3C24FD4D9C7} = s 'CallBack Class'
+		{
+			ProgID = s 'WebTest.CallBack.1'
+			VersionIndependentProgID = s 'WebTest.CallBack'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{F42060E2-B894-477F-8A1F-96FDD088051A}'
+		}
+	}
+}

@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>WebTest.ThreadEvent</title>
+<script language="javascript">
+<!--
+function OnCallBack(index, str){
+	labelProgress.innerHTML = str + ":" + i;
+}
+function OnUnload(){
+	//window.event.returnValue="<font color=red>确定离开当前页面吗？</font>";
+	// alert('refresh');
+	//objThreadEvent.CallBack = OnCallBack;
+	objThreadEvent.SetCallBack(OnCallBack);
+	return false;
+}
+-->
+</script>
+</head>
+<body>
+<h1>WebTest.ThreadEvent</h1>
+<object classid="clsid:{695E2785-111E-4E6A-9FF4-A3C24FD4D9C7}" id="objThreadEvent" VIEWASTEXT></object>
+
+<button onClick="objThreadEvent.SetCallBack(OnCallBack);objThreadEvent.DoWork()">Start</button>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br /><br />
+当前进度<label style="color:red" id="labelProgress"></label>
+</body>
+</html>
