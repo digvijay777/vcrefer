@@ -6,6 +6,8 @@
 #define IDR_WEBTEST                     101
 #define IDR_THREADEVENT                 102
 #define IDR_CALLBACK                    103
+#define IDB_MINIOBJECT                  104
+#define IDR_MINIOBJECT                  105
 
 // Next default values for new objects
 // 
@@ -14,6 +16,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        201
 #define _APS_NEXT_COMMAND_VALUE         32768
 #define _APS_NEXT_CONTROL_VALUE         201
-#define _APS_NEXT_SYMED_VALUE           104
+#define _APS_NEXT_SYMED_VALUE           106
 #endif
 #endif

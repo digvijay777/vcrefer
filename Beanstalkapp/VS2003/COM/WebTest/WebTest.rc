@@ -94,6 +94,14 @@ END
 IDR_WEBTEST             REGISTRY                "WebTest.rgs"
 IDR_THREADEVENT         REGISTRY                "ThreadEvent.rgs"
 IDR_CALLBACK            REGISTRY                "CallBack.rgs"
+IDR_MINIOBJECT          REGISTRY                "MiniObject.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_MINIOBJECT          BITMAP                  "MiniObject.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

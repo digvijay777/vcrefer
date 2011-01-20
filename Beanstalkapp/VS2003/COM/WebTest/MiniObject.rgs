@@ -1,0 +1,34 @@
+HKCR
+{
+	WebTest.MiniObject.1 = s 'MiniObject Class'
+	{
+		CLSID = s '{A7E5B589-3014-46CB-8F97-DA621FA09690}'
+	}
+	WebTest.MiniObject = s 'MiniObject Class'
+	{
+		CLSID = s '{A7E5B589-3014-46CB-8F97-DA621FA09690}'
+		CurVer = s 'WebTest.MiniObject.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A7E5B589-3014-46CB-8F97-DA621FA09690} = s 'MiniObject Class'
+		{
+			ProgID = s 'WebTest.MiniObject.1'
+			VersionIndependentProgID = s 'WebTest.MiniObject'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 104'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{F42060E2-B894-477F-8A1F-96FDD088051A}'
+			'Version' = s '1.0'
+		}
+	}
+}

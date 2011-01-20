@@ -150,9 +150,6 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\CallBack.cpp">
-			</File>
-			<File
 				RelativePath=".\dlldatax.c">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -197,9 +194,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\CallBack.h">
-			</File>
-			<File
 				RelativePath=".\dlldatax.h">
 			</File>
 			<File
@@ -214,7 +208,7 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\CallBack.rgs">
+				RelativePath=".\MiniObject.bmp">
 			</File>
 			<File
 				RelativePath=".\ThreadEvent.rgs">
@@ -258,6 +252,36 @@
 				RelativePath=".\ThreadEvent.h">
 			</File>
 		</Filter>
+		<Filter
+			Name="CallBack"
+			Filter="">
+			<File
+				RelativePath=".\CallBack.cpp">
+			</File>
+			<File
+				RelativePath=".\CallBack.h">
+			</File>
+			<File
+				RelativePath=".\CallBack.rgs">
+			</File>
+		</Filter>
+		<Filter
+			Name="MiniObject"
+			Filter="">
+			<File
+				RelativePath=".\MiniObject.cpp">
+			</File>
+			<File
+				RelativePath=".\MiniObject.h">
+			</File>
+			<File
+				RelativePath=".\MiniObject.rgs">
+			</File>
+		</Filter>
+		<File
+			RelativePath=".\MiniObject.htm"
+			DeploymentContent="TRUE">
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt">
 		</File>

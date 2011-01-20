@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MiniObject</title>
+<script language="javascript">
+<!--
+function al(i, str){
+	alert(str + ":" + i);
+}
+function am(i, str){
+	document.getElementById("idTest").innerHTML = str + ":" + i;
+}
+
+function OnClick(){
+	var obj = new ActiveXObject("WebTest.MiniObject");
+	
+	obj.CallBack = al;
+	obj.Do();
+}
+var objTest;
+function OnTest(){
+	objTest = new ActiveXObject("WebTest.CallBack");
+	
+	objTest.SetCallBack(am);
+	objTest.DoWork();
+}
+-->
+</script>
+</head>
+
+<body>
+<button onclick="OnClick()">测试MiniObject</button>
+<br />
+<button onclick="OnTest()">测试Object</button><div id="idTest"></div>
+</body>
+</html>

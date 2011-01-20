@@ -17,6 +17,7 @@ public:
 	CCallBack()
 	{
 		m_hThread = NULL;
+		m_dwGlobalTable = 0;
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CALLBACK)
@@ -48,10 +49,11 @@ END_COM_MAP()
 
 	_variant_t			m_vtCallBack;
 	HANDLE				m_hThread;
+	DWORD				m_dwGlobalTable;
 
 	static DWORD CALLBACK WorkThread(LPVOID lpParameter);
 
-	void	OnWork();
+	void	OnWork(IDispatch*	pDispatch);
 public:
 
 	STDMETHOD(get_CallBack)(VARIANT* pVal);

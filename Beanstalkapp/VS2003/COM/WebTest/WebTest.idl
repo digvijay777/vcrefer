@@ -4,6 +4,7 @@
 // This file will be processed by the MIDL tool to
 // produce the type library (WebTest.tlb) and marshalling code.
 
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
 
@@ -35,6 +36,19 @@ interface ICallBack : IDispatch{
 	[id(2), helpstring("method DoWork")] HRESULT DoWork(void);
 	[id(3), helpstring("method SetCallBack")] HRESULT SetCallBack([in] VARIANT var);
 };
+[
+	object,
+	uuid(62F069C8-CA28-4F7F-8017-CF5DF453E922),
+	dual,
+	nonextensible,
+	helpstring("IMiniObject Interface"),
+	pointer_default(unique)
+]
+interface IMiniObject : IDispatch{
+	[propput, id(1), helpstring("property CallBack")] HRESULT CallBack([in] IDispatch* newVal);
+	[id(2), helpstring("method Do")] HRESULT Do(void);
+};
+
 [
 	uuid(F42060E2-B894-477F-8A1F-96FDD088051A),
 	version(1.0),
@@ -69,5 +83,13 @@ library WebTestLib
 	coclass CallBack
 	{
 		[default] interface ICallBack;
+	};
+	[
+		uuid(A7E5B589-3014-46CB-8F97-DA621FA09690),
+		helpstring("MiniObject Class")
+	]
+	coclass MiniObject
+	{
+		[default] interface IMiniObject;
 	};
 };
