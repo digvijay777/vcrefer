@@ -1,0 +1,27 @@
+HKCR
+{
+	DoubleCOM.test1.1 = s 'test1 Class'
+	{
+		CLSID = s '{FB72DE77-1D76-47AD-A335-29CCEA39A469}'
+	}
+	DoubleCOM.test1 = s 'test1 Class'
+	{
+		CLSID = s '{FB72DE77-1D76-47AD-A335-29CCEA39A469}'
+		CurVer = s 'DoubleCOM.test1.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FB72DE77-1D76-47AD-A335-29CCEA39A469} = s 'test1 Class'
+		{
+			ProgID = s 'DoubleCOM.test1.1'
+			VersionIndependentProgID = s 'DoubleCOM.test1'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{73DB8937-6D73-4256-900D-13ABE4500CCE}'
+		}
+	}
+}

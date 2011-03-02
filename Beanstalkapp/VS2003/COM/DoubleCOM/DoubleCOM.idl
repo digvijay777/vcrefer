@@ -1,0 +1,50 @@
+// DoubleCOM.idl : IDL source for DoubleCOM
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DoubleCOM.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(764AD375-1FD0-41D0-AB6B-862B764DEF59),
+	dual,
+	nonextensible,
+	helpstring("Itest1 Interface"),
+	pointer_default(unique)
+]
+interface Itest1 : IDispatch{
+	[id(1), helpstring("method GetStr1")] HRESULT GetStr1([out,retval] BSTR* lpVal);
+};
+[
+	object,
+	uuid(85434049-A03C-46B2-AC77-F56ED61D9033),
+	dual,
+	nonextensible,
+	helpstring("Itest2 Interface"),
+	pointer_default(unique)
+]
+interface Itest2 : IDispatch{
+	[id(1), helpstring("method GetStr2")] HRESULT GetStr2([out,retval] BSTR* lpVal);
+};
+
+[
+	uuid(73DB8937-6D73-4256-900D-13ABE4500CCE),
+	version(1.0),
+	helpstring("DoubleCOM 1.0 Type Library")
+]
+library DoubleCOMLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(FB72DE77-1D76-47AD-A335-29CCEA39A469),
+		helpstring("test1 Class")
+	]
+	coclass test1
+	{
+		[default] interface Itest1;
+		interface Itest2;
+	};
+};
