@@ -1,0 +1,38 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<script language="javascript">
+<!--
+
+function OnBtnClick(){
+	try{
+		document.getElementById("idmytest1").alert(OnEventAlert);
+	} catch(e) {
+		alert(e);
+	}
+}
+function OnBtnClick2(){
+	try{
+		document.getElementById("idmytest2").alert(OnEventAlert);
+	} catch(e) {
+		alert(e);
+	}
+}
+
+function OnEventAlert(a){
+	//alert(typeof(a));
+	//alert(a.length);
+	alert(a);
+}
+-->
+</script>
+</head>
+
+<body>
+<object type="application/x-yuanjie-simple2" id="idmytest1" clsid="{619B1C99-1D80-464C-B03F-88A1DC68E303}"></object>
+<button onClick="OnBtnClick()">调用组件方法</button>
+<embed type="application/x-yuanjie-simple2" id="idmytest2" srd="aa.dll"></embed>
+<button onClick="OnBtnClick2()">调用组件方法</button>
+</body>
+</html>
