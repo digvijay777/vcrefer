@@ -3,6 +3,9 @@
 #include <prtypes.h>
 #include <npfunctions.h>
 #include "simple.h"
+#include <atlbase.h>
+#include <atlcom.h>
+#include "mywindow.h"
 
 
 NPNetscapeFuncs*	gpnpf		= NULL;
@@ -11,17 +14,29 @@ NPError NPP_MyNew(NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t ar
 				  , char* argn[], char* argv[], NPSavedData* saved)
 {
 	// 设置为无窗口对像
-// 	NPVariant		var;
-// 	int				nb		= 0;
-// 
-// 	BOOLEAN_TO_NPVARIANT(false, var);
+	NPVariant		var;
+	int				nb		= 0;
+
+	BOOLEAN_TO_NPVARIANT(false, var);
 // 	gpnpf->setvalue(instance, NPPVpluginWindowBool, &nb);
 // 	gpnpf->setvalue(instance, NPPVpluginWindowBool, &var);
-	gpnpf->setvalue(instance, NPPVpluginWindowBool, NULL);	// 强制绘制动作
+// 	gpnpf->setvalue(instance, NPPVpluginWindowBool, NULL);	// 强制绘制动作
 
 	// 创建对像
 	if(gpnpf->version >= 14)
 		instance->pdata = gpnpf->createobject((NPP)instance, &npcRefObject);
+
+	// 设置ID
+	for(int i = 0; i < argc; i++)
+	{
+		if(stricmp(argn[i], "id") == 0)
+		{
+			CScriptTable*	pTable		= (CScriptTable *)instance->pdata;
+
+			pTable->m_strid = argv[i];
+		}
+	}
+
 	//instance->pdata = new char[1024];
 	//bool		n = 0;
 	return NPERR_NO_ERROR;
@@ -85,34 +100,68 @@ NPError NPP_MySetWindow(NPP instance, NPWindow* window)
 // 	gpnpf->invalidateregion(instance, window);
 	CScriptTable*	pTable	= (CScriptTable *)instance->pdata;
 	memcpy(&pTable->m_window, window, sizeof(NPWindow));
+
+	if(window->type == NPWindowTypeDrawable)
+		return NPERR_NO_ERROR;
+	// 创建窗体
+	if(!IsWindow(pTable->m_hDialog))
+		pTable->m_hDialog = CreateMyWindow((HWND)window->window);
+	if(IsWindow(pTable->m_hDialog))
+	{
+		POINT	lt		= {window->x, window->y};
+		//::ClientToScreen((HWND)window->window, &lt);
+		::MoveWindow(pTable->m_hDialog, 0, 0, window->width, window->height, TRUE);
+	}
+
 	return NPERR_NO_ERROR;
 }
 
 void NPP_MyPrint(NPP instance, NPPrint* platformPrint)
 {
 	int i = 0;//return NPERR_NO_ERROR;
+
 }
 
 NPError NPP_MyHandleEvent(NPP instance, void* event)
 {
 	NPEvent*		pEvent		= (NPEvent *)event;
 
+	ATLTRACE("[NPP_MyHandleEvent] event:%d\n", pEvent->event);
 	if(WM_PAINT == pEvent->event)
 	{
+		gpnpf->forceredraw(instance);
+
 		CScriptTable*		pTable		= (CScriptTable *)instance->pdata;
 		HWND				hWnd		= NULL;
 		HDC					hDC			= NULL;
 		RECT				rect		= {pTable->m_window.x, pTable->m_window.y
 			, pTable->m_window.x + pTable->m_window.width, pTable->m_window.y + pTable->m_window.height};
 
-		gpnpf->getvalue(instance, NPNVnetscapeWindow, (void *)&hWnd);
-		hDC = ::GetDC(hWnd);
-		
+		//gpnpf->getvalue(instance, NPNVnetscapeWindow, (void *)&hWnd);
+		//hDC = ::GetDC(hWnd);
+		if(NPWindowTypeWindow == pTable->m_window.type)
+		{
+			// 窗口插件
+			hWnd = (HWND)pTable->m_window.window;
+			hDC = ::GetDC(hWnd);
+		}
+		else
+		{
+			hDC = (HDC)pTable->m_window.window;
+		}
 
+
+
+		char		szText[1024];
+
+		_snprintf(szText, sizeof(szText), "插件ID: %s", pTable->m_strid.c_str());
 		::SetBkColor(hDC, RGB(0xff, 0x0, 0x0));
 		::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
+		::DrawTextA(hDC, szText, (int)strlen(szText), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-		::ReleaseDC(hWnd, hDC);
+		if(NULL != hWnd)
+			::ReleaseDC(hWnd, hDC);
+		//::ReleaseDC(hWnd, hDC);
 	}
 	return NPERR_NO_ERROR;
 }
@@ -145,6 +194,7 @@ NPError OSCALL NP_GetEntryPoints(NPPluginFuncs *nppfuncs)
 	nppfuncs->asfile = NPP_MyStreamAsFile;
 	nppfuncs->urlnotify = NPP_MyURLNotify;
 	nppfuncs->print = NPP_MyPrint;
+	
 
 	nppfuncs->javaClass = NULL;
 
@@ -155,6 +205,7 @@ NPError OSCALL NP_GetEntryPoints(NPPluginFuncs *nppfuncs)
 #define HIBYTE(x) ((((uint32)(x)) & 0xff00) >> 8)
 #endif
 
+
 NPError OSCALL NP_Initialize(NPNetscapeFuncs *npnf)
 {
 	if(npnf == NULL)
@@ -164,10 +215,13 @@ NPError OSCALL NP_Initialize(NPNetscapeFuncs *npnf)
 		return NPERR_INCOMPATIBLE_VERSION_ERROR;
 
 	gpnpf = npnf;
+// 	npnf->invalidaterect = NPN_MyInvalidateRect;
 	//NP_GetEntryPoints(nppf);
 
 	return NPERR_NO_ERROR;
 }
+
+
 
 NPError OSCALL NP_Shutdown() 
 {

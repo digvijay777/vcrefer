@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../../ExtClass/String/MultiString.h"
+#include <string>
 
 extern NPNetscapeFuncs*	gpnpf;
 //////////////////////////////////////////////////////////////////////////
@@ -10,11 +11,14 @@ public:
 	{
 		m_instance = npp;
 		memset(&m_window, 0, sizeof(m_window));
+		m_hDialog = NULL;
 	}
 
 public:
 	NPP			m_instance;
 	NPWindow	m_window;
+	std::string	m_strid;
+	HWND		m_hDialog;
 };
 
 BOOL CALLBACK EnumThreadFirstWndProc(HWND hwnd, LPARAM lParam)
@@ -133,6 +137,8 @@ void DeallocateScriptable(NPObject *obj)
 	}
 
 	CScriptTable *s = (CScriptTable *)obj;
+	if(NULL != s->m_hDialog)
+		::EndDialog(s->m_hDialog, IDOK);
 	delete s;
 }
 

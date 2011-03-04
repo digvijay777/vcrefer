@@ -1,6 +1,10 @@
 #include <windows.h>
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+HINSTANCE		gInst	= NULL;;
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-	return 0;
+	gInst = hinstDLL;
+
+	return TRUE;
 }

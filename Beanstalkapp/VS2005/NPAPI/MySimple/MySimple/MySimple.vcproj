@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\mywindow.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
