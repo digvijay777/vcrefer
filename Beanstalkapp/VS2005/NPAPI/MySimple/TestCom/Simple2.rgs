@@ -1,0 +1,27 @@
+HKCR
+{
+	TestCom.Simple2.1 = s 'Simple2 Class'
+	{
+		CLSID = s '{9082122F-3E3E-492E-8F8B-8E618449E488}'
+	}
+	TestCom.Simple2 = s 'Simple2 Class'
+	{
+		CLSID = s '{9082122F-3E3E-492E-8F8B-8E618449E488}'
+		CurVer = s 'TestCom.Simple2.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {9082122F-3E3E-492E-8F8B-8E618449E488} = s 'Simple2 Class'
+		{
+			ProgID = s 'TestCom.Simple2.1'
+			VersionIndependentProgID = s 'TestCom.Simple2'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{53429F72-7F20-4687-B1FE-A30CCEDF7B8A}'
+		}
+	}
+}

@@ -1,0 +1,9 @@
+; TestCom.def : Declares the module parameters.
+
+LIBRARY      "TestCom.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE

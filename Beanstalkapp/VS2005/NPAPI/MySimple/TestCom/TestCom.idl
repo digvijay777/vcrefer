@@ -1,0 +1,54 @@
+// TestCom.idl : IDL source for TestCom
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestCom.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(5485B63C-B773-49BD-B14A-289184615D70),
+	dual,
+	nonextensible,
+	helpstring("ISimple Interface"),
+	pointer_default(unique)
+]
+interface ISimple : IDispatch{
+};
+[
+	object,
+	uuid(85EB30BA-1820-43D9-8D2D-C7645521C68B),
+	dual,
+	nonextensible,
+	helpstring("ISimple2 Interface"),
+	pointer_default(unique)
+]
+interface ISimple2 : IDispatch{
+};
+[
+	uuid(53429F72-7F20-4687-B1FE-A30CCEDF7B8A),
+	version(1.0),
+	helpstring("TestCom 1.0 Type Library")
+]
+library TestComLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(F3D5C9B3-6C35-4066-8ADC-63D729C35F10),
+		helpstring("Simple Class")
+	]
+	coclass Simple
+	{
+		[default] interface ISimple;
+	};
+	[
+		uuid(9082122F-3E3E-492E-8F8B-8E618449E488),
+		helpstring("Simple2 Class")
+	]
+	coclass Simple2
+	{
+		[default] interface ISimple2;
+	};
+};

@@ -1,0 +1,18 @@
+// npActiveX.idl : IDL source for npActiveX
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (npActiveX.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(9EF99A30-60EA-46DC-B63A-F2FB6E11303F),
+	version(1.0),
+	helpstring("npActiveX 1.0 Type Library")
+]
+library npActiveXLib
+{
+	importlib("stdole2.tlb");
+};

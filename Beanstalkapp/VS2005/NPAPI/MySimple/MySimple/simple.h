@@ -103,6 +103,32 @@ bool invoke(NPObject* obj, NPIdentifier methodName, const NPVariant *args, uint3
 			NULL_TO_NPVARIANT(*result);
 			return true;
 		}
+		else if(!strcmp(name, "callback"))
+		{
+			if(argCount != 0)
+			{
+				NPString		callback	= NPVARIANT_TO_STRING(args[0]);
+				NPIdentifier	id			= gpnpf->getstringidentifier(callback.UTF8Characters);
+
+				NPVariant		arg;
+				CScriptTable*	pScript		= (CScriptTable *)obj;
+				wchar_t*		pString		= L"这里是NPAPI的字符串";
+				CHAR			szString[1024]		= {0};
+				NPString		str;
+
+				str.UTF8Characters = "callback('hello')";
+				str.UTF8Length = (uint32_t)strlen("callback('hello')");
+
+				WideCharToMultiByte(CP_UTF8, 0, pString, (int)wcslen(pString)+1, szString, (int)sizeof(szString), NULL, NULL);
+
+				STRINGN_TO_NPVARIANT(szString, (int)strlen(szString)+1, arg);
+
+				NPVariant		var;
+
+				return gpnpf->evaluate(pScript->m_instance, obj, &str, &var);
+				return gpnpf->invokeDefault(pScript->m_instance, NPVARIANT_TO_OBJECT(args[0]), &arg, 1, result);
+			}
+		}
 	}
 	// aim exception handling
 	gpnpf->setexception(obj, "exception during invocation");

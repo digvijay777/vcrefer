@@ -230,3 +230,8 @@ NPError OSCALL NP_Shutdown()
 	return NPERR_NO_ERROR;
 }
 
+NPError OSCALL /* needs to be present for WebKit based browsers */
+NP_GetValue(void *npp, NPPVariable variable, void *value) 
+{	
+	return NPP_MyGetValue((NPP)npp, variable, value);
+}

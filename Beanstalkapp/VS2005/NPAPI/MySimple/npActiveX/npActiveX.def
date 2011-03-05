@@ -1,0 +1,13 @@
+; npActiveX.def : Declares the module parameters.
+
+LIBRARY      "npActiveX.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	; NPAPIµ¼³öº¯Êý
+	NP_GetEntryPoints   PRIVATE  
+	NP_Initialize       PRIVATE  
+	NP_Shutdown         PRIVATE  

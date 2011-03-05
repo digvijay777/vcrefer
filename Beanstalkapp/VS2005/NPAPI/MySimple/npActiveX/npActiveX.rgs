@@ -1,0 +1,25 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'npActiveX'
+		'npActiveX.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}
+
+HKLM
+{
+	NoRemove SOFTWARE
+	{
+		NoRemove MozillaPlugins
+		{
+			ForceRemove @yuanjie.xia@hotmail/npActiveX
+			{
+				val Path = s '%MODULE%'
+			}
+		}
+	}
+}
