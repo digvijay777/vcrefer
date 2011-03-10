@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "npActiveX", "npActiveX\npAc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestCom", "TestCom\TestCom.vcproj", "{654CEF7E-C2AD-415F-A5A9-8B9F4E61B264}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectUI", "directui\DirectUI.vcproj", "{BA552B59-AD9E-4615-8040-CFB2BC38D4B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{654CEF7E-C2AD-415F-A5A9-8B9F4E61B264}.Debug|Win32.Build.0 = Debug|Win32
 		{654CEF7E-C2AD-415F-A5A9-8B9F4E61B264}.Release|Win32.ActiveCfg = Release|Win32
 		{654CEF7E-C2AD-415F-A5A9-8B9F4E61B264}.Release|Win32.Build.0 = Release|Win32
+		{BA552B59-AD9E-4615-8040-CFB2BC38D4B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BA552B59-AD9E-4615-8040-CFB2BC38D4B7}.Debug|Win32.Build.0 = Debug|Win32
+		{BA552B59-AD9E-4615-8040-CFB2BC38D4B7}.Release|Win32.ActiveCfg = Release|Win32
+		{BA552B59-AD9E-4615-8040-CFB2BC38D4B7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

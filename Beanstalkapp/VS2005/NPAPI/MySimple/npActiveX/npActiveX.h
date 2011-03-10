@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Mar 04 23:40:38 2011
+/* at Mon Mar 07 14:55:45 2011
  */
 /* Compiler settings for .\npActiveX.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

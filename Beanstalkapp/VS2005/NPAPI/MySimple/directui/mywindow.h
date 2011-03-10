@@ -9,7 +9,7 @@ HWND CreateMyWindow(HWND hParent)
 {
 	extern HINSTANCE gInst;
 
-	EndDialog(NULL, 0);
+	// EndDialog(NULL, 0);
 	return CreateDialogA(gInst, MAKEINTRESOURCEA(IDD_DIALOG1), hParent, DialogProc);
 }
 
