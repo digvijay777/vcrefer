@@ -4,6 +4,8 @@
 // This file will be processed by the MIDL tool to
 // produce the type library (TestCom.tlb) and marshalling code.
 
+#include "olectl.h"
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
 
@@ -28,6 +30,28 @@ interface ISimple : IDispatch{
 interface ISimple2 : IDispatch{
 };
 [
+	object,
+	uuid(CCE220DF-2F87-4B13-95BD-5BDD161E51BF),
+	dual,
+	nonextensible,
+	helpstring("IATLControl Interface"),
+	pointer_default(unique)
+]
+interface IATLControl : IDispatch{
+};
+
+[
+	object,
+	uuid(29D30587-8E31-4595-8DF5-BA8259B66470),
+	dual,
+	nonextensible,
+	helpstring("ITestWindow Interface"),
+	pointer_default(unique)
+]
+interface ITestWindow : IDispatch{
+};
+
+[
 	uuid(53429F72-7F20-4687-B1FE-A30CCEDF7B8A),
 	version(1.0),
 	helpstring("TestCom 1.0 Type Library")
@@ -50,5 +74,23 @@ library TestComLib
 	coclass Simple2
 	{
 		[default] interface ISimple2;
+	};
+	[
+		uuid(23AFB164-E01F-4AD1-AAC1-3E8EBE9B168F),
+		control,
+		helpstring("ATLControl Class")
+	]
+	coclass ATLControl
+	{
+		[default] interface IATLControl;
+	};
+	[
+		uuid(D867829A-60F8-446E-A949-E0D24062D97C),
+		control,
+		helpstring("TestWindow Class")
+	]
+	coclass TestWindow
+	{
+		[default] interface ITestWindow;
 	};
 };

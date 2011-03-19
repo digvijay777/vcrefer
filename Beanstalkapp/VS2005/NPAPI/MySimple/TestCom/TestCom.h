@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Sat Mar 05 00:26:20 2011
+/* at Sat Mar 05 22:04:01 2011
  */
 /* Compiler settings for .\TestCom.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -57,6 +57,18 @@ typedef interface ISimple2 ISimple2;
 #endif 	/* __ISimple2_FWD_DEFINED__ */
 
 
+#ifndef __IATLControl_FWD_DEFINED__
+#define __IATLControl_FWD_DEFINED__
+typedef interface IATLControl IATLControl;
+#endif 	/* __IATLControl_FWD_DEFINED__ */
+
+
+#ifndef __ITestWindow_FWD_DEFINED__
+#define __ITestWindow_FWD_DEFINED__
+typedef interface ITestWindow ITestWindow;
+#endif 	/* __ITestWindow_FWD_DEFINED__ */
+
+
 #ifndef __Simple_FWD_DEFINED__
 #define __Simple_FWD_DEFINED__
 
@@ -79,6 +91,30 @@ typedef struct Simple2 Simple2;
 #endif /* __cplusplus */
 
 #endif 	/* __Simple2_FWD_DEFINED__ */
+
+
+#ifndef __ATLControl_FWD_DEFINED__
+#define __ATLControl_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ATLControl ATLControl;
+#else
+typedef struct ATLControl ATLControl;
+#endif /* __cplusplus */
+
+#endif 	/* __ATLControl_FWD_DEFINED__ */
+
+
+#ifndef __TestWindow_FWD_DEFINED__
+#define __TestWindow_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class TestWindow TestWindow;
+#else
+typedef struct TestWindow TestWindow;
+#endif /* __cplusplus */
+
+#endif 	/* __TestWindow_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -312,6 +348,226 @@ EXTERN_C const IID IID_ISimple2;
 #endif 	/* __ISimple2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IATLControl_INTERFACE_DEFINED__
+#define __IATLControl_INTERFACE_DEFINED__
+
+/* interface IATLControl */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IATLControl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("CCE220DF-2F87-4B13-95BD-5BDD161E51BF")
+    IATLControl : public IDispatch
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IATLControlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IATLControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IATLControl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IATLControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IATLControl * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IATLControl * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IATLControl * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IATLControl * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        END_INTERFACE
+    } IATLControlVtbl;
+
+    interface IATLControl
+    {
+        CONST_VTBL struct IATLControlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IATLControl_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IATLControl_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IATLControl_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IATLControl_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IATLControl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IATLControl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IATLControl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IATLControl_INTERFACE_DEFINED__ */
+
+
+#ifndef __ITestWindow_INTERFACE_DEFINED__
+#define __ITestWindow_INTERFACE_DEFINED__
+
+/* interface ITestWindow */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ITestWindow;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("29D30587-8E31-4595-8DF5-BA8259B66470")
+    ITestWindow : public IDispatch
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ITestWindowVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITestWindow * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITestWindow * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITestWindow * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITestWindow * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITestWindow * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITestWindow * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITestWindow * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        END_INTERFACE
+    } ITestWindowVtbl;
+
+    interface ITestWindow
+    {
+        CONST_VTBL struct ITestWindowVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ITestWindow_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ITestWindow_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ITestWindow_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ITestWindow_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define ITestWindow_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define ITestWindow_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define ITestWindow_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __ITestWindow_INTERFACE_DEFINED__ */
+
+
 
 #ifndef __TestComLib_LIBRARY_DEFINED__
 #define __TestComLib_LIBRARY_DEFINED__
@@ -336,6 +592,22 @@ EXTERN_C const CLSID CLSID_Simple2;
 
 class DECLSPEC_UUID("9082122F-3E3E-492E-8F8B-8E618449E488")
 Simple2;
+#endif
+
+EXTERN_C const CLSID CLSID_ATLControl;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("23AFB164-E01F-4AD1-AAC1-3E8EBE9B168F")
+ATLControl;
+#endif
+
+EXTERN_C const CLSID CLSID_TestWindow;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("D867829A-60F8-446E-A949-E0D24062D97C")
+TestWindow;
 #endif
 #endif /* __TestComLib_LIBRARY_DEFINED__ */
 

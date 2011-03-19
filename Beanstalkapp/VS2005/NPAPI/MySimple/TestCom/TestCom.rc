@@ -94,6 +94,16 @@ END
 IDR_TESTCOM             REGISTRY                "TestCom.rgs"
 IDR_SIMPLE              REGISTRY                "Simple.rgs"
 IDR_SIMPLE2             REGISTRY                "Simple2.rgs"
+IDR_ATLCONTROL          REGISTRY                "ATLControl.rgs"
+IDR_TESTWINDOW          REGISTRY                "TestWindow.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ATLCONTROL          BITMAP                  "ATLControl.bmp"
+IDB_TESTWINDOW          BITMAP                  "TestWindow.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

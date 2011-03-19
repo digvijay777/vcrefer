@@ -1,0 +1,34 @@
+HKCR
+{
+	TestCom.TestWindow.1 = s 'TestWindow Class'
+	{
+		CLSID = s '{D867829A-60F8-446E-A949-E0D24062D97C}'
+	}
+	TestCom.TestWindow = s 'TestWindow Class'
+	{
+		CLSID = s '{D867829A-60F8-446E-A949-E0D24062D97C}'
+		CurVer = s 'TestCom.TestWindow.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D867829A-60F8-446E-A949-E0D24062D97C} = s 'TestWindow Class'
+		{
+			ProgID = s 'TestCom.TestWindow.1'
+			VersionIndependentProgID = s 'TestCom.TestWindow'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 106'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{53429F72-7F20-4687-B1FE-A30CCEDF7B8A}'
+			'Version' = s '1.0'
+		}
+	}
+}
