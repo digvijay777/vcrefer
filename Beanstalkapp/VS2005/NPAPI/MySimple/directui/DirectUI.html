@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+<TITLE>网页操作</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script language="javascript">
+<!--
+
+function OnBtnClick(){
+	try{
+		document.getElementById("ClientManager_ff").alert(OnEventAlert);
+	} catch(e) {
+		alert(e);
+	}
+}
+function OnBtnClick2(){
+	try{
+		document.getElementById("idmytest2").callback("OnEventAlert");
+	} catch(e) {
+		alert(e);
+	}
+}
+
+function OnEventAlert(a){
+	//alert(typeof(a));
+	//alert(a.length);
+	alert(a);
+}
+-->
+</script>
+</HEAD>
+<BODY style="margin:0" scroll=no>
+<table width="100%" height="90%"><!-- Opera浏览器必须要在td里才能正常显示 -->
+<tr>
+<td>
+<object id="ClientManager_ff" TYPE="application/x-yuanjie-directui" WIDTH="100%" HEIGHT="100%">
+</object>
+</td>
+</tr>
+</table>
+<button onClick="OnBtnClick()">调用组件方法</button>
+</BODY>
+</HTML>
