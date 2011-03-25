@@ -1,0 +1,10 @@
+[
+     uuid("4556509F-618A-46CF-AB3D-ED736ED66477"),   // 唯一的UUID，用 GUIDGen 生成
+     version(1.0)
+]
+interface HelloWorld  
+{
+     // 我们定义的方法
+     void Hello([in,string]const char * psz);
+     void Shutdown(void);  
+}
