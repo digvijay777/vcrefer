@@ -35,7 +35,10 @@ int main(int argc, char * argv[])
          }
          else
          {
-              Hello((unsigned char*)argv[1]);
+			 char		szData[10]		= {0};
+
+              Hello((unsigned char*)argv[1], sizeof(szData), (unsigned char *)szData);
+			  printf("server say: %s\n", szData);
          }
      }
      RpcExcept(1)

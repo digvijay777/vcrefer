@@ -5,6 +5,6 @@
 interface HelloWorld  
 {
      // 我们定义的方法
-     void Hello([in,string]const char * psz);
+     void Hello([in,string]const char * psz, [in] int na, [out, size_is(na)] char* pp);
      void Shutdown(void);  
 }

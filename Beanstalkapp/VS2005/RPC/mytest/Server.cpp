@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include "test.h"
 
-void Hello(const unsigned char *psz)
+void Hello(const unsigned char *psz, int na, unsigned char* pp)
 {
 	printf("%s\n", psz);
+	strncpy((char *)pp, "server", na);
 }
 
 void Shutdown()
