@@ -11,6 +11,7 @@ public:
 private:
 	NPP				m_npp;
 	VPlugObject*	m_pPlugObject;
+	CComPtr<IDispatchEx>	m_spDispatch;
 
 public:
 	void		Initialize(int16_t argc, char* argn[], char* argv[], VPlugObject* pPlugObject = NULL);

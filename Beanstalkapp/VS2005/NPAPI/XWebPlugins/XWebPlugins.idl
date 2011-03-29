@@ -19,6 +19,7 @@ import "ocidl.idl";
 interface IWebPlugins : IDispatch{
 };
 
+
 [
 	uuid(784236CC-78B5-42A2-9E26-2A3179402E4B),
 	version(1.0),
@@ -45,4 +46,5 @@ library XWebPluginsLib
 		[default] interface IWebPlugins;
 		[default, source] dispinterface _IWebPluginsEvents;
 	};
+
 };

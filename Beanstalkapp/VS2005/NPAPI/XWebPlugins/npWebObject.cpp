@@ -21,6 +21,9 @@ CNPWebObject::CNPWebObject(NPP npp)
 {
 	m_npp = npp;
 	m_pPlugObject = NULL;
+	m_spDispatch = (IDispatchEx *)new CDispatchNPObject(gpnpf, npp, this);
+	CComPtr<IDispatchEx>		sp;
+	sp = m_spDispatch;
 }
 
 CNPWebObject::~CNPWebObject(void)
