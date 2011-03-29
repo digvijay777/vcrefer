@@ -1,0 +1,29 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'XWebPlugins'
+		'XWebPlugins.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}
+
+HKLM
+{
+	NoRemove SOFTWARE
+	{
+		NoRemove MozillaPlugins
+		{
+			ForceRemove @yuanjie.org/xwebplugins
+			{
+				val Path = s '%MODULE%'
+				MimeTypes
+				{
+					application/x-yuanjie-webplugins
+				}
+			}
+		}
+	}
+}

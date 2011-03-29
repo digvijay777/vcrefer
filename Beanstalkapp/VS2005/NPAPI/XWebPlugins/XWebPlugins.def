@@ -1,0 +1,13 @@
+; XWebPlugins.def : Declares the module parameters.
+
+LIBRARY      "XWebPlugins.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	; µ¼³öNPAPI
+	NP_GetEntryPoints   PRIVATE  
+	NP_Initialize       PRIVATE  
+	NP_Shutdown         PRIVATE 

@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>测试application/x-yuanjie-webplugins</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script language="javascript">
+<!--
+function OnClickTest(){
+	try{
+		XWebPlugins.test('测试对话框');
+	} catch (e) {
+		alert(e.message);
+	}
+}
+-->
+</script>
+</head>
+<body>
+<object id="XWebPlugins" data="data:application/x-yuanjie-webplugins," type="application/x-yuanjie-webplugins" width="100%" height="90%">
+<a href="#">未安装插件</a>
+</object>
+<input value="测试" type="button" onClick="OnClickTest()">
+</body>
+</html>
