@@ -44,6 +44,7 @@ private:
 
 public:
 	BOOL			OnTest(const VARIANT *args, UINT argCount, VARIANT *lpVal);
+	BOOL			Error(LPCWSTR lpFmt, ...);
 public:
 	virtual	LPCWSTR GetLastError();
 	virtual	BOOL	SetDocument(VPlugDocument* pDocument);
