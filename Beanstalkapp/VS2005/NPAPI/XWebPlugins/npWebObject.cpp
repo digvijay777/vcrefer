@@ -172,19 +172,26 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 	LONG			nID				= -1;
 	VARIANT*		pVal			= new VARIANT[argCount];
 	BOOL			bRet			= FALSE;
+	VARIANT			vRet;
 
 	MultiByteToWideChar(CP_UTF8, 0, pMethod, (int)strlen(pMethod), szName, sizeof(szName)/sizeof(WCHAR));
 	nID = m_pPlugObject->GetIDOfName(szName);
+	if(-1 == nID)
+		Error(L"尚未实现的方法");
+
 	for(int i = 0; i < (int)argCount; i++)
 	{
-		NPVariantToVARIANT(&pVal[i], args[i]);
+		ConvertNPVariantToVARIANT(args[i], pVal[i], gpnpf, m_npp);
 	}
-	bRet = m_pPlugObject->CallMethod(nID, pVal, argCount, NULL);
+	VariantInit(&vRet);
+	bRet = m_pPlugObject->CallMethod(nID, pVal, argCount, &vRet);
 	delete [] pVal;
-	if(FALSE != bRet)
-		return true;
+	if(FALSE == bRet)
+		return Error(m_pPlugObject->GetLastError());
+	if(NULL != result)
+		ConvertVARIANTtoNPVariant(vRet, *result, gpnpf, m_npp);
 
-	return Error(L"尚未实现的方法");
+	return true;
 }
 //////////////////////////////////////////////////////////////////////////
 // 静态成员

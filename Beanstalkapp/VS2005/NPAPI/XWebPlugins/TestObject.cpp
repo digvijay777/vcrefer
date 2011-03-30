@@ -10,6 +10,7 @@ CTestObject::CTestObject(void)
 {
 	m_pPlugDocument = NULL;
 	m_hParentWnd = NULL;
+	memset(m_szError, 0, sizeof(m_szError));
 	// 初始化列表
 	m_objItem.push_back(OBJECTITEM(ObjectItem_Method, L"test", &CTestObject::OnTest));
 }
@@ -21,6 +22,23 @@ CTestObject::~CTestObject(void)
 		if(ObjectItem_Property == m_objItem[i].type)
 			VariantInit(&m_objItem[i].value.val);
 	}
+}
+
+BOOL CTestObject::Error(LPCWSTR lpFmt, ...)
+{
+	va_list		vaArr;
+	WCHAR		szError[1024]		= {0};
+
+	va_start(vaArr, lpFmt);
+	_vsnwprintf(szError, sizeof(szError)/sizeof(WCHAR), lpFmt, vaArr);
+	va_end(vaArr);
+	
+	return FALSE;
+}
+
+LPCWSTR CTestObject::GetLastError()
+{
+	return m_szError;
 }
 
 BOOL CTestObject::SetDocument(VPlugDocument* pDocument)
@@ -76,7 +94,8 @@ void CTestObject::SetWindow(HWND hParent, LPRECT lpRect)
 
 BOOL CTestObject::OnTest(const VARIANT *args, UINT argCount, VARIANT *lpVal)
 {
-	MessageBoxW(m_hParentWnd, args[0].bstrVal, L"TestObject", MB_OK);
+	if(0 < argCount)
+		MessageBoxW(m_hParentWnd, args[0].bstrVal, L"WebRequest", MB_OK|MB_ICONINFORMATION);
 	return TRUE;
 }
 

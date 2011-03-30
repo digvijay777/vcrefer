@@ -7,6 +7,7 @@ struct VPlugDocument
 
 struct VPlugObject
 {
+	virtual LPCWSTR GetLastError() = 0;
 	virtual BOOL	SetDocument(VPlugDocument* pDocument) = 0;
 	virtual ULONG	GetIDOfName(LPCWSTR name) = 0;
 	virtual BOOL	CallMethod(ULONG nMethodID, const VARIANT *args, UINT argCount, VARIANT *lpVal) = 0;

@@ -227,9 +227,10 @@ public:
 		if(0 == nSize)
 			return E_FAIL;
 
-		if(0 == id)
+		if(0 >= id)
 		{
 			*pid = (DISPID)(__int64)pNames[0];
+			return S_OK;
 		}
 		for(int i = 0; i < (int)nSize; i++)
 		{
@@ -309,13 +310,13 @@ inline BOOL ConvertVARIANTtoNPVariant(const VARIANT& var, NPVariant& npvar, NPNe
 	case VT_BSTR:
 		{
 			NPString		npstr;
-			LPCSTR			lpstr		= W2U(var.bstrVal);
+			std::string		str			= WideCharToUTF8(var.bstrVal);
 
-			npstr.UTF8Length = (uint32_t)strlen(lpstr);
+			npstr.UTF8Length = (uint32_t)strlen(str.c_str());
 			if(NULL == pnpf)
 				return FALSE;
 			npstr.UTF8Characters = (NPUTF8 *)pnpf->memalloc(npstr.UTF8Length);
-			memcpy((void *)npstr.UTF8Characters, lpstr, npstr.UTF8Length);
+			memcpy((void *)npstr.UTF8Characters, str.c_str(), npstr.UTF8Length);
 			npvar.type = NPVariantType_String;
 			npvar.value.stringValue = npstr;
 		}

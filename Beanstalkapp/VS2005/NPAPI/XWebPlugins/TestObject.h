@@ -40,10 +40,12 @@ private:
 	VPlugDocument*				m_pPlugDocument;
 	std::vector<OBJECTITEM>		m_objItem;
 	HWND						m_hParentWnd;
+	WCHAR						m_szError[1024];
 
 public:
 	BOOL			OnTest(const VARIANT *args, UINT argCount, VARIANT *lpVal);
 public:
+	virtual	LPCWSTR GetLastError();
 	virtual	BOOL	SetDocument(VPlugDocument* pDocument);
 	virtual ULONG	GetIDOfName(LPCWSTR name);
 	virtual BOOL	CallMethod(ULONG nMethodID, const VARIANT *args, UINT argCount, VARIANT *lpVal);

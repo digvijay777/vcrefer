@@ -27,7 +27,7 @@ STDMETHODIMP CWebPlugins::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WO
 	if(NULL == m_pPlugObject)
 		return Error(L"Î´³õÊ¼»¯ÊµÀý");
 
-	if(DISPATCH_METHOD == wFlags)
+	if( DISPATCH_METHOD == (DISPATCH_METHOD & wFlags) )
 	{
 		VARIANT*		pVal		= NULL;
 		int				nSize		= 0;
@@ -40,11 +40,14 @@ STDMETHODIMP CWebPlugins::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WO
 
 		if(FALSE != m_pPlugObject->CallMethod(dispIdMember, pVal, nSize, pVarResult))
 			return S_OK;
+		return Error(m_pPlugObject->GetLastError());
 	}
 	else if(DISPATCH_PROPERTYGET == wFlags)
 	{
 		if(FALSE != m_pPlugObject->GetProperty(dispIdMember, pVarResult))
 			return S_OK;
+
+		return Error(m_pPlugObject->GetLastError());
 	}
 	else if(DISPATCH_PROPERTYPUT == wFlags)
 	{
@@ -53,6 +56,8 @@ STDMETHODIMP CWebPlugins::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WO
 
 		if(FALSE != m_pPlugObject->SetProperty(dispIdMember, pDispParams->rgvarg[0]))
 			return S_OK;
+
+		return Error(m_pPlugObject->GetLastError());
 	}
 	else
 	{
