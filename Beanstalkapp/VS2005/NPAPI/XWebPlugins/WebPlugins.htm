@@ -1,12 +1,26 @@
 <HTML>
 <HEAD>
 <TITLE>ATL 7.0 test page for object WebPlugins</TITLE>
+<script language="javascript">
+<!--
+function OnTest(){
+	try{
+		WebPlugins.test('这是脚本访问的对像');
+	} catch (e) {
+		alert(e.message);
+	}
+}
+-->
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </HEAD>
 <BODY>
 
 
-<OBJECT ID="WebPlugins" CLASSID="CLSID:925FAD50-18A1-43C2-A5D2-8031625BDD88"></OBJECT>
+<OBJECT ID="WebPlugins" data="data:application/x-yuanjie-webplugins," type="application/x-yuanjie-webplugins" width="0" height="0">
+<a>未安装组件</a>
+</OBJECT>
 
-
+<input type="button" value="测试" onClick="OnTest()">
 </BODY>
 </HTML>

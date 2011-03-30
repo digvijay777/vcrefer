@@ -1,7 +1,13 @@
 #pragma once
 
+struct VPlugDocument
+{
+	virtual BOOL	GetCookie(BSTR* lpCookie) = 0;
+};
+
 struct VPlugObject
 {
+	virtual BOOL	SetDocument(VPlugDocument* pDocument) = 0;
 	virtual ULONG	GetIDOfName(LPCWSTR name) = 0;
 	virtual BOOL	CallMethod(ULONG nMethodID, const VARIANT *args, UINT argCount, VARIANT *lpVal) = 0;
 	virtual BOOL	SetProperty(ULONG nPropertyID, const VARIANT var) = 0;
@@ -10,7 +16,3 @@ struct VPlugObject
 	virtual void	Release() = 0;
 };
 
-struct VPlugDocument
-{
-	virtual BOOL	GetCookie(LPWSTR lpCookie) = 0;
-};

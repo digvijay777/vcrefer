@@ -11,6 +11,7 @@ NPError NPP_MyNew(NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t ar
 				  , char* argn[], char* argv[], NPSavedData* saved)
 {
 	//	gpnpf->setvalue(instance, NPPVpluginWindowBool, 0);	// 无窗体组件
+
 	if(gpnpf->version >= 14 && NULL != gpnpf)
 		instance->pdata = gpnpf->createobject((NPP)instance, &CNPWebObject::Object);
 
@@ -63,6 +64,10 @@ NPError NPP_MySetValue(NPP instance, NPNVariable variable, void *value)
 
 NPError NPP_MySetWindow(NPP instance, NPWindow* window)
 {
+	CNPWebObject*		pobject		= (CNPWebObject *)instance->pdata;
+
+	if(NULL != pobject)
+		pobject->SetWindow(window);
 	return NPERR_NO_ERROR;
 }
 

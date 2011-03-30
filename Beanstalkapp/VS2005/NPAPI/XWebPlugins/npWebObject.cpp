@@ -1,6 +1,43 @@
 #include "stdafx.h"
 #include "npWebObject.h"
 
+//////////////////////////////////////////////////////////////////////////
+CNPVPlugDocument::CNPVPlugDocument(NPP npp, NPObject* pobject)
+{
+	m_npp = npp;
+	m_pobject = pobject;
+}
+
+BOOL CNPVPlugDocument::GetCookie(BSTR *lpCookie)
+{
+	NPObject*		pDoc		= NULL;
+	NPIdentifier	cookie;
+	NPVariant		valCookie;
+
+	gpnpf->getvalue(m_npp, NPNVWindowNPObject, &pDoc);
+	cookie = gpnpf->getstringidentifier((NPUTF8*)"document");
+	gpnpf->getproperty(m_npp, pDoc, cookie, &valCookie);
+	if(NPVARIANT_IS_OBJECT(valCookie))
+	{
+		pDoc = NPVARIANT_TO_OBJECT(valCookie);
+	}
+	cookie = gpnpf->getstringidentifier((NPUTF8*)"cookie");
+	gpnpf->getproperty(m_npp, pDoc, cookie, &valCookie);
+	if(NPVARIANT_IS_STRING(valCookie))
+	{
+		VARIANT		var;
+
+		if(FALSE != ConvertNPVariantToVARIANT(valCookie, var))
+		{
+			*lpCookie = var.bstrVal;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
 NPClass CNPWebObject::Object = {
 	NP_CLASS_STRUCT_VERSION
 		, CNPWebObject::_AllocateScriptable
@@ -18,21 +55,26 @@ NPClass CNPWebObject::Object = {
 };
 
 CNPWebObject::CNPWebObject(NPP npp)
+:m_doc(npp, this)
 {
 	m_npp = npp;
 	m_pPlugObject = NULL;
 	m_spDispatch = (IDispatchEx *)new CDispatchNPObject(gpnpf, npp, this);
-	CComPtr<IDispatchEx>		sp;
-	sp = m_spDispatch;
 }
 
 CNPWebObject::~CNPWebObject(void)
 {
+	if(NULL != m_spDispatch)
+		m_spDispatch->Release();
+	if(NULL != m_pPlugObject)
+		m_pPlugObject->Release();
 }
 // 初始化
 void CNPWebObject::Initialize(int16_t argc, char* argn[], char* argv[], VPlugObject* pPlugObject /* = NULL */)
 {
 	m_pPlugObject = pPlugObject;
+	if(NULL != m_pPlugObject)
+		m_pPlugObject->SetDocument(&m_doc);
 }
 
 // 发出错误
@@ -40,17 +82,22 @@ bool CNPWebObject::Error(LPCWSTR lpErr, ...)
 {
 	va_list		vaArr;
 	WCHAR		szError[1024]		= {0};
-	CHAR		szErrorA[3096]		= {0};
 
 	va_start(vaArr, lpErr);
 	_vsnwprintf(szError, sizeof(szError)/sizeof(WCHAR), lpErr, vaArr);
 	va_end(vaArr);
 
-	WideCharToMultiByte(CP_UTF8, 0, szError, wcslen(szError), szErrorA, sizeof(szErrorA), NULL, NULL);
-	gpnpf->setexception(this, szErrorA);
+	gpnpf->setexception(this, W2U(szError));
 	return false;
 }
-
+void CNPWebObject::SetWindow(NPWindow* window)
+{
+	if(NULL != m_pPlugObject)
+	{
+		RECT		rect = {0, 0, window->width, window->height};
+		m_pPlugObject->SetWindow((HWND)window->window, &rect);
+	}
+}
 // 是否成员函数
 bool CNPWebObject::HasMethod(NPIdentifier methodName)
 {
@@ -60,7 +107,7 @@ bool CNPWebObject::HasMethod(NPIdentifier methodName)
 	WCHAR			szName[512]		= {0};
 	LPCSTR			lpName			= gpnpf->utf8fromidentifier(methodName);
 
-	MultiByteToWideChar(CP_UTF8, 0, lpName, strlen(lpName), szName, sizeof(szName)/sizeof(WCHAR));
+	MultiByteToWideChar(CP_UTF8, 0, lpName, (int)strlen(lpName), szName, sizeof(szName)/sizeof(WCHAR));
 	if(-1 != m_pPlugObject->GetIDOfName(szName))
 		return true;
 
@@ -74,12 +121,40 @@ bool CNPWebObject::HasProperty(NPIdentifier propertyName)
 // 获取属性
 bool CNPWebObject::GetProperty(NPIdentifier propertyName, NPVariant *result)
 {
-	return false;
+	LPCSTR	lpstr		= gpnpf->utf8fromidentifier(propertyName);
+	ULONG	nID			= -1;
+
+	nID = m_pPlugObject->GetIDOfName(U2W(lpstr));
+	if(-1 == nID)
+		return false;
+
+	if(NULL == result)
+		return false;
+
+	VARIANT		var;
+	
+	m_pPlugObject->GetProperty(nID, &var);
+	ConvertVARIANTtoNPVariant(var, *result);
+	return true;
 }
 // 设置属性
 bool CNPWebObject::SetProperty(NPIdentifier name, const NPVariant *value)
 {
-	return false;
+	LPCSTR	lpstr		= gpnpf->utf8fromidentifier(name);
+	ULONG	nID			= -1;
+
+	nID = m_pPlugObject->GetIDOfName(U2W(lpstr));
+	if(-1 == nID)
+		return false;
+
+	if(NULL == value)
+		return false;
+
+	VARIANT		var;
+
+	ConvertNPVariantToVARIANT(*value, var);
+	m_pPlugObject->SetProperty(nID, var);
+	return true;
 }
 // 默认调用过程
 bool CNPWebObject::InvokeDefault(const NPVariant *args, uint32_t argCount, NPVariant *result)
@@ -98,9 +173,9 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 	VARIANT*		pVal			= new VARIANT[argCount];
 	BOOL			bRet			= FALSE;
 
-	MultiByteToWideChar(CP_UTF8, 0, pMethod, strlen(pMethod), szName, sizeof(szName)/sizeof(WCHAR));
+	MultiByteToWideChar(CP_UTF8, 0, pMethod, (int)strlen(pMethod), szName, sizeof(szName)/sizeof(WCHAR));
 	nID = m_pPlugObject->GetIDOfName(szName);
-	for(int i = 0; i < argCount; i++)
+	for(int i = 0; i < (int)argCount; i++)
 	{
 		NPVariantToVARIANT(&pVal[i], args[i]);
 	}

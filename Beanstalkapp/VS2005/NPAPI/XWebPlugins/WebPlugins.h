@@ -25,12 +25,14 @@ class ATL_NO_VTABLE CWebPlugins :
 	public IDataObjectImpl<CWebPlugins>,
 	public IProvideClassInfo2Impl<&CLSID_WebPlugins, &__uuidof(_IWebPluginsEvents), &LIBID_XWebPluginsLib>,
 	public CComCoClass<CWebPlugins, &CLSID_WebPlugins>,
-	public CComControl<CWebPlugins>
+	public CComControl<CWebPlugins>,
+	public VPlugDocument
 {
 public:
 
 	CWebPlugins()
 	{
+		m_bWindowOnly = TRUE; // 指定为窗体控件
 		m_pPlugObject = NULL;
 	}
 
@@ -80,6 +82,8 @@ BEGIN_CONNECTION_POINT_MAP(CWebPlugins)
 END_CONNECTION_POINT_MAP()
 
 BEGIN_MSG_MAP(CWebPlugins)
+	MESSAGE_HANDLER(WM_CREATE, OnCreate)
+	MESSAGE_HANDLER(WM_SIZE, OnSize)
 	CHAIN_MSG_MAP(CComControl<CWebPlugins>)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
@@ -88,44 +92,31 @@ private:
 	VPlugObject*		m_pPlugObject;
 
 public:
-	STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR FAR *FAR *rgszNames, unsigned int cNames, LCID lcid, DISPID FAR *rgDispId)
+	virtual BOOL GetCookie(BSTR* lpCookie)
 	{
-		if(S_OK == __super::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId))
-			return S_OK;
+		HRESULT							hr			= S_FALSE;
+		CComPtr<IOleContainer>			spContainer;
+		CComPtr<IOleClientSite>			spClientSite;
+		CComPtr<IHTMLDocument2>		spDoc;
 
-		if(NULL != m_pPlugObject)
-		{
-			*rgDispId = m_pPlugObject->GetIDOfName(*rgszNames);
-			return S_OK;
-		}
-
-		return E_INVALIDARG;
+		hr = GetClientSite(&spClientSite);
+		if(spClientSite == NULL)
+			return FALSE;
+		hr = spClientSite->GetContainer(&spContainer);
+		if(spContainer == NULL)
+			return FALSE;
+		hr = spContainer->QueryInterface(IID_IHTMLDocument2, (void **)&spDoc);
+		if(spDoc == NULL)
+			return FALSE;
+		hr = spDoc->get_cookie(lpCookie);
+		if(FAILED(hr))
+			return FALSE;
+		return TRUE;
 	}
-
+public:
+	STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR FAR *FAR *rgszNames, unsigned int cNames, LCID lcid, DISPID FAR *rgDispId);
 	STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR *pDispParams
-		, VARIANT FAR *pVarResult, EXCEPINFO FAR *pExcepInfo, unsigned int FAR *puArgErr)
-	{
-		if(S_OK == __super::Invoke(dispIdMember, riid, lcid, wFlags, pDispParams
-			, pVarResult, pExcepInfo, puArgErr))
-			return S_OK;
-
-		if(NULL != m_pPlugObject)
-		{
-			VARIANT*		pVal		= NULL;
-			int				nSize		= 0;
-
-			if(NULL != pDispParams)
-			{
-				nSize = pDispParams->cArgs;
-				pVal = pDispParams->rgvarg;
-			}
-
-			if(FALSE != m_pPlugObject->CallMethod(dispIdMember, pVal, nSize, pVarResult))
-				return S_OK;
-		}
-
-		return E_INVALIDARG;
-	}
+		, VARIANT FAR *pVarResult, EXCEPINFO FAR *pExcepInfo, unsigned int FAR *puArgErr);
 // Handler prototypes:
 //  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 //  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -200,6 +191,10 @@ public:
 			m_pPlugObject = NULL;
 		}
 	}
+public:
+	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+public:
+	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(WebPlugins), CWebPlugins)

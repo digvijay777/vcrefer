@@ -8,31 +8,50 @@ VPlugObject* CTestObject::CreateObject()
 
 CTestObject::CTestObject(void)
 {
+	m_pPlugDocument = NULL;
+	m_hParentWnd = NULL;
+	// 初始化列表
+	m_objItem.push_back(OBJECTITEM(ObjectItem_Method, L"test", &CTestObject::OnTest));
 }
 
 CTestObject::~CTestObject(void)
 {
+	for(int i = 0; i < (int)m_objItem.size(); i++)
+	{
+		if(ObjectItem_Property == m_objItem[i].type)
+			VariantInit(&m_objItem[i].value.val);
+	}
+}
+
+BOOL CTestObject::SetDocument(VPlugDocument* pDocument)
+{
+	m_pPlugDocument = pDocument;
+	return TRUE;
 }
 
 ULONG CTestObject::GetIDOfName(LPCWSTR name)
 {
-	if(wcscmp(L"test", name) == 0)
-		return 1;
+	for(int i = 0; i < (int)m_objItem.size(); i++)
+	{
+		if(wcscmp(m_objItem[i].name.c_str(), name) == 0)
+			return i;
+	}
+
 	return -1;
 }
 
 BOOL CTestObject::CallMethod(ULONG nMethodID, const VARIANT *args, UINT argCount, VARIANT *lpVal)
 {
-	if(-1 == nMethodID)
+	if(nMethodID >= (ULONG)m_objItem.size())
 		return FALSE;
 
-	if(1 == nMethodID)
-	{
-		MessageBoxW(NULL, args[0].bstrVal, L"TestObject", MB_OK);
-		return TRUE;
-	}
+	if(ObjectItem_Method != m_objItem[nMethodID].type)
+		return FALSE;
 
-	return FALSE;
+	if(NULL == m_objItem[nMethodID].value.call)
+		return FALSE;
+
+	return (this->*m_objItem[nMethodID].value.call)(args, argCount, lpVal);
 }
 
 BOOL CTestObject::SetProperty(ULONG nPropertyID, const VARIANT var)
@@ -52,7 +71,12 @@ void CTestObject::Release()
 
 void CTestObject::SetWindow(HWND hParent, LPRECT lpRect)
 {
-
+	m_hParentWnd = hParent;
 }
 
+BOOL CTestObject::OnTest(const VARIANT *args, UINT argCount, VARIANT *lpVal)
+{
+	MessageBoxW(m_hParentWnd, args[0].bstrVal, L"TestObject", MB_OK);
+	return TRUE;
+}
 
