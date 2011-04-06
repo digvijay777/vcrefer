@@ -22,7 +22,10 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 	pDriverObject->MajorFunction[IRP_MJ_WRITE] = IOBufferDDKDispatchWrite;
 	pDriverObject->MajorFunction[IRP_MJ_QUERY_INFORMATION] = IOBufferDDKQueryInformation;
 
+	// 缓冲区读方式
 	status = CreateBufferIODevice(pDriverObject);
+	// 直接记方式
+	status = CreateDirectIODevice(pDriverObject);
 
 	LogWrite("DriverEnter end\r\n");
 	return status;
@@ -55,6 +58,63 @@ NTSTATUS CreateBufferIODevice(PDRIVER_OBJECT pDriverObject)
 	}
 
 	pDevObj->Flags |= DO_BUFFERED_IO;
+	pDevExt = (PDEVICE_EXTENSION)pDevObj->DeviceExtension;
+	pDevExt->pDevice = pDevObj;
+	pDevExt->ustrDeviceName = devName;
+	pDevExt->ustrSymLinkName = devLink;
+
+	pDevExt->nBufferMaxSize = 2048;
+	pDevExt->nOffset = 0;
+	pDevExt->pBuffer = (PUCHAR)ExAllocatePool(PagedPool, pDevExt->nBufferMaxSize);
+
+	if(NULL ==pDevExt->pBuffer)
+	{
+		LogWrite("ExAllocate %d Error.\r\n", pDevExt->nBufferMaxSize);
+		IoDeleteDevice(pDevObj);
+		return STATUS_DEVICE_NOT_CONNECTED;
+	}
+
+	status = IoCreateSymbolicLink(&devLink, &devName);
+	if( !NT_SUCCESS(status) )
+	{
+		LogWrite("Create Symbolic link '%S' Error: %d\r\n", devLink.Buffer, status);
+		ExFreePool(pDevExt->pBuffer);
+		IoDeleteDevice(pDevObj);
+		return status;
+	}
+
+	LogWrite("Create device '%S'['%S'] success.\r\n", devName.Buffer, devLink.Buffer);
+
+	return STATUS_SUCCESS;
+}
+// 创建设备
+#pragma PAGEDCODE
+NTSTATUS CreateDirectIODevice(PDRIVER_OBJECT pDriverObject)
+{
+	NTSTATUS			status;
+	PDEVICE_OBJECT		pDevObj;
+	PDEVICE_EXTENSION	pDevExt;
+	UNICODE_STRING		devName;
+	UNICODE_STRING		devLink;
+
+	RtlInitUnicodeString(&devName, L"\\Device\\DDKTestIODrect");
+	RtlInitUnicodeString(&devLink, L"\\??\\TestIODrect");
+
+	status = IoCreateDevice(pDriverObject
+		, sizeof(DEVICE_EXTENSION)
+		, &devName
+		, FILE_DEVICE_UNKNOWN
+		, 0
+		, TRUE
+		, &pDevObj);
+
+	if( !NT_SUCCESS(status) )
+	{
+		LogWrite("IoCreate Device '%S' Error: %d\r\n", devName.Buffer, status);
+		return status;
+	}
+
+	pDevObj->Flags |= DO_DIRECT_IO;
 	pDevExt = (PDEVICE_EXTENSION)pDevObj->DeviceExtension;
 	pDevExt->pDevice = pDevObj;
 	pDevExt->ustrDeviceName = devName;
@@ -228,8 +288,10 @@ NTSTATUS IOBufferDDKDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	ULONG					ulReadLength	= stack->Parameters.Read.Length;
 	ULONG					ulReadOffset	= (ULONG)stack->Parameters.Read.ByteOffset.QuadPart;
 	UNICODE_STRING			ustrBufferDev;
+	UNICODE_STRING			ustrDrectDev;
 
 	RtlInitUnicodeString(&ustrBufferDev, L"\\Device\\DDKTestIOBuffer");
+	RtlInitUnicodeString(&ustrDrectDev, L"\\Device\\DDKTestIODrect");
 
 	if(ulReadOffset >= pDevExt->nOffset)
 	{
@@ -245,6 +307,36 @@ NTSTATUS IOBufferDDKDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 			memcpy(pIrp->AssociatedIrp.SystemBuffer
 				, pDevExt->pBuffer + ulReadOffset
 				, ulReadLength);
+		}
+		else if(RtlCompareUnicodeString(&pDevExt->ustrDeviceName, &ustrDrectDev, TRUE) == 0)
+		{
+			// 得到锁定缓冲区的首地址长度
+			ULONG	mdl_length	= MmGetMdlByteCount(pIrp->MdlAddress);
+			// 得到缓冲区的首地址
+			PVOID	mdl_address = MmGetMdlVirtualAddress(pIrp->MdlAddress);
+			// 得到缓冲区的偏移量
+			ULONG	mdl_offset = MmGetMdlByteOffset(pIrp->MdlAddress);
+
+			LogWrite("mdl_address:0X%08X\r\n", mdl_address);
+			LogWrite("mdl_length: %d\r\n", mdl_length);
+			LogWrite("mdl_offset:%d\r\n", mdl_offset);
+			if(mdl_length != stack->Parameters.Read.Length)
+			{
+				// mdl 的长度与读取长度不一致时
+				ulReadLength = 0;
+				status = STATUS_UNSUCCESSFUL;
+			}
+			else
+			{
+				// 是到MDL在内核模式下的映射
+				PVOID	kernal_address = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress
+					, NormalPagePriority);
+				LogWrite("mdl_address: 0X%08X\r\n", kernal_address);
+				memcpy(kernal_address
+					, pDevExt->pBuffer + ulReadOffset
+					, ulReadLength);
+			}
+
 		}
 		else
 		{
@@ -272,8 +364,11 @@ NTSTATUS IOBufferDDKDispatchWrite(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	ULONG					ulWriteLength	= stack->Parameters.Write.Length;
 	ULONG					ulWriteOffset	= (ULONG)stack->Parameters.Write.ByteOffset.QuadPart;
 	UNICODE_STRING			ustrBufferDev;
+	UNICODE_STRING			ustrDrectDev;
 
 	RtlInitUnicodeString(&ustrBufferDev, L"\\Device\\DDKTestIOBuffer");
+	RtlInitUnicodeString(&ustrDrectDev, L"\\Device\\DDKTestIODrect");
+
 	if(ulWriteOffset+ulWriteLength >= pDevExt->nBufferMaxSize)
 	{
 		status = STATUS_FILE_INVALID;
@@ -289,6 +384,26 @@ NTSTATUS IOBufferDDKDispatchWrite(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 				, pIrp->AssociatedIrp.SystemBuffer
 				, ulWriteLength);
 			//pIrp->AssociatedIrp.IrpCount = ulWriteLength;
+		}
+		else if(RtlCompareUnicodeString(&ustrDrectDev, &pDevExt->ustrDeviceName, TRUE) == 0)
+		{
+			ULONG	mdl_length	= MmGetMdlByteCount(pIrp->MdlAddress);
+			if(mdl_length != stack->Parameters.Read.Length)
+			{
+				// mdl 的长度与读取长度不一致时
+				ulWriteLength = 0;
+				status = STATUS_UNSUCCESSFUL;
+			}
+			else
+			{
+				// 是到MDL在内核模式下的映射
+				PVOID	kernal_address = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress
+					, NormalPagePriority);
+				LogWrite("mdl_address: 0X%08X\r\n", kernal_address);
+				memcpy(pDevExt->pBuffer + ulWriteOffset
+					, kernal_address
+					, ulWriteLength);
+			}
 		}
 		else
 		{

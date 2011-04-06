@@ -28,7 +28,7 @@ int _tmain(int argc, const char* argv[])
 
 	if(_stricmp("-w", argv[1]) == 0)
 	{
-		HANDLE		hFile	= CreateFile("\\\\.\\TestIOBuffer"
+		HANDLE		hFile	= CreateFile("\\\\.\\TestIODrect"/*"\\\\.\\TestIOBuffer"*/
 			, GENERIC_WRITE
 			, 0
 			, NULL
@@ -61,7 +61,7 @@ int _tmain(int argc, const char* argv[])
 	}
 	else if(_stricmp("-r", argv[1]) == 0)
 	{
-		HANDLE		hFile	= CreateFile("\\\\.\\TestIOBuffer"
+		HANDLE		hFile	= CreateFile("\\\\.\\TestIODrect"/*"\\\\.\\TestIOBuffer"*/
 			, GENERIC_READ
 			, 0
 			, NULL
