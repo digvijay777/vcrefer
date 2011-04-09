@@ -26,6 +26,8 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 	status = CreateBufferIODevice(pDriverObject);
 	// 直接记方式
 	status = CreateDirectIODevice(pDriverObject);
+	// IO读取练习
+	status = CreateControlIODevice(pDriverObject);
 
 	LogWrite("DriverEnter end\r\n");
 	return status;
@@ -141,6 +143,66 @@ NTSTATUS CreateDirectIODevice(PDRIVER_OBJECT pDriverObject)
 	}
 
 	LogWrite("Create device '%S'['%S'] success.\r\n", devName.Buffer, devLink.Buffer);
+
+	return STATUS_SUCCESS;
+}
+
+// 创建设备
+NTSTATUS CreateControlIODevice(PDRIVER_OBJECT pDriverObject)
+{
+	NTSTATUS			status;
+	PDEVICE_OBJECT		pDevObj;
+	PDEVICE_EXTENSION	pDevExt;
+	UNICODE_STRING		devName;
+	UNICODE_STRING		devLink;
+
+	RtlInitUnicodeString(&devName, L"\\Device\\DDKTestIOControl");
+	RtlInitUnicodeString(&devLink, L"\\??\\TestIOControl");
+
+	status = IoCreateDevice(pDriverObject
+		, sizeof(DEVICE_EXTENSION)
+		, &devName
+		, FILE_DEVICE_UNKNOWN
+		, 0
+		, TRUE
+		, &pDevObj);
+
+	if( !NT_SUCCESS(status) )
+	{
+		LogWrite("IoCreate Device '%S' Error: %d\r\n", devName.Buffer, status);
+		return status;
+	}
+
+	pDevObj->Flags |= DO_DIRECT_IO;
+	pDevExt = (PDEVICE_EXTENSION)pDevObj->DeviceExtension;
+	pDevExt->pDevice = pDevObj;
+	pDevExt->ustrDeviceName = devName;
+	pDevExt->ustrSymLinkName = devLink;
+
+	pDevExt->nBufferMaxSize = 2048;
+	pDevExt->nOffset = 0;
+	pDevExt->pBuffer = (PUCHAR)ExAllocatePool(PagedPool, pDevExt->nBufferMaxSize);
+
+	if(NULL ==pDevExt->pBuffer)
+	{
+		LogWrite("ExAllocate %d Error.\r\n", pDevExt->nBufferMaxSize);
+		IoDeleteDevice(pDevObj);
+		return STATUS_DEVICE_NOT_CONNECTED;
+	}
+
+	status = IoCreateSymbolicLink(&devLink, &devName);
+	if( !NT_SUCCESS(status) )
+	{
+		LogWrite("Create Symbolic link '%S' Error: %d\r\n", devLink.Buffer, status);
+		ExFreePool(pDevExt->pBuffer);
+		IoDeleteDevice(pDevObj);
+		return status;
+	}
+
+	LogWrite("Create device '%S'['%S'] success.\r\n", devName.Buffer, devLink.Buffer);
+
+	// 设置例程
+	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = IOBufferDDKDispatchControl;
 
 	return STATUS_SUCCESS;
 }
@@ -289,9 +351,11 @@ NTSTATUS IOBufferDDKDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	ULONG					ulReadOffset	= (ULONG)stack->Parameters.Read.ByteOffset.QuadPart;
 	UNICODE_STRING			ustrBufferDev;
 	UNICODE_STRING			ustrDrectDev;
+	UNICODE_STRING			ustrIOCtrlDev;
 
 	RtlInitUnicodeString(&ustrBufferDev, L"\\Device\\DDKTestIOBuffer");
 	RtlInitUnicodeString(&ustrDrectDev, L"\\Device\\DDKTestIODrect");
+	RtlInitUnicodeString(&ustrIOCtrlDev, L"\\Device\\DDKTestIOControl");
 
 	if(ulReadOffset >= pDevExt->nOffset)
 	{
@@ -308,7 +372,8 @@ NTSTATUS IOBufferDDKDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 				, pDevExt->pBuffer + ulReadOffset
 				, ulReadLength);
 		}
-		else if(RtlCompareUnicodeString(&pDevExt->ustrDeviceName, &ustrDrectDev, TRUE) == 0)
+		else if( RtlCompareUnicodeString(&pDevExt->ustrDeviceName, &ustrDrectDev, TRUE) == 0
+			|| RtlCompareUnicodeString(&pDevExt->ustrDeviceName, &ustrIOCtrlDev, TRUE) == 0 )
 		{
 			// 得到锁定缓冲区的首地址长度
 			ULONG	mdl_length	= MmGetMdlByteCount(pIrp->MdlAddress);
@@ -444,5 +509,76 @@ NTSTATUS IOBufferDDKQueryInformation(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
 	LogWrite("[IOBufferDDKQueryInformation] device '%S'\r\n", pDevExt->ustrDeviceName.Buffer);
+	return STATUS_SUCCESS;
+}
+
+// IOCONTROL例程
+NTSTATUS IOBufferDDKDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp)
+{
+	LogWrite("[IOBufferDDKDispatchControl] login.\r\n");
+	
+	NTSTATUS				status		= STATUS_SUCCESS;
+	PIO_STACK_LOCATION		stack		= IoGetCurrentIrpStackLocation(pIrp);
+	ULONG					nInLen		= stack->Parameters.DeviceIoControl.InputBufferLength;
+	ULONG					nOutLen		= stack->Parameters.DeviceIoControl.OutputBufferLength;
+	ULONG					code		= stack->Parameters.DeviceIoControl.IoControlCode;
+	PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)pDevObj->DeviceExtension;
+
+	LogWrite("[IOBufferDDKDispatchControl] recv: %s\r\n", pIrp->AssociatedIrp.SystemBuffer);
+	switch(code)
+	{
+	case IOCTRL_TEST1:	// 缓冲区方式
+		{
+			UCHAR*		InputBuffer		= (UCHAR *)pIrp->AssociatedIrp.SystemBuffer;
+			
+			if(nInLen > pDevExt->nBufferMaxSize)
+				nInLen = pDevExt->nBufferMaxSize;
+			memcpy(pDevExt->pBuffer, InputBuffer, nInLen);
+			pDevExt->nOffset = nInLen;
+			// 输出写入字节数
+			UCHAR*		OutBuffer		= (UCHAR *)pIrp->AssociatedIrp.SystemBuffer;
+			if(nOutLen >= 4)
+			{
+				nOutLen = 4;
+				*((LONG*)OutBuffer) = nInLen;
+			}
+			else
+			{
+				nOutLen = 0;
+			}
+		}
+		break;
+	case IOCTRL_TEST2:	// 直接方式
+		{
+			UCHAR*		InputBuffer		= (UCHAR *)pIrp->AssociatedIrp.SystemBuffer;
+
+			if(nInLen > pDevExt->nBufferMaxSize)
+				nInLen = pDevExt->nBufferMaxSize;
+			memcpy(pDevExt->pBuffer, InputBuffer, nInLen);
+			pDevExt->nOffset = nInLen;
+			// 返回
+			UCHAR*		OutBuffer		= (UCHAR *)MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority);
+			if(nOutLen < 4)
+			{
+				nOutLen = 0;
+			}
+			else
+			{
+				*((LONG *)OutBuffer) = nInLen;
+				nOutLen = 4;
+			}
+		}
+		break;
+	default:
+		LogWrite("[IOBufferDDKDispatchControl] unknown code: %X.\r\n", code);
+		break;
+	}
+
+	pIrp->IoStatus.Information = nOutLen;
+	pIrp->IoStatus.Status = status;
+	LogWrite("[IOBufferDDKDispatchControl] write byte: %d.\r\n", nOutLen);
+
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+
 	return STATUS_SUCCESS;
 }

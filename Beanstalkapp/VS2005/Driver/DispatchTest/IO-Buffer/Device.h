@@ -40,5 +40,18 @@ NTSTATUS IOBufferDDKDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS IOBufferDDKDispatchWrite(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS IOBufferDDKDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS IOBufferDDKQueryInformation(PDEVICE_OBJECT pDevObj, PIRP pIrp);
+NTSTATUS IOBufferDDKDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 
 void LogWrite(const char* pFmt, ...);
+
+#define IOCTRL_TEST1			CTL_CODE(\
+	FILE_DEVICE_UNKNOWN \
+	, 0x800 \
+	, METHOD_BUFFERED \
+	, FILE_ANY_ACCESS)
+
+#define IOCTRL_TEST2			CTL_CODE(\
+	FILE_DEVICE_UNKNOWN \
+	, 0x801 \
+	, METHOD_IN_DIRECT \
+	, FILE_ANY_ACCESS)
