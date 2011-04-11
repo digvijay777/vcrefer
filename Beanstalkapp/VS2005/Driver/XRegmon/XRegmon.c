@@ -7,11 +7,42 @@
 
 #define SYSNAME         "System"
 
-HANDLE					ghEventMetux			= NULL;
-HANDLE					ghEventBadopt			= NULL;
+#define KEYMONPATHLEN		2
+#define KEYUSEROOTLEN		2
+#define KEYROOTLEN			4
+
+#define MAXROOTLEN      128
+
+KEVENT					ghEventRead;
+KEVENT					ghEventWrite;
+KMUTEX					ghMetuxSetValue;
+KEVENT					ghEventStop;
 PSRVTABLE				ServiceTable			= NULL;
 fnRealRegSetValueKey	RealRegSetValueKey		= NULL;
 ULONG					ProcessNameOffset		= 0;
+ULONG					SetValueAllowd			= 0;
+
+// 
+LPCWSTR		KeyMonitorPath[KEYMONPATHLEN]		= {
+	L"HKLM\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\RUN"
+	, L"HKCU\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\RUN"
+};
+
+ROOTKEY CurrentUser[KEYUSEROOTLEN] = {
+	{ L"\\REGISTRY\\USER\\S", L"HKCU", 0 },
+	{ L"HKU\\S", L"HKCU", 0 }
+};
+
+ROOTKEY RootKey[KEYROOTLEN] = {
+	{ L"\\REGISTRY\\USER", L"HKU", 0 },
+	{ L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\HARDWARE PROFILES\\CURRENT", 
+	L"HKCC", 0 },
+	{ L"\\REGISTRY\\MACHINE\\SOFTWARE\\CLASSES", L"HKCR", 0 },
+	{ L"\\REGISTRY\\MACHINE", L"HKLM", 0 }
+};
+
+struct FindBadOptItem		BadSetValue		= {0};
+
 
 NTSTATUS RegSetValueKey( IN HANDLE KeyHandle, IN PUNICODE_STRING ValueName,
 						IN ULONG TitleIndex, IN ULONG Type, 
@@ -84,6 +115,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 	pDriverObject->MajorFunction[IRP_MJ_READ] = DDKXRegmonDispatchRead;
 	pDriverObject->MajorFunction[IRP_MJ_WRITE] = DDKXRegmonDispatchWrite;
 	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DDKXRegmonDispatchControl;
+	pDriverObject->MajorFunction[IRP_MJ_CLOSE] = DDKXRegmonDispatchClose;
 
 	// 创建REGMON设备
 	status = CreateXRegmonDevice(pDriverObject);
@@ -93,7 +125,16 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 	RealRegSetValueKey = (fnRealRegSetValueKey) SYSCALL( ZwSetValueKey );
 	ProcessNameOffset = GetProcessNameOffset();
 	LogWrite("ServiceTable:%X; RealRegSetValueKey:%X; RegSetValueKey:%X\r\n", ServiceTable, RealRegSetValueKey, RegSetValueKey);
+	// 设置事件
+	KeInitializeEvent(&ghEventRead, SynchronizationEvent, FALSE);
+	KeInitializeEvent(&ghEventRead, SynchronizationEvent, FALSE);
+	KeInitializeMutex(&ghMetuxSetValue, 0);
+	KeInitializeEvent(&ghEventStop, NotificationEvent, TRUE);
 
+	for(i = 0; i < KEYUSEROOTLEN; i++)
+		CurrentUser[i].RootNameLen = wcslen(CurrentUser[i].RootName);
+	for(i = 0; i < KEYROOTLEN; i++)
+		RootKey[i].RootNameLen = wcslen(RootKey[i].RootName);
 	return status;
 }
 
@@ -153,13 +194,15 @@ void DDKXRegmonUnload(PDRIVER_OBJECT pDriverObject)
 		PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)pNexObj->DeviceExtension;
 		UNICODE_STRING			pLinkName;
 
+		KeSetEvent(&ghEventStop, IO_NO_INCREMENT, FALSE);
+		if(NULL != RealRegSetValueKey && SYSCALL(ZwSetValueKey) != RealRegSetValueKey)
+			SETSYSCALL(ZwSetValueKey, RealRegSetValueKey);
+
 		RtlInitUnicodeString(&pLinkName, XREGMON_LINKNAME);
 		IoDeleteSymbolicLink(&pLinkName);
 		pNexObj = pNexObj->NextDevice;
 		IoDeleteDevice(pDevExt->pDevice);
 
-		if(NULL != RealRegSetValueKey && SYSCALL(ZwSetValueKey) != RealRegSetValueKey)
-			SETSYSCALL(ZwSetValueKey, RealRegSetValueKey);
 	}
 	LogWrite("Leave LogDDKUnload\r\n");
 }
@@ -279,7 +322,24 @@ NTSTATUS DDKXRegmonDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	NTSTATUS				status			= STATUS_SUCCESS;
 	PIO_STACK_LOCATION		stack			= IoGetCurrentIrpStackLocation(pIrp);
 	ULONG					ulReadLength	= stack->Parameters.Read.Length;
+	PVOID					pObj[2];
+	NTSTATUS				nsWait;
 
+	if( ulReadLength > sizeof(BadSetValue) )
+		ulReadLength = sizeof(BadSetValue);
+	
+	pObj[0] = &ghEventStop;
+	pObj[1] = &ghEventRead;
+	nsWait = KeWaitForMultipleObjects(2, pObj, WaitAny, Executive, KernelMode, FALSE, NULL, NULL);
+	if(STATUS_WAIT_0 == nsWait)
+	{
+		ulReadLength = 0;
+		status = STATUS_FILE_CLOSED;
+	}
+	else
+	{
+		memcpy(pIrp->AssociatedIrp.SystemBuffer, &BadSetValue, ulReadLength);
+	}
 
 	pIrp->IoStatus.Status = status;
 	pIrp->IoStatus.Information = ulReadLength;
@@ -298,6 +358,12 @@ NTSTATUS DDKXRegmonDispatchWrite(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	ULONG					ulWriteLength	= stack->Parameters.Write.Length;
 	ULONG					ulWriteOffset	= (ULONG)stack->Parameters.Write.ByteOffset.QuadPart;
 
+	if(4 == ulWriteLength)
+	{
+		SetValueAllowd = *((LONG *)pIrp->AssociatedIrp.SystemBuffer);
+	}
+
+	KeSetEvent(&ghEventWrite, IO_NO_INCREMENT, FALSE);
 
 	pIrp->IoStatus.Status = status;
 	pIrp->IoStatus.Information = ulWriteLength;
@@ -323,9 +389,11 @@ NTSTATUS DDKXRegmonDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	switch(code)
 	{
 	case IOCTRL_REGMON_START:
+		KeResetEvent( &ghEventStop );
 		SETSYSCALL( ZwSetValueKey, RegSetValueKey );
 		break;
 	case IOCTRL_REGMON_STOP:
+		KeSetEvent( &ghEventStop, IO_NO_INCREMENT, FALSE );
 		SETSYSCALL( ZwSetValueKey, RealRegSetValueKey );
 		break;
 	default:
@@ -343,6 +411,23 @@ NTSTATUS DDKXRegmonDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	return STATUS_SUCCESS;
 }
 
+// 关闭例程
+NTSTATUS DDKXRegmonDispatchClose(PDEVICE_OBJECT pDevObj, PIRP pIrp)
+{
+	if(SYSCALL(ZwSetValueKey) != RealRegSetValueKey)
+	{
+		KeSetEvent(&ghEventStop, IO_NO_INCREMENT, FALSE);
+		SETSYSCALL(ZwSetValueKey, RealRegSetValueKey);
+	}
+
+	pIrp->IoStatus.Information = 0;
+	pIrp->IoStatus.Status = STATUS_SUCCESS;
+	LogWrite("[DDKXRegmonDispatchClose]\r\n");
+
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+
+	return STATUS_SUCCESS;
+}
 //////////////////////////////////////////////////////////////////////////
 // REGMON
 PCHAR GetProcess( PCHAR Name )
@@ -367,7 +452,62 @@ PCHAR GetProcess( PCHAR Name )
 
 	return Name;
 }
+//////////////////////////////////////////////////////////////////////////
+// 转换路径
+VOID ConvertToUpper( PWCHAR Dest, PWCHAR Source, ULONG Len )
+{
+	ULONG   i;
 
+	if(-1 == Len)
+		Len = wcslen(Source);
+	for( i = 0; i < Len; i++ ) {
+		if( Source[i] >= L'a' && Source[i] <= L'z' ) {
+
+			Dest[i] = Source[i] - L'a' + L'A';
+
+		} else {
+
+			Dest[i] = Source[i];
+		}
+	}
+}
+
+void ConvertKeyPath(LPWSTR pOut, LPWSTR pIn, int nLen)
+{
+	int		i						= 0;
+	WCHAR	cmpname[MAXROOTLEN]		= {0};
+	LPWSTR	nameptr					= NULL;
+
+	for( i = 0; i < KEYUSEROOTLEN; i++ ) 
+	{
+		ConvertToUpper( cmpname, pIn, CurrentUser[i].RootNameLen );
+		if( !wcsncmp( cmpname, CurrentUser[i].RootName,	CurrentUser[i].RootNameLen )) 
+		{
+			nameptr = pIn + CurrentUser[i].RootNameLen;
+			while( *nameptr && *nameptr != L'\\' ) nameptr++;
+			wcscpy( pOut, CurrentUser[i].RootShort );
+			wcsncpy( &pOut[4],nameptr, nLen-4);
+			//wcsncat( , pOut, nameptr );
+			return;
+		}
+	}     
+
+	for( i = 0; i < KEYROOTLEN; i++ ) 
+	{
+		ConvertToUpper( cmpname, pIn, RootKey[i].RootNameLen );
+		if( !wcsncmp( cmpname, RootKey[i].RootName, 
+			RootKey[i].RootNameLen )) 
+		{
+			nameptr = pIn + RootKey[i].RootNameLen;
+			wcscpy( pOut, RootKey[i].RootShort );
+			//wcscat( pOut, nameptr );
+			wcsncpy( &pOut[4],nameptr, nLen-4);
+			return;
+		}
+	}
+
+	wcscpy( pOut, pIn );
+}
 // #pragma PAGEDCODE
 #define MAXPATHLEN 1024
 NTSTATUS RegSetValueKey( IN HANDLE KeyHandle, IN PUNICODE_STRING ValueName,
@@ -379,6 +519,8 @@ NTSTATUS RegSetValueKey( IN HANDLE KeyHandle, IN PUNICODE_STRING ValueName,
 	PVOID			pKeyObj					= NULL;
 	ULONG			ulRet					= 0;
 	PUNICODE_STRING	fullUniName				= NULL;
+	int				i;
+	ULONG			nAllowd					= 1;
 
 	if(STATUS_SUCCESS == ObReferenceObjectByHandle(KeyHandle, 0, NULL, KernelMode, &pKeyObj, NULL))
 	{
@@ -386,9 +528,36 @@ NTSTATUS RegSetValueKey( IN HANDLE KeyHandle, IN PUNICODE_STRING ValueName,
 		fullUniName->MaximumLength = MAXPATHLEN*2;
 		ObQueryNameString(pKeyObj, (POBJECT_NAME_INFORMATION)fullUniName, MAXPATHLEN, &ulRet);
 		ObDereferenceObject(pKeyObj);
-		wcsncpy(szFullPath, fullUniName->Buffer, MAXPATHLEN);
+		// 转换路径
+
+		ConvertKeyPath(szFullPath, fullUniName->Buffer, MAXPATHLEN);
 		ExFreePool(fullUniName);
+				// 比较
+		ConvertToUpper(szFullPath, szFullPath, -1);
+		for(i = 0; i < KEYMONPATHLEN; i++)
+		{
+			//RtlEqualString(STRING)
+			if(wcscmp(szFullPath, KeyMonitorPath[i]) == 0)
+			{
+				// 是监控的对象
+				KeWaitForMutexObject( &ghMetuxSetValue, Executive, KernelMode, FALSE, NULL );
+				BadSetValue.nPID = (ULONG)PsGetCurrentProcessId();
+				wcsncpy(BadSetValue.szRegPath, szFullPath, MAXPATHLEN);
+				wcsncpy(BadSetValue.szName, ValueName->Buffer, MAXPATHLEN);
+				wcsncpy(BadSetValue.szValue, Data, MAXPATHLEN);
+				BadSetValue.Type = Type;
+				LogWrite("发现非法操作%S\r\n", szFullPath);
+				//KeSetEvent( &ghEventRead, IO_NO_INCREMENT, FALSE );	// 让用户读
+				//KeWaitForSingleObject(&ghEventWrite, Executive, KernelMode, FALSE, NULL); // 等待用返回
+				nAllowd = SetValueAllowd;
+				KeReleaseMutex(&ghMetuxSetValue, FALSE);
+				break;
+			}
+		}
+		
 	}
+	if(0 == nAllowd)
+		return STATUS_ACCESS_DENIED;
 	LogWrite("Reg set value: %s '%S' \r\n", GetProcess(szMod), szFullPath);
 	return RealRegSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize);
 }

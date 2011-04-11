@@ -22,7 +22,8 @@ int _tmain(int argc, const char* argv[])
 		, OPEN_EXISTING
 		, FILE_ATTRIBUTE_NORMAL
 		, NULL);
-	DWORD		dwOut;
+	DWORD			dwOut;
+	FindBadOptItem	item		= {0};
 
 	if(INVALID_HANDLE_VALUE == hFile)
 	{
@@ -38,7 +39,29 @@ int _tmain(int argc, const char* argv[])
 		CloseHandle(hFile);
 		return 0;
 	}
-	Sleep(1000 * 60 * 1);
+	while(ReadFile(hFile, &item, sizeof(item), &dwOut, NULL))
+	{
+		LONG		nAllowd		= 0;
+
+		printf("发现程序[PID:%d]: \"%S\" 更改注册表 \"%S\\%S\" 的值为 \"%S\" 是否允许操作(Y/N):"
+			, item.nPID
+			, item.szExePath
+			, item.szRegPath
+			, item.szName
+			, item.szValue);
+
+		char		cy			= getchar();
+		if('y' == cy || 'Y' == cy)
+		{
+			nAllowd = 1;
+			printf("\n你允许了操作\n");
+		}
+		else
+		{
+			printf("\n你拒绝了操作\n");
+		}
+		WriteFile(hFile, &nAllowd, 4, &dwOut, NULL);
+	}
 	DeviceIoControl(hFile, IOCTRL_REGMON_STOP, NULL, 0
 		, NULL, 0, (DWORD *)&dwOut, NULL);
 	printf("停止监控 %d\n", GetLastError());

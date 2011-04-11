@@ -34,7 +34,7 @@ NTSTATUS DDKXRegmonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS DDKXRegmonDispatchWrite(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS DDKXRegmonDispatchRead(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS DDKXRegmonDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp);
-
+NTSTATUS DDKXRegmonDispatchClose(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 void LogWrite(const char* pFmt, ...);
 
 #define XREGMON_DEVICE			L"\\Device\\DDKXRegmon"
@@ -62,8 +62,10 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-extern HANDLE		ghEventMetux;				// 同步处理事件
-extern HANDLE		ghEventBadopt;				// 同步错误数据
+extern KEVENT		ghEventRead;				// 同步处理事件
+extern KEVENT		ghEventWrite;				// 同步错误数据
+extern KMUTEX		ghMetuxSetValue;			// 设置SetValue同步
+extern KEVENT		ghEventStop;				// 是否停止事件
 extern PSRVTABLE    ServiceTable;
 
 	// 定义系统调用
@@ -92,3 +94,11 @@ void DisableServiceTable();
 
 //////////////////////////////////////////////////////////////////////////
 NTSTATUS ObQueryNameString(PVOID Object, POBJECT_NAME_INFORMATION ObjectNameInfo, ULONG Length, PULONG ReturnLength);
+
+typedef struct _rootkey {
+	WCHAR                RootName[256];
+	WCHAR                RootShort[32];
+	ULONG               RootNameLen;
+} ROOTKEY, *PROOTKEY;
+
+
