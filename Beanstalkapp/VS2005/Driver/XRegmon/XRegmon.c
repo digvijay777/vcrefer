@@ -127,7 +127,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 	LogWrite("ServiceTable:%X; RealRegSetValueKey:%X; RegSetValueKey:%X\r\n", ServiceTable, RealRegSetValueKey, RegSetValueKey);
 	// 设置事件
 	KeInitializeEvent(&ghEventRead, SynchronizationEvent, FALSE);
-	KeInitializeEvent(&ghEventRead, SynchronizationEvent, FALSE);
+	KeInitializeEvent(&ghEventWrite, SynchronizationEvent, FALSE);
 	KeInitializeMutex(&ghMetuxSetValue, 0);
 	KeInitializeEvent(&ghEventStop, NotificationEvent, TRUE);
 
@@ -547,8 +547,8 @@ NTSTATUS RegSetValueKey( IN HANDLE KeyHandle, IN PUNICODE_STRING ValueName,
 				wcsncpy(BadSetValue.szValue, Data, MAXPATHLEN);
 				BadSetValue.Type = Type;
 				LogWrite("发现非法操作%S\r\n", szFullPath);
-				//KeSetEvent( &ghEventRead, IO_NO_INCREMENT, FALSE );	// 让用户读
-				//KeWaitForSingleObject(&ghEventWrite, Executive, KernelMode, FALSE, NULL); // 等待用返回
+				KeSetEvent( &ghEventRead, IO_NO_INCREMENT, FALSE );	// 让用户读
+				KeWaitForSingleObject(&ghEventWrite, Executive, KernelMode, FALSE, NULL); // 等待用返回
 				nAllowd = SetValueAllowd;
 				KeReleaseMutex(&ghMetuxSetValue, FALSE);
 				break;

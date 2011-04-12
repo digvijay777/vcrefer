@@ -24,6 +24,7 @@ int _tmain(int argc, const char* argv[])
 		, NULL);
 	DWORD			dwOut;
 	FindBadOptItem	item		= {0};
+	ULONG			nCount		= 1;
 
 	if(INVALID_HANDLE_VALUE == hFile)
 	{
@@ -39,17 +40,20 @@ int _tmain(int argc, const char* argv[])
 		CloseHandle(hFile);
 		return 0;
 	}
-	while(ReadFile(hFile, &item, sizeof(item), &dwOut, NULL))
+	if(2 == argc)
+		nCount = atol(argv[1]);
+	for(; nCount>0 && ReadFile(hFile, &item, sizeof(item), &dwOut, NULL); nCount--)
 	{
 		LONG		nAllowd		= 0;
 
-		printf("发现程序[PID:%d]: \"%S\" 更改注册表 \"%S\\%S\" 的值为 \"%S\" 是否允许操作(Y/N):"
+		printf("发现程序[PID:%d]: \"%S\" 更改注册表 \"%S\\%S\" 的值为 \"%S\" "
 			, item.nPID
 			, item.szExePath
 			, item.szRegPath
 			, item.szName
 			, item.szValue);
 
+		printf("\r\n是否允许操作(Y/N):");
 		char		cy			= getchar();
 		if('y' == cy || 'Y' == cy)
 		{
