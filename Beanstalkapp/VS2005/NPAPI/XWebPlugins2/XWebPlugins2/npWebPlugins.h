@@ -8,3 +8,7 @@
 extern NPNetscapeFuncs*	gpnpf;
 
 BOOL NPVariantToVARIANT(VARIANT* lpVal, const NPVariant var);
+
+NPError OSCALL NP_Initialize(NPNetscapeFuncs *npnf);
+NPError OSCALL NP_Shutdown();
+NPError OSCALL NP_GetEntryPoints(NPPluginFuncs *nppfuncs);

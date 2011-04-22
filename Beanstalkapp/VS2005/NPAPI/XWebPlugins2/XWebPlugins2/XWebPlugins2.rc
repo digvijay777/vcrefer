@@ -94,6 +94,7 @@ END
 
 IDR_XWEBPLUGINS2        REGISTRY                "XWebPlugins2.rgs"
 IDR_NPWEBPLUGIN         REGISTRY                "NPWebPlugin.rgs"
+IDR_IEWEBPLUGIN         REGISTRY                "IEWebPlugin.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -101,6 +102,7 @@ IDR_NPWEBPLUGIN         REGISTRY                "NPWebPlugin.rgs"
 //
 
 IDB_NPWEBPLUGIN         BITMAP                  "NPWebPlugin.bmp"
+IDB_IEWEBPLUGIN         BITMAP                  "IEWebPlugin.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

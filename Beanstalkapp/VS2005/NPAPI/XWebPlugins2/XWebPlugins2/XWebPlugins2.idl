@@ -5,18 +5,20 @@
 // produce the type library (XWebPlugins2.tlb) and marshalling code.
 
 #include "olectl.h"
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
 
+
 [
 	object,
-	uuid(8FD9A7C8-58CC-4241-8070-1195EA6E4EF0),
+	uuid(5077BB90-4C02-44AE-BC08-5AE599A4A1A0),
 	dual,
 	nonextensible,
-	helpstring("INPWebPlugin Interface"),
+	helpstring("IIEWebPlugin Interface"),
 	pointer_default(unique)
 ]
-interface INPWebPlugin : IDispatch{
+interface IIEWebPlugin : IDispatch{
 };
 
 [
@@ -27,13 +29,14 @@ interface INPWebPlugin : IDispatch{
 library XWebPlugins2Lib
 {
 	importlib("stdole2.tlb");
+
 	[
-		uuid(FD8A830B-4C7D-435A-8D35-E277BC76AA3D),
+		uuid(94C4BE48-5122-4823-960E-823E62393209),
 		control,
-		helpstring("NPWebPlugin Class")
+		helpstring("IEWebPlugin Class")
 	]
-	coclass NPWebPlugin
+	coclass IEWebPlugin
 	{
-		[default] interface INPWebPlugin;
+		[default] interface IIEWebPlugin;
 	};
 };

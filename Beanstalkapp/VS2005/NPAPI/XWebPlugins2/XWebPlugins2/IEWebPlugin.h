@@ -1,52 +1,44 @@
-// NPWebPlugin.h : Declaration of the CNPWebPlugin
+// IEWebPlugin.h : Declaration of the CIEWebPlugin
 #pragma once
 #include "resource.h"       // main symbols
 #include <atlctl.h>
 #include "XWebPlugins2.h"
-#include "IENPObject.h"
 #include "../../../../ExtClass/atl/AtlIECom.h"
+#include "IENPObject.h"
 
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
 #error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
 #endif
 
 
-// CNPWebPlugin
-class ATL_NO_VTABLE CNPWebPlugin :
+// CIEWebPlugin
+class ATL_NO_VTABLE CIEWebPlugin :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<INPWebPlugin, &IID_INPWebPlugin, &LIBID_XWebPlugins2Lib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
-	public IPersistStreamInitImpl<CNPWebPlugin>,
-	public IOleControlImpl<CNPWebPlugin>,
-	public IOleObjectImpl<CNPWebPlugin>,
-	public IOleInPlaceActiveObjectImpl<CNPWebPlugin>,
-	public IViewObjectExImpl<CNPWebPlugin>,
-	public IOleInPlaceObjectWindowlessImpl<CNPWebPlugin>,
+	public IDispatchImpl<IIEWebPlugin, &IID_IIEWebPlugin, &LIBID_XWebPlugins2Lib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IPersistStreamInitImpl<CIEWebPlugin>,
+	public IOleControlImpl<CIEWebPlugin>,
+	public IOleObjectImpl<CIEWebPlugin>,
+	public IOleInPlaceActiveObjectImpl<CIEWebPlugin>,
+	public IViewObjectExImpl<CIEWebPlugin>,
+	public IOleInPlaceObjectWindowlessImpl<CIEWebPlugin>,
 	public ISupportErrorInfo,
-	public IPersistStorageImpl<CNPWebPlugin>,
-	public ISpecifyPropertyPagesImpl<CNPWebPlugin>,
-	public IQuickActivateImpl<CNPWebPlugin>,
-#ifndef _WIN32_WCE
-	public IDataObjectImpl<CNPWebPlugin>,
-#endif
-	public IProvideClassInfo2Impl<&CLSID_NPWebPlugin, NULL, &LIBID_XWebPlugins2Lib>,
-#ifdef _WIN32_WCE // IObjectSafety is required on Windows CE for the control to be loaded correctly
-	public IObjectSafetyImpl<CNPWebPlugin, INTERFACESAFE_FOR_UNTRUSTED_CALLER>,
-#endif
-	public CComCoClass<CNPWebPlugin, &CLSID_NPWebPlugin>,
-	public CComControl<CNPWebPlugin>,
-	public TAtlIECom<CNPWebPlugin>,
-	public IObjectWithSiteImpl<CNPWebPlugin>
+	public CComCoClass<CIEWebPlugin, &CLSID_IEWebPlugin>,
+	public CComControl<CIEWebPlugin>,
+	public IObjectSafetyImpl<CIEWebPlugin, INTERFACESAFE_FOR_UNTRUSTED_CALLER>,
+	public TAtlIECom<CIEWebPlugin>
 {
 public:
 
 
-	CNPWebPlugin()
+	CIEWebPlugin()
 	{
 		m_bWindowOnly = TRUE; // 指定为窗体控件
 		InitNPAPI();
+		m_nppt.ndata = NULL;
+		m_nppt.pdata = (IDispatch *)this;
 	}
 
-	virtual ~CNPWebPlugin()
+	~CIEWebPlugin()
 	{
 		ReleaseNPAPI();
 	}
@@ -58,11 +50,11 @@ DECLARE_OLEMISC_STATUS(OLEMISC_RECOMPOSEONRESIZE |
 	OLEMISC_SETCLIENTSITEFIRST
 )
 
-DECLARE_REGISTRY_RESOURCEID(IDR_NPWEBPLUGIN)
+DECLARE_REGISTRY_RESOURCEID(IDR_IEWEBPLUGIN)
 
 
-BEGIN_COM_MAP(CNPWebPlugin)
-	COM_INTERFACE_ENTRY(INPWebPlugin)
+BEGIN_COM_MAP(CIEWebPlugin)
+	COM_INTERFACE_ENTRY(IIEWebPlugin)
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(IViewObjectEx)
 	COM_INTERFACE_ENTRY(IViewObject2)
@@ -76,21 +68,10 @@ BEGIN_COM_MAP(CNPWebPlugin)
 	COM_INTERFACE_ENTRY(IPersistStreamInit)
 	COM_INTERFACE_ENTRY2(IPersist, IPersistStreamInit)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
-	COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
-	COM_INTERFACE_ENTRY(IQuickActivate)
-	COM_INTERFACE_ENTRY(IPersistStorage)
-#ifndef _WIN32_WCE
-	COM_INTERFACE_ENTRY(IDataObject)
-#endif
-	COM_INTERFACE_ENTRY(IProvideClassInfo)
-	COM_INTERFACE_ENTRY(IProvideClassInfo2)
-#ifdef _WIN32_WCE // IObjectSafety is required on Windows CE for the control to be loaded correctly
 	COM_INTERFACE_ENTRY_IID(IID_IObjectSafety, IObjectSafety)
-#endif
-	COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-BEGIN_PROP_MAP(CNPWebPlugin)
+BEGIN_PROP_MAP(CIEWebPlugin)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
 	// Example entries
@@ -99,13 +80,13 @@ BEGIN_PROP_MAP(CNPWebPlugin)
 END_PROP_MAP()
 
 
-BEGIN_MSG_MAP(CNPWebPlugin)
+BEGIN_MSG_MAP(CIEWebPlugin)
 	MESSAGE_HANDLER(WM_CREATE, OnCreate)
+	MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 	MESSAGE_HANDLER(WM_SIZE, OnSize)
-	CHAIN_MSG_MAP(CComControl<CNPWebPlugin>)
+	CHAIN_MSG_MAP(CComControl<CIEWebPlugin>)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-
 // Handler prototypes:
 //  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 //  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -116,7 +97,7 @@ END_MSG_MAP()
 	{
 		static const IID* arr[] =
 		{
-			&IID_INPWebPlugin,
+			&IID_IIEWebPlugin,
 		};
 
 		for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++)
@@ -130,7 +111,7 @@ END_MSG_MAP()
 // IViewObjectEx
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// INPWebPlugin
+// IIEWebPlugin
 public:
 		HRESULT OnDraw(ATL_DRAWINFO& di)
 		{
@@ -150,7 +131,7 @@ public:
 
 		Rectangle(di.hdcDraw, rc.left, rc.top, rc.right, rc.bottom);
 		SetTextAlign(di.hdcDraw, TA_CENTER|TA_BASELINE);
-		LPCTSTR pszText = _T("IE NPAPI plugins");
+		LPCTSTR pszText = _T("ATL 8.0 : IEWebPlugin");
 #ifndef _WIN32_WCE
 		TextOut(di.hdcDraw,
 			(rc.left + rc.right) / 2,
@@ -185,12 +166,19 @@ public:
 	void FinalRelease()
 	{
 	}
-
-private:
+public:
 	CComPtr<IHTMLDocument2>		m_spHtmlDoc;
+	NPP_t						m_nppt;
+
+public:
+	STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR FAR *FAR *rgszNames, unsigned int cNames, LCID lcid, DISPID FAR *rgDispId);
+	STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR *pDispParams
+		, VARIANT FAR *pVarResult, EXCEPINFO FAR *pExcepInfo, unsigned int FAR *puArgErr);
+
 public:
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(NPWebPlugin), CNPWebPlugin)
+OBJECT_ENTRY_AUTO(__uuidof(IEWebPlugin), CIEWebPlugin)

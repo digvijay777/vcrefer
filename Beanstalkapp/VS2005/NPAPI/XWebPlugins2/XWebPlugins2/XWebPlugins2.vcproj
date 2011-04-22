@@ -289,11 +289,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\NPWebPlugin.bmp"
+				RelativePath=".\IEWebPlugin.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\NPWebPlugin.rgs"
+				RelativePath=".\IEWebPlugin.rgs"
+				>
+			</File>
+			<File
+				RelativePath=".\NPWebPlugin.bmp"
 				>
 			</File>
 			<File
@@ -358,6 +362,10 @@
 			Name="IENPAPI"
 			>
 			<File
+				RelativePath="..\..\..\..\ExtClass\ATL\AtlIECom.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IENetscapeFuncs.cpp"
 				>
 			</File>
@@ -366,14 +374,35 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NPWebPlugin.cpp"
+				RelativePath=".\IENPObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\NPWebPlugin.h"
+				RelativePath=".\IENPObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IEPluginFuncs.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IEPluginFuncs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IEWebPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IEWebPlugin.h"
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\IEWebPlugin.htm"
+			DeploymentContent="true"
+			>
+		</File>
 		<File
 			RelativePath=".\NPWebPlugin.htm"
 			DeploymentContent="true"

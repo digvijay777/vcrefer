@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Apr 22 17:47:21 2011
+/* at Fri Apr 22 23:42:38 2011
  */
 /* Compiler settings for .\XWebPlugins2.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -74,8 +74,8 @@ extern const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString;
 extern const MIDL_STUB_DESC Object_StubDesc;
 
 
-extern const MIDL_SERVER_INFO INPWebPlugin_ServerInfo;
-extern const MIDL_STUBLESS_PROXY_INFO INPWebPlugin_ProxyInfo;
+extern const MIDL_SERVER_INFO IIEWebPlugin_ServerInfo;
+extern const MIDL_STUBLESS_PROXY_INFO IIEWebPlugin_ProxyInfo;
 
 
 
@@ -119,11 +119,11 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
    GUID={0x00020400,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
 
 
-/* Object interface: INPWebPlugin, ver. 0.0,
-   GUID={0x8FD9A7C8,0x58CC,0x4241,{0x80,0x70,0x11,0x95,0xEA,0x6E,0x4E,0xF0}} */
+/* Object interface: IIEWebPlugin, ver. 0.0,
+   GUID={0x5077BB90,0x4C02,0x44AE,{0xBC,0x08,0x5A,0xE5,0x99,0xA4,0xA1,0xA0}} */
 
 #pragma code_seg(".orpc")
-static const unsigned short INPWebPlugin_FormatStringOffsetTable[] =
+static const unsigned short IIEWebPlugin_FormatStringOffsetTable[] =
     {
     (unsigned short) -1,
     (unsigned short) -1,
@@ -132,31 +132,31 @@ static const unsigned short INPWebPlugin_FormatStringOffsetTable[] =
     0
     };
 
-static const MIDL_STUBLESS_PROXY_INFO INPWebPlugin_ProxyInfo =
+static const MIDL_STUBLESS_PROXY_INFO IIEWebPlugin_ProxyInfo =
     {
     &Object_StubDesc,
     __MIDL_ProcFormatString.Format,
-    &INPWebPlugin_FormatStringOffsetTable[-3],
+    &IIEWebPlugin_FormatStringOffsetTable[-3],
     0,
     0,
     0
     };
 
 
-static const MIDL_SERVER_INFO INPWebPlugin_ServerInfo = 
+static const MIDL_SERVER_INFO IIEWebPlugin_ServerInfo = 
     {
     &Object_StubDesc,
     0,
     __MIDL_ProcFormatString.Format,
-    &INPWebPlugin_FormatStringOffsetTable[-3],
+    &IIEWebPlugin_FormatStringOffsetTable[-3],
     0,
     0,
     0,
     0};
-CINTERFACE_PROXY_VTABLE(7) _INPWebPluginProxyVtbl = 
+CINTERFACE_PROXY_VTABLE(7) _IIEWebPluginProxyVtbl = 
 {
     0,
-    &IID_INPWebPlugin,
+    &IID_IIEWebPlugin,
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
@@ -167,7 +167,7 @@ CINTERFACE_PROXY_VTABLE(7) _INPWebPluginProxyVtbl =
 };
 
 
-static const PRPC_STUB_FUNCTION INPWebPlugin_table[] =
+static const PRPC_STUB_FUNCTION IIEWebPlugin_table[] =
 {
     STUB_FORWARDING_FUNCTION,
     STUB_FORWARDING_FUNCTION,
@@ -175,12 +175,12 @@ static const PRPC_STUB_FUNCTION INPWebPlugin_table[] =
     STUB_FORWARDING_FUNCTION
 };
 
-CInterfaceStubVtbl _INPWebPluginStubVtbl =
+CInterfaceStubVtbl _IIEWebPluginStubVtbl =
 {
-    &IID_INPWebPlugin,
-    &INPWebPlugin_ServerInfo,
+    &IID_IIEWebPlugin,
+    &IIEWebPlugin_ServerInfo,
     7,
-    &INPWebPlugin_table[-3],
+    &IIEWebPlugin_table[-3],
     CStdStubBuffer_DELEGATING_METHODS
 };
 
@@ -210,19 +210,19 @@ static const MIDL_STUB_DESC Object_StubDesc =
 
 const CInterfaceProxyVtbl * _XWebPlugins2_ProxyVtblList[] = 
 {
-    ( CInterfaceProxyVtbl *) &_INPWebPluginProxyVtbl,
+    ( CInterfaceProxyVtbl *) &_IIEWebPluginProxyVtbl,
     0
 };
 
 const CInterfaceStubVtbl * _XWebPlugins2_StubVtblList[] = 
 {
-    ( CInterfaceStubVtbl *) &_INPWebPluginStubVtbl,
+    ( CInterfaceStubVtbl *) &_IIEWebPluginStubVtbl,
     0
 };
 
 PCInterfaceName const _XWebPlugins2_InterfaceNamesList[] = 
 {
-    "INPWebPlugin",
+    "IIEWebPlugin",
     0
 };
 
