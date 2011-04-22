@@ -1,0 +1,39 @@
+// XWebPlugins2.idl : IDL source for XWebPlugins2
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (XWebPlugins2.tlb) and marshalling code.
+
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(8FD9A7C8-58CC-4241-8070-1195EA6E4EF0),
+	dual,
+	nonextensible,
+	helpstring("INPWebPlugin Interface"),
+	pointer_default(unique)
+]
+interface INPWebPlugin : IDispatch{
+};
+
+[
+	uuid(3E9834D3-0327-46BF-8DEC-2CEC083E958B),
+	version(1.0),
+	helpstring("XWebPlugins2 1.0 Type Library")
+]
+library XWebPlugins2Lib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(FD8A830B-4C7D-435A-8D35-E277BC76AA3D),
+		control,
+		helpstring("NPWebPlugin Class")
+	]
+	coclass NPWebPlugin
+	{
+		[default] interface INPWebPlugin;
+	};
+};

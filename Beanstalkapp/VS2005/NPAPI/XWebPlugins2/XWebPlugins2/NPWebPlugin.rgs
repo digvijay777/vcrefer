@@ -1,0 +1,47 @@
+HKCR
+{
+	XWebPlugins2.NPWebPlugin.1 = s 'NPWebPlugin Class'
+	{
+		CLSID = s '{FD8A830B-4C7D-435A-8D35-E277BC76AA3D}'
+	}
+	XWebPlugins2.NPWebPlugin = s 'NPWebPlugin Class'
+	{
+		CLSID = s '{FD8A830B-4C7D-435A-8D35-E277BC76AA3D}'
+		CurVer = s 'XWebPlugins2.NPWebPlugin.1'
+	}
+	NoRemove MIME
+    {
+		NoRemove Database
+		{
+			NoRemove 'Content Type'
+			{
+				ForceRemove application/x-yuanjie-webplugins2
+				{
+					val CLSID = s '{FD8A830B-4C7D-435A-8D35-E277BC76AA3D}'
+				}
+			}
+		}
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FD8A830B-4C7D-435A-8D35-E277BC76AA3D} = s 'NPWebPlugin Class'
+		{
+			ProgID = s 'XWebPlugins2.NPWebPlugin.1'
+			VersionIndependentProgID = s 'XWebPlugins2.NPWebPlugin'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 102'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{3E9834D3-0327-46BF-8DEC-2CEC083E958B}'
+			'Version' = s '1.0'
+		}
+	}
+}
