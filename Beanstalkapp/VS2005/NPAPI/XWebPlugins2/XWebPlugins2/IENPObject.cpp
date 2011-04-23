@@ -1,36 +1,6 @@
 #include "StdAfx.h"
 #include "IENPObject.h"
 
-static LONG		glpapi		= 0L;
-
-// 初始化NPAPI库
-void	InitNPAPI()
-{
-	LONG		napi;
-	NPError		npErr;
-
-	napi = InterlockedIncrement(&glpapi);
-	if(1 == napi)
-	{
-		npErr = NP_Initialize(&gIENpFuncs);
-		ATLASSERT(NPERR_NO_ERROR == npErr);
-		npErr = NP_GetEntryPoints(&gIEPlugFuncs);
-		ATLASSERT( ((NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR) == gIEPlugFuncs.version );
-	}
-}
-
-// 释放NPAPI库
-void	ReleaseNPAPI()
-{
-	LONG		napi;
-	
-	napi = InterlockedDecrement(&glpapi);
-	if(0 == napi)
-	{
-		NP_Shutdown();
-	}
-}
-
 //////////////////////////////////////////////////////////////////////////
 // IDispatch的NPAPI接口
 CDispatchNPObject::CDispatchNPObject(IDispatch* pDispatch)

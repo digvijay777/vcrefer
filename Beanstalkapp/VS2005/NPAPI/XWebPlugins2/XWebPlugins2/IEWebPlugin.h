@@ -4,7 +4,7 @@
 #include <atlctl.h>
 #include "XWebPlugins2.h"
 #include "../../../../ExtClass/atl/AtlIECom.h"
-#include "IENPObject.h"
+#include "IENAPAI.h"
 
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
 #error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
@@ -34,8 +34,8 @@ public:
 	{
 		m_bWindowOnly = TRUE; // 指定为窗体控件
 		InitNPAPI();
-		m_nppt.ndata = NULL;
-		m_nppt.pdata = (IDispatch *)this;
+		m_nppt.pdata = NULL;
+		m_nppt.ndata = (IDispatch*)this;
 	}
 
 	~CIEWebPlugin()
@@ -170,6 +170,15 @@ public:
 	CComPtr<IHTMLDocument2>		m_spHtmlDoc;
 	NPP_t						m_nppt;
 
+	HRESULT			Error(EXCEPINFO* pExceInfo, LPCWSTR lpStr)
+	{
+		if(NULL != pExceInfo)
+		{
+			pExceInfo->bstrDescription = ::SysAllocString(lpStr);
+			pExceInfo->scode = DISP_E_EXCEPTION ;
+		}
+		return __super::Error(lpStr);
+	}
 public:
 	STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR FAR *FAR *rgszNames, unsigned int cNames, LCID lcid, DISPID FAR *rgDispId);
 	STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR *pDispParams

@@ -342,6 +342,14 @@
 			Name="NPAPI"
 			>
 			<File
+				RelativePath=".\NPExt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NPExt.h"
+				>
+			</File>
+			<File
 				RelativePath=".\npWebObject.cpp"
 				>
 			</File>
@@ -366,27 +374,31 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IENetscapeFuncs.cpp"
+				RelativePath=".\IENAPAI.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IENetscapeFuncs.h"
+				RelativePath=".\IENPAPI.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IENPObject.cpp"
+				RelativePath=".\IENPDispatchEx.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IENPObject.h"
+				RelativePath=".\IENPNFuncs.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IEPluginFuncs.cpp"
+				RelativePath=".\IENPObjectFuncs.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IEPluginFuncs.h"
+				RelativePath=".\IENPPDefFuncs.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IENPVariant.cpp"
 				>
 			</File>
 			<File
@@ -395,6 +407,14 @@
 			</File>
 			<File
 				RelativePath=".\IEWebPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TNPObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\ExtClass\algorithm\TSortList.h"
 				>
 			</File>
 		</Filter>

@@ -2,10 +2,8 @@
 #include "IENetscapeFuncs.h"
 #include "IEPluginFuncs.h"
 
-// ³õÊ¼»¯NPAPI¿â
-void	InitNPAPI();
-void	ReleaseNPAPI();
 
+//////////////////////////////////////////////////////////////////////////
 // IDispatchExµÄNPObject¼æÈÝ²ã
 class CDispatchNPObject : public NPObject
 {

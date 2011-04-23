@@ -1,13 +1,24 @@
 <HTML>
 <HEAD>
 <TITLE>ATL 8.0 test page for object NPWebPlugin</TITLE>
+<script language=javascript>
+function OnHello()
+{
+    try{
+        NPWebPlugin.Hello(1, 'hello');
+    } catch (e) {
+        if(e.message)
+            alert(e.message);
+        else 
+            alert(e);
+    }
+}
+</script>
 </HEAD>
 <BODY>
 
 <object ID="NPWebPlugin" data="data:application/x-yuanjie-webplugins2," param_1="a" type="application/x-yuanjie-webplugins2" width="0" height="0"></object>
 
-<script language=javascript>
-document.getElementById('NPWebPlugin').attributes
-</script>
+<input type=button value=Hello onClick="OnHello()" />
 </BODY>
 </HTML>

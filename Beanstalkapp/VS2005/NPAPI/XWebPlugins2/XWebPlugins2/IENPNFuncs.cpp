@@ -1,9 +1,10 @@
-#include "StdAfx.h"
-#include "IENetscapeFuncs.h"
+#include "stdafx.h"
+#include "IENAPAI.h"
+#include <map>
 
 NPNetscapeFuncs		gIENpFuncs		= {
 	sizeof(NPNetscapeFuncs),
-	0,
+	14,
 	IE_NPN_GetURL,
 	IE_NPN_PostURL,
 	IE_NPN_RequestRead,
@@ -96,17 +97,16 @@ const char*  IE_NPN_UserAgent(NPP instance)
 }
 void*        IE_NPN_MemAlloc(uint32_t size)
 {
-	ATLASSERT(FALSE);
-	return NULL;
+	return malloc(size);
 }
 void         IE_NPN_MemFree(void* ptr)
 {
-	ATLASSERT(FALSE);
+	free(ptr);
 }
 uint32_t     IE_NPN_MemFlush(uint32_t size)
 {
 	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	return 0;
 }
 void         IE_NPN_ReloadPlugins(NPBool reloadPages)
 {
@@ -157,46 +157,63 @@ void         IE_NPN_ForceRedraw(NPP instance)
 }
 NPIdentifier IE_NPN_GetStringIdentifier(const NPUTF8* name)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	NPIdentifier		identifiers		= NULL;
+
+	IE_NPN_GetStringIdentifiers(&name, 1, &identifiers);
+	return identifiers;
 }
 void         IE_NPN_GetStringIdentifiers(const NPUTF8** names, int32_t nameCount, NPIdentifier* identifiers)
 {
-	ATLASSERT(FALSE);
+	for(int i = 0; i < nameCount; i++)
+	{
+		identifiers[i] = IE_GetUTF8Identifier((CHAR*)names[i]);
+	}
 }
 NPIdentifier IE_NPN_GetIntIdentifier(int32_t intid)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	NPIdentifier		identifiers		= NULL;
+
+	identifiers = IE_GetIntIdentifier(intid);
+	return identifiers;
 }
 bool         IE_NPN_IdentifierIsString(NPIdentifier identifier)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	return NULL != IE_GetIdentifierString(identifier);
 }
 NPUTF8*      IE_NPN_UTF8FromIdentifier(NPIdentifier identifier)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	return (NPUTF8 *)IE_GetIdentifierUTF8(identifier);
 }
 int32_t      IE_NPN_IntFromIdentifier(NPIdentifier identifier)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	return (int32_t)IE_GetIdentifierInt(identifier);
 }
 NPObject*    IE_NPN_CreateObject(NPP npp, NPClass *aClass)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	return IE_NPAllocate(npp, aClass);
 }
+// 增加对像的引用记数
 NPObject*    IE_NPN_RetainObject(NPObject *obj)
 {
-	ATLASSERT(FALSE);
-	return NPERR_NO_ERROR;
+	//ATLASSERT(NULL != obj);
+	if(NULL == obj)
+		return NULL;
+	
+	InterlockedIncrement((LONG *)&obj->referenceCount);
+	return obj;
 }
+// 减小对象的引用记数
 void         IE_NPN_ReleaseObject(NPObject *obj)
 {
-	ATLASSERT(FALSE);
+	//ATLASSERT(NULL != obj);
+	if(NULL == obj)
+		return;
+
+	InterlockedDecrement((LONG *)&obj->referenceCount);
+	if(obj->referenceCount <= 0)
+	{
+		IE_NPDeallocate(obj);
+	}
 }
 bool         IE_NPN_Invoke(NPP npp, NPObject* obj, NPIdentifier methodName
 								  , const NPVariant *args, uint32_t argCount, NPVariant *result)
@@ -245,7 +262,7 @@ void         IE_NPN_ReleaseVariantValue(NPVariant *variant)
 }
 void         IE_NPN_SetException(NPObject *obj, const NPUTF8 *message)
 {
-	ATLASSERT(FALSE);
+	IE_SetLastError(obj, (char *)message);
 }
 bool         IE_NPN_PushPopupsEnabledState(NPP npp, NPBool enabled)
 {
@@ -288,3 +305,4 @@ NPError      IE_NPN_GetAuthenticationInfo(NPP npp, const char *protocol, const c
 	ATLASSERT(FALSE);
 	return NPERR_NO_ERROR;
 }
+

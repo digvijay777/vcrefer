@@ -1,9 +1,9 @@
 #include "StdAfx.h"
-#include "IEPluginFuncs.h"
+#include "IENAPAI.h"
 
 NPPluginFuncs		gIEPlugFuncs	= {
 	sizeof(NPPluginFuncs),
-	14,
+	0,
 	IE_NPP_New,
 	IE_NPP_Destroy,
 	IE_NPP_SetWindow,
@@ -83,3 +83,5 @@ NPError NP_LOADDS IE_NPP_SetValue(NPP instance, NPNVariable variable, void *valu
 	ATLASSERT(FALSE);
 	return NPERR_NO_ERROR;
 }
+
+

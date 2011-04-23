@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "IEWebPlugin.h"
 
-#include <comutil.h>
+
 #include <vector>
 #include <string>
 
@@ -13,13 +13,30 @@ STDMETHODIMP CIEWebPlugin::GetIDsOfNames(REFIID riid, OLECHAR FAR *FAR *rgszName
 	if(S_OK == __super::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId))
 		return S_OK;
 
-// 	if(NULL != m_pPlugObject)
-// 	{
-// 		*rgDispId = m_pPlugObject->GetIDOfName(*rgszNames);
-// 		return S_OK;
-// 	}
+	NPObject*		pObject			= NULL;
 
-	return E_INVALIDARG;
+	gIEPlugFuncs.getvalue(&m_nppt, NPPVpluginScriptableNPObject, (void **)&pObject);
+	if(NULL == pObject)
+		return E_INVALIDARG;
+
+	if(NULL == pObject->_class || NULL == pObject->_class->hasMethod)
+	{
+		gIENpFuncs.releaseobject(pObject);
+		return E_INVALIDARG;
+	}
+
+	for(int i = 0; i < (int)cNames; i++)
+	{
+		NPIdentifier		id		= IE_GetStringIdentifier(rgszNames[i]);
+
+		if(IE_NPHasMethod(pObject, id))
+			rgDispId[i] = (DISPID)id;
+		else
+			rgDispId[i] = DISPID_UNKNOWN;
+	}
+
+	gIENpFuncs.releaseobject(pObject);
+	return S_OK;
 }
 STDMETHODIMP CIEWebPlugin::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR *pDispParams
 								 , VARIANT FAR *pVarResult, EXCEPINFO FAR *pExcepInfo, unsigned int FAR *puArgErr)
@@ -28,47 +45,93 @@ STDMETHODIMP CIEWebPlugin::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, W
 		, pVarResult, pExcepInfo, puArgErr))
 		return S_OK;
 
-// 	if(NULL == m_pPlugObject)
-// 		return Error(L"未初始化实例");
-// 
-// 	if( DISPATCH_METHOD == (DISPATCH_METHOD & wFlags) )
-// 	{
-// 		VARIANT*		pVal		= NULL;
-// 		int				nSize		= 0;
-// 
-// 		if(NULL != pDispParams)
-// 		{
-// 			nSize = pDispParams->cArgs;
-// 			pVal = pDispParams->rgvarg;
-// 		}
-// 
-// 		if(FALSE != m_pPlugObject->CallMethod(dispIdMember, pVal, nSize, pVarResult))
-// 			return S_OK;
-// 		return Error(m_pPlugObject->GetLastError());
-// 	}
-// 	else if(DISPATCH_PROPERTYGET == wFlags)
-// 	{
-// 		if(FALSE != m_pPlugObject->GetProperty(dispIdMember, pVarResult))
-// 			return S_OK;
-// 
-// 		return Error(m_pPlugObject->GetLastError());
-// 	}
-// 	else if(DISPATCH_PROPERTYPUT == wFlags)
-// 	{
-// 		if(NULL == pDispParams || pDispParams->cArgs != 0)
-// 			return Error(L"参数错误");
-// 
-// 		if(FALSE != m_pPlugObject->SetProperty(dispIdMember, pDispParams->rgvarg[0]))
-// 			return S_OK;
-// 
-// 		return Error(m_pPlugObject->GetLastError());
-// 	}
-// 	else
-// 	{
-// 		return Error(L"未知的调用过程");
-// 	}
+	NPObject*		pObject			= NULL;
+	HRESULT			hRet			= S_OK;
+	bool			bRet			= false;
 
-	return Error(L"错误的调用过程");
+	gIEPlugFuncs.getvalue(&m_nppt, NPPVpluginScriptableNPObject, (void **)&pObject);
+	if(NULL == pObject)
+		return Error(pExcepInfo, L"未初始化实例");
+
+ 
+	if( DISPATCH_METHOD == (DISPATCH_METHOD & wFlags) )
+	{
+		// 构建参数
+		NPVariant		npRet;
+		NPVariant*		npParam		= NULL;
+		uint32_t		nCount		= 0;
+
+		if(NULL != pDispParams)
+		{
+			nCount = pDispParams->cArgs;
+			if(0 < nCount)
+			{
+				npParam = new NPVariant[nCount];
+				for(int i = 0; i < nCount; i++)
+					IEVariantToNPVariant(npParam[i], pDispParams->rgvarg[nCount-i-1]);
+			}
+		}
+		// 调用
+		bRet = IE_NPInvoke(pObject, (NPIdentifier)dispIdMember, npParam, nCount, &npRet);
+		for(int i = 0; i < nCount; i++)
+		{
+			IEClearNPVariant(npParam[i]);
+			VariantClear(&pDispParams->rgvarg[i]);
+		}
+		if(NULL != npParam)
+			delete [] npParam;
+		// 返回
+		if(NULL != pVarResult)
+			IENPVariantToVariant(*pVarResult, npRet);
+		IEClearNPVariant(npRet);		
+		// 清理
+		if(false == bRet)
+		{
+			hRet = Error(pExcepInfo, IE_GetLastError(pObject));
+		}
+	}
+ 	else if(DISPATCH_PROPERTYGET == wFlags)
+	{
+		NPVariant		npRet;
+
+		// 调用
+		bRet = IE_NPGetProperty(pObject, (NPIdentifier)dispIdMember, &npRet);
+		// 返回
+		if(NULL != pVarResult)
+			IENPVariantToVariant(*pVarResult, npRet);
+		IEClearNPVariant(npRet);
+		// 异常处理
+		if(false == bRet)
+		{
+			hRet = Error(pExcepInfo, IE_GetLastError(pObject));
+		}
+	}
+	else if(DISPATCH_PROPERTYPUT == wFlags)
+	{
+		NPVariant		npVal;
+
+		if(NULL == pDispParams || 1 != pDispParams->cArgs)
+			return Error(pExcepInfo, L"参数不正确.");
+
+		IEVariantToNPVariant(npVal, pDispParams->rgvarg[0]);
+		VariantClear(&pDispParams->rgvarg[0]);
+		// 调用
+		bRet = IE_NPSetProperty(pObject, (NPIdentifier)dispIdMember, &npVal);
+		// 返回
+		IEClearNPVariant(npVal);
+		// 异常处理
+		if(false == bRet)
+		{
+			hRet = Error(pExcepInfo, IE_GetLastError(pObject));
+		}
+	}
+	else
+	{
+		hRet = Error(pExcepInfo, L"未知的调用过程");
+	}
+
+	gIENpFuncs.releaseobject(pObject);
+	return hRet;
 }
 
 LRESULT CIEWebPlugin::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "npWebObject.h"
+#include "TNPObject.h"
+#include "NPExt.h"
 
 //////////////////////////////////////////////////////////////////////////
 CNPVPlugDocument::CNPVPlugDocument(NPP npp, NPObject* pobject)
@@ -40,15 +42,15 @@ BOOL CNPVPlugDocument::GetCookie(BSTR *lpCookie)
 //////////////////////////////////////////////////////////////////////////
 NPClass CNPWebObject::Object = {
 	NP_CLASS_STRUCT_VERSION
-		, CNPWebObject::_AllocateScriptable
-		, CNPWebObject::_DeallocateScriptable
+		, TNPAllocate<CNPWebObject>
+		, TNPDeallocate<CNPWebObject>
 		, NULL
-		, CNPWebObject::_HasMethod
-		, CNPWebObject::_Invoke
-		, CNPWebObject::_InvokeDefault
-		, CNPWebObject::_HasProperty
-		, CNPWebObject::_GetProperty
-		, CNPWebObject::_SetProperty
+		, TNPHasMethod<CNPWebObject>
+		, TNPInvoke<CNPWebObject>
+		, TNPInvokeDefault<CNPWebObject>
+		, TNPHasProperty<CNPWebObject>
+		, TNPGetProperty<CNPWebObject>
+		, TNPSetProperty<CNPWebObject>
 		, NULL
 		, NULL
 		, NULL
@@ -58,6 +60,7 @@ CNPWebObject::CNPWebObject(NPP npp)
 :m_doc(npp, this)
 {
 	m_npp = npp;
+	m_hWnd = NULL;
 //	m_pPlugObject = NULL;
 	//m_spDispatch = (IDispatchEx *)new CDispatchNPObject(gpnpf, npp, this);
 }
@@ -92,11 +95,7 @@ bool CNPWebObject::Error(LPCWSTR lpErr, ...)
 }
 void CNPWebObject::SetWindow(NPWindow* window)
 {
-// 	if(NULL != m_pPlugObject)
-// 	{
-// 		RECT		rect = {0, 0, window->width, window->height};
-// 		m_pPlugObject->SetWindow((HWND)window->window, &rect);
-// 	}
+	m_hWnd = (HWND)window->window;
 }
 // 是否成员函数
 bool CNPWebObject::HasMethod(NPIdentifier methodName)
@@ -104,10 +103,11 @@ bool CNPWebObject::HasMethod(NPIdentifier methodName)
 // 	if(NULL == m_pPlugObject)
 // 		return false;
 
-	WCHAR			szName[512]		= {0};
 	LPCSTR			lpName			= gpnpf->utf8fromidentifier(methodName);
 
-	MultiByteToWideChar(CP_UTF8, 0, lpName, (int)strlen(lpName), szName, sizeof(szName)/sizeof(WCHAR));
+	if(strcmp("Hello", lpName) == 0)
+		return true;
+	
 // 	if(-1 != m_pPlugObject->GetIDOfName(szName))
 // 		return true;
 
@@ -168,17 +168,21 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 // 		return Error(L"尚未实现的方法");
 
 	char*			pMethod			= gpnpf->utf8fromidentifier(methodName);
-	WCHAR			szName[512]		= {0};
-	LONG			nID				= -1;
-	VARIANT*		pVal			= new VARIANT[argCount];
-	BOOL			bRet			= FALSE;
-	VARIANT			vRet;
 
-	MultiByteToWideChar(CP_UTF8, 0, pMethod, (int)strlen(pMethod), szName, sizeof(szName)/sizeof(WCHAR));
-// 	nID = m_pPlugObject->GetIDOfName(szName);
-	if(-1 == nID)
-		Error(L"尚未实现的方法");
-
+	if(strcmp(pMethod, "Hello") == 0)
+	{
+		if(2 != argCount)
+		{
+			gpnpf->setexception(this, "Don't have enough parameter.");
+			return false;
+		}
+		MessageBoxA(m_hWnd, "调用方法'Hello'成功!", "Success", MB_OK|MB_ICONINFORMATION);
+		if(NULL != result)
+		{
+			StringToNPVariant(*result, "这是返回值测试");
+		}
+		return true;
+	}
 // 	for(int i = 0; i < (int)argCount; i++)
 // 	{
 // 		ConvertNPVariantToVARIANT(args[i], pVal[i], gpnpf, m_npp);
@@ -191,44 +195,9 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 // 	if(NULL != result)
 // 		ConvertVARIANTtoNPVariant(vRet, *result, gpnpf, m_npp);
 
-	return true;
-}
-//////////////////////////////////////////////////////////////////////////
-// 静态成员
-bool CNPWebObject::_HasMethod(NPObject* obj, NPIdentifier methodName)
-{
-	return ((CNPWebObject*)obj)->HasMethod(methodName);
-}
-bool CNPWebObject::_HasProperty(NPObject *obj, NPIdentifier propertyName)
-{
-	return ((CNPWebObject*)obj)->HasProperty(propertyName);
-}
-bool CNPWebObject::_GetProperty(NPObject *obj, NPIdentifier propertyName, NPVariant *result)
-{
-	return ((CNPWebObject*)obj)->GetProperty(propertyName, result);
-}
-bool CNPWebObject::_SetProperty(NPObject *obj, NPIdentifier name, const NPVariant *value)
-{
-	return ((CNPWebObject*)obj)->SetProperty(name, value);
-}
-bool CNPWebObject::_InvokeDefault(NPObject *obj, const NPVariant *args, uint32_t argCount, NPVariant *result)
-{
-	return ((CNPWebObject*)obj)->InvokeDefault(args, argCount, result);
-}
-bool CNPWebObject::_Invoke(NPObject* obj, NPIdentifier methodName, const NPVariant *args, uint32_t argCount, NPVariant *result)
-{
-	return ((CNPWebObject*)obj)->Invoke(methodName, args, argCount, result);
-}
-// 分配空间
-NPObject* CNPWebObject::_AllocateScriptable(NPP npp, NPClass *aClass)
-{
-	return new CNPWebObject(npp);
-}
-// 释放空间 opera 调用不了Object_DeallocateScriptable(原因代查)
-void CNPWebObject::_DeallocateScriptable(NPObject *obj)
-{
-	CNPWebObject*		pobject		= (CNPWebObject *)obj;
+	char		szError[512]		={0};
 
-	if(NULL != pobject)
-		delete pobject;
+	sprintf_s(szError, sizeof(szError), "Unrealized method '%s'.", pMethod);
+	gpnpf->setexception(this, szError);
+	return false;
 }
