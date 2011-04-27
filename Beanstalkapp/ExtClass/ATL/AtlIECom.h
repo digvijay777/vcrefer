@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <comutil.h>
 
 template <class T>
 class TAtlIECom
