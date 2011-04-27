@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Apr 22 23:42:38 2011
+/* at Wed Apr 27 13:31:31 2011
  */
 /* Compiler settings for .\XWebPlugins2.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

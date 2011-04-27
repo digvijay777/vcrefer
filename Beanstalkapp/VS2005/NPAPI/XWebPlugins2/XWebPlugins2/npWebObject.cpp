@@ -2,6 +2,7 @@
 #include "npWebObject.h"
 #include "TNPObject.h"
 #include "NPExt.h"
+#include "TNPVariant.h"
 
 //////////////////////////////////////////////////////////////////////////
 CNPVPlugDocument::CNPVPlugDocument(NPP npp, NPObject* pobject)
@@ -171,10 +172,31 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 
 	if(strcmp(pMethod, "Hello") == 0)
 	{
-		if(2 != argCount)
+		if(1 != argCount)
 		{
 			gpnpf->setexception(this, "Don't have enough parameter.");
 			return false;
+		}
+		NPObject*			pObject		= NULL;
+		TNPVariant<>		var(gpnpf);
+		TNPVariant<>		callback(gpnpf);
+
+		if(NPVARIANT_IS_OBJECT(args[0]))
+		{
+			pObject = NPVARIANT_TO_OBJECT(args[0]);
+			NPIdentifier		idH1		= gpnpf->getstringidentifier("h1");
+			NPIdentifier		idH2		= gpnpf->getstringidentifier("h2");
+
+			gpnpf->getproperty(m_npp, pObject, idH1, &var);
+			gpnpf->getproperty(m_npp, pObject, idH2, &callback);
+
+			if(NPVARIANT_IS_OBJECT(callback))
+			{
+				TNPVariant<>	varstr(gpnpf);
+
+				varstr = "这是测试的内容";
+				gpnpf->invokeDefault(m_npp, NPVARIANT_TO_OBJECT(callback), &varstr, 1, NULL);
+			}
 		}
 		MessageBoxA(m_hWnd, "调用方法'Hello'成功!", "Success", MB_OK|MB_ICONINFORMATION);
 		if(NULL != result)

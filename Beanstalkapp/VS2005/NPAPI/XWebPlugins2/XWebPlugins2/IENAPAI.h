@@ -95,40 +95,46 @@ bool		IE_NPConstruct(NPObject *npobj, const NPVariant *args, uint32_t argCount, 
 // NPVariant π‹¿Ì∆˜
 class  CIENPIdentifier
 {
-public:
-	BSTR			m_bstr;
+private:
+	WCHAR			m_szUnicode[512];
 	ULONG			m_ulLong;
 	bool			m_bstring;
-	CHAR*			m_utf8;
+	CHAR			m_szUtf8[512];
 
 public:
 	CIENPIdentifier();
 	virtual ~CIENPIdentifier();
 
 public:
-	void Clear();
+	void		Clear();
+	bool		IsString();
+	LPCWSTR		GetUnicode();
+	LPCSTR		GetUtf8();
+	ULONG		GetLong();
 public:
 	bool operator == (CIENPIdentifier& id) const;
-	bool operator == (BSTR bstr) const;
-	bool operator == (CHAR* utf8) const;
+	bool operator == (LPCWSTR str) const;
+	bool operator == (LPCSTR utf8) const;
 	bool operator == (ULONG ul) const;
-	CIENPIdentifier& operator=(BSTR bstr);
+	CIENPIdentifier& operator=(LPCWSTR str);
 	CIENPIdentifier& operator=(ULONG ul);
-	CIENPIdentifier& operator=(CHAR* utf8);
+	CIENPIdentifier& operator=(LPCSTR utf8);
 };
 
 CHAR* GetUTF8(LPCWSTR lpStr);
-BSTR Utf8ToBSTR(LPCSTR lpStr);
+// BSTR Utf8ToBSTR(LPCSTR lpStr);
+WCHAR* Utf8ToUnicode(LPCSTR lpStr);
 CHAR* GetUTF8(LPCSTR lpStr);
+CHAR* AnsiToUtf8(LPCSTR lpStr);
 
 typedef CIENPIdentifier*		IE_NPIdentifier;
 
 NPIdentifier	IE_GetStringIdentifier(BSTR bstr);
 NPIdentifier	IE_GetUTF8Identifier(CHAR* pStr);
 NPIdentifier	IE_GetIntIdentifier(ULONG nInt);
-BSTR			IE_GetIdentifierString(NPIdentifier id);
+LPCWSTR			IE_GetIdentifierString(NPIdentifier id);
 ULONG			IE_GetIdentifierInt(NPIdentifier id);
-CHAR*			IE_GetIdentifierUTF8(NPIdentifier id);
+LPCSTR			IE_GetIdentifierUTF8(NPIdentifier id);
 BSTR			IE_GetLastError(NPObject* pObject);
 void			IE_SetLastError(NPObject* pObject, CHAR* utf8);
 

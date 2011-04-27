@@ -76,7 +76,8 @@ STDMETHODIMP CIEWebPlugin::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, W
 		for(int i = 0; i < nCount; i++)
 		{
 			IEClearNPVariant(npParam[i]);
-			VariantClear(&pDispParams->rgvarg[i]);
+			// IE的内存在这里不能释放
+			// VariantClear(&pDispParams->rgvarg[i]);
 		}
 		if(NULL != npParam)
 			delete [] npParam;

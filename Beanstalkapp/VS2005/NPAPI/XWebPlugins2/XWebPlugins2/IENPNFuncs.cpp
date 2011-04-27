@@ -223,8 +223,7 @@ bool         IE_NPN_Invoke(NPP npp, NPObject* obj, NPIdentifier methodName
 }
 bool         IE_NPN_InvokeDefault(NPP npp, NPObject* obj, const NPVariant *args, uint32_t argCount, NPVariant *result)
 {
-	ATLASSERT(FALSE);
-	return false;
+	return obj->_class->invokeDefault(obj, args, argCount, result);
 }
 bool         IE_NPN_Evaluate(NPP npp, NPObject *obj, NPString *script, NPVariant *result)
 {
@@ -233,8 +232,8 @@ bool         IE_NPN_Evaluate(NPP npp, NPObject *obj, NPString *script, NPVariant
 }
 bool         IE_NPN_GetProperty(NPP npp, NPObject *obj, NPIdentifier propertyName, NPVariant *result)
 {
-	ATLASSERT(FALSE);
-	return false;
+	//ATLASSERT(FALSE);
+	return obj->_class->getProperty(obj, propertyName, result);
 }
 bool         IE_NPN_SetProperty(NPP npp, NPObject *obj, NPIdentifier propertyName, const NPVariant *value)
 {

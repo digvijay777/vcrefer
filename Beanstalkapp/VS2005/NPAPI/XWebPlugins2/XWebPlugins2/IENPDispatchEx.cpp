@@ -63,6 +63,7 @@ bool CNPDispatchEx::InvokeDefault(const NPVariant *args, uint32_t argCount, NPVa
 
 	DISPPARAMS		param		= {0};
 	VARIANT			var;
+	HRESULT			hres;
 
 	// 构建参数
 	param.cArgs = argCount;
@@ -74,7 +75,7 @@ bool CNPDispatchEx::InvokeDefault(const NPVariant *args, uint32_t argCount, NPVa
 	}
 	VariantInit(&var);
 	// 调用
-	m_pDispatchEx->InvokeEx(1, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &param, &var, NULL, NULL);
+	hres = m_pDispatchEx->InvokeEx(0, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &param, &var, NULL, NULL);
 	if(NULL != result)
 		IEVariantToNPVariant(*result, var);
 	VariantClear(&var);
@@ -156,7 +157,7 @@ bool CNPDispatchEx::GetProperty(NPIdentifier propertyName, NPVariant *result)
 
 	m_pDispatchEx->GetDispID(bstr, fdexNameCaseSensitive, &dispid);
 	::SysFreeString(bstr);
-	if(DISPID_UNKNOWN != dispid)
+	if(DISPID_UNKNOWN == dispid)
 		return false;
 
 	// 调用过程

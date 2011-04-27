@@ -365,6 +365,10 @@
 				RelativePath=".\npWebPlugins.h"
 				>
 			</File>
+			<File
+				RelativePath=".\TNPVariant.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="IENPAPI"

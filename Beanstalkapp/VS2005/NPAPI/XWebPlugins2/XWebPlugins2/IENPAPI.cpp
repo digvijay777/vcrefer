@@ -2,14 +2,14 @@
 #include "IENAPAI.h"
 #include <map>
 
+#ifndef arrayof
+#define arrayof(x)			( sizeof((x))/sizeof((x)[0]) )
+#endif
 //////////////////////////////////////////////////////////////////////////
 // 连标识符管理器
 CIENPIdentifier::CIENPIdentifier()
 {
-	m_bstr = NULL;
-	m_ulLong = 0;
-	m_utf8 = NULL;
-	m_bstring = false;
+	Clear();
 }
 
 CIENPIdentifier::~CIENPIdentifier()
@@ -19,10 +19,26 @@ CIENPIdentifier::~CIENPIdentifier()
 
 void CIENPIdentifier::Clear()
 {
-	if(NULL != m_bstr)
-		::SysFreeString(m_bstr);
-	if(NULL != m_utf8)
-		free(m_utf8);
+	memset(m_szUnicode, 0, sizeof(m_szUnicode));
+	memset(m_szUtf8, 0, sizeof(m_szUtf8));
+	m_ulLong = 0;
+	m_bstring = false;
+}
+bool CIENPIdentifier::IsString()
+{
+	return m_bstring;
+}
+LPCWSTR CIENPIdentifier::GetUnicode()
+{
+	return m_szUnicode;
+}
+LPCSTR CIENPIdentifier::GetUtf8()
+{
+	return m_szUtf8;
+}
+ULONG CIENPIdentifier::GetLong()
+{
+	return m_ulLong;
 }
 // 判断相等
 bool CIENPIdentifier::operator ==(CIENPIdentifier &id) const
@@ -32,60 +48,55 @@ bool CIENPIdentifier::operator ==(CIENPIdentifier &id) const
 
 	if(m_bstring)
 	{
-		if(NULL == m_bstr && NULL == id.m_bstring)
-			return true;
-		else if(NULL == m_bstr || NULL == id.m_bstr)
-			return false;
-		return 0 == wcscmp(m_bstr, id.m_bstr);
+		return 0 == wcscmp(m_szUnicode, id.m_szUnicode);
 	}
 	else
 	{
 		return m_ulLong == id.m_ulLong;
 	}
 }
-bool CIENPIdentifier::operator ==(BSTR bstr) const
+bool CIENPIdentifier::operator ==(LPCWSTR str) const
 {
 	if(!m_bstring)
 		return false;
-	if(NULL == m_bstr && NULL == bstr)
-		return true;
-	else if(NULL == m_bstr || NULL == bstr)
-		return false;
-	return 0 == wcscmp(m_bstr, bstr);
+	
+	return 0 == wcscmp(m_szUnicode, str);
 }
 bool CIENPIdentifier::operator ==(ULONG ul) const
 {
 	if(m_bstring)
 		return false;
+
 	return m_ulLong == ul;
 }
-bool CIENPIdentifier::operator ==(CHAR *utf8) const
+bool CIENPIdentifier::operator ==(LPCSTR utf8) const
 {
 	if(!m_bstring)
 		return false;
-	if(NULL == m_utf8 && NULL == utf8)
-		return true;
-	else if(NULL == m_utf8 || NULL == utf8)
-		return false;
-	return 0 == strcmp(m_utf8, utf8);
+	
+	return 0 == strcmp(m_szUtf8, utf8);
 }
 // 负值
-CIENPIdentifier& CIENPIdentifier::operator =(BSTR bstr)
+CIENPIdentifier& CIENPIdentifier::operator =(LPCWSTR str)
 {
 	Clear();
 
 	m_bstring = true;
-	m_bstr = ::SysAllocString(bstr);
-	m_utf8 = GetUTF8(bstr);
+	wcsncpy(m_szUnicode, str, arrayof(m_szUnicode));
+	WideCharToMultiByte(CP_UTF8, 0, m_szUnicode, wcslen(m_szUnicode)
+		, m_szUtf8, arrayof(m_szUtf8), NULL, NULL);
+
 	return *this;
 }
-CIENPIdentifier& CIENPIdentifier::operator =(CHAR *utf8)
+CIENPIdentifier& CIENPIdentifier::operator =(LPCSTR utf8)
 {
 	Clear();
 
 	m_bstring = true;
-	m_bstr = Utf8ToBSTR(utf8);
-	m_utf8 = GetUTF8(utf8);
+	strncpy(m_szUtf8, utf8, arrayof(m_szUtf8));
+	MultiByteToWideChar(CP_UTF8, 0, m_szUtf8, strlen(m_szUtf8)
+		, m_szUnicode, arrayof(m_szUnicode));
+
 	return *this;
 }
 CIENPIdentifier& CIENPIdentifier::operator =(ULONG ul)
@@ -115,11 +126,25 @@ CHAR* GetUTF8(LPCWSTR lpStr)
 	WideCharToMultiByte(CP_UTF8, 0, lpStr, wcslen(lpStr), pUtf8, nLen, NULL, NULL);
 	return pUtf8;
 }
-BSTR Utf8ToBSTR(LPCSTR lpStr)
+CHAR* AnsiToUtf8(LPCSTR lpStr)
+{
+	WCHAR*		pwstr		= NULL;
+	CHAR*		putf8		= NULL;
+	int			nLen;
+
+	nLen = MultiByteToWideChar(CP_ACP, 0, lpStr, strlen(lpStr), NULL, 0);
+	nLen++;
+	pwstr = (WCHAR *)malloc(nLen * 2);
+	memset(pwstr, 0, nLen * 2);
+	MultiByteToWideChar(CP_ACP, 0, lpStr, strlen(lpStr), pwstr, nLen);
+	putf8 = GetUTF8(pwstr);
+	free(pwstr);
+	return putf8;
+}
+WCHAR* Utf8ToUnicode(LPCSTR lpStr)
 {
 	WCHAR*	pStr		= NULL;
 	int		nLen		= 0;
-	BSTR	bstr		= NULL;
 
 	nLen = MultiByteToWideChar(CP_UTF8, 0, lpStr, strlen(lpStr), NULL, 0);
 	nLen++;
@@ -128,9 +153,8 @@ BSTR Utf8ToBSTR(LPCSTR lpStr)
 		return NULL;
 	memset(pStr, 0, nLen * 2);
 	MultiByteToWideChar(CP_UTF8, 0, lpStr, strlen(lpStr), pStr, nLen);
-	bstr = ::SysAllocString(pStr);
-	free(pStr);
-	return bstr;
+
+	return pStr;
 }
 CHAR* GetUTF8(LPCSTR lpStr)
 {
@@ -221,9 +245,9 @@ NPIdentifier	IE_GetIntIdentifier(ULONG nInt)
 
 	return identifier;
 }
-BSTR			IE_GetIdentifierString(NPIdentifier id)
+LPCWSTR			IE_GetIdentifierString(NPIdentifier id)
 {
-	BSTR		bstr		= NULL;
+	LPCWSTR		str		= NULL;
 
 	if(NULL == id)
 		return NULL;
@@ -232,18 +256,18 @@ BSTR			IE_GetIdentifierString(NPIdentifier id)
 	{
 		if(gIdentifierMgr[i] == id)
 		{
-			if(gIdentifierMgr[i]->m_bstring)
-				bstr = gIdentifierMgr[i]->m_bstr;
+			if(gIdentifierMgr[i]->IsString())
+				str = gIdentifierMgr[i]->GetUnicode();
 			break;
 		}
 	}
 	LeaveCriticalSection(&gIdentifierLock);
 
-	return bstr;
+	return str;
 }
-CHAR*			IE_GetIdentifierUTF8(NPIdentifier id)
+LPCSTR			IE_GetIdentifierUTF8(NPIdentifier id)
 {
-	CHAR*		bstr		= NULL;
+	LPCSTR		bstr		= NULL;
 
 	if(NULL == id)
 		return NULL;
@@ -252,8 +276,8 @@ CHAR*			IE_GetIdentifierUTF8(NPIdentifier id)
 	{
 		if(gIdentifierMgr[i] == id)
 		{
-			if(gIdentifierMgr[i]->m_bstring)
-				bstr = gIdentifierMgr[i]->m_utf8;
+			if(gIdentifierMgr[i]->IsString())
+				bstr = gIdentifierMgr[i]->GetUtf8();
 			break;
 		}
 	}
@@ -272,8 +296,8 @@ ULONG			IE_GetIdentifierInt(NPIdentifier id)
 	{
 		if(gIdentifierMgr[i] == id)
 		{
-			if(!gIdentifierMgr[i]->m_bstring)
-				ul = gIdentifierMgr[i]->m_ulLong;
+			if(!gIdentifierMgr[i]->IsString())
+				ul = gIdentifierMgr[i]->GetLong();
 			break;
 		}
 	}
@@ -304,12 +328,12 @@ void			IE_SetLastError(NPObject* pObject, CHAR* utf8)
 	item = gmaperror.find(pObject);
 	if(gmaperror.end() != item)
 	{
-		::SysFreeString(item->second);
-		item->second = Utf8ToBSTR(utf8);
+		free(item->second);
+		item->second = Utf8ToUnicode(utf8);
 	}
 	else
 	{
-		gmaperror[pObject] = Utf8ToBSTR(utf8);
+		gmaperror[pObject] = Utf8ToUnicode(utf8);
 	}
 }
 //////////////////////////////////////////////////////////////////////////
@@ -351,7 +375,7 @@ void	ReleaseNPAPI()
 		// 清除最后错误
 		std::map<NPObject*, BSTR>::iterator		item;
 		for(item = gmaperror.begin(); item != gmaperror.end(); item++)
-			::SysFreeString(item->second);
+			free(item->second);
 		gmaperror.clear();
 	}
 }

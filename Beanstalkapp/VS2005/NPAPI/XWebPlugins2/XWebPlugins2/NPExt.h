@@ -1,4 +1,5 @@
 #pragma once
 
-bool StringToNPVariantV(NPVariant& npvar, char* pfmt, va_list arr);
-bool StringToNPVariant(NPVariant& npvar, char* pfmt, ...);
+bool StringToNPVariantV(NPVariant& npvar, const char* pfmt, va_list arr);
+bool StringToNPVariant(NPVariant& npvar, const char* pfmt, ...);
+bool ClearStringNPVariant(NPVariant& npvar);

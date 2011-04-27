@@ -114,9 +114,11 @@ bool		IENPVariantToVariant(VARIANT& ievar, const NPVariant& npvar)
 	else if(NPVARIANT_IS_STRING(npvar))
 	{
 		LPCSTR		lpData		= NPVARIANT_TO_STRING(npvar).UTF8Characters;
+		LPWSTR		lpUnicode	= Utf8ToUnicode(lpData);
 		
 		ievar.vt = VT_BSTR;
-		ievar.bstrVal = Utf8ToBSTR(lpData);
+		ievar.bstrVal = ::SysAllocString(lpUnicode);
+		free(lpUnicode);
 	}
 	else
 	{

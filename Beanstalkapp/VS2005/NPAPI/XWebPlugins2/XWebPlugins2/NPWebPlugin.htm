@@ -5,7 +5,13 @@
 function OnHello()
 {
     try{
-        NPWebPlugin.Hello(1, 'hello');
+		var str 	= "";
+		var obj 	= document.getElementById('NPWebPlugin');
+        str = obj.Hello({'h1':'ha', h2:function(str){
+				alert(str);
+			}
+		});
+		alert("return: " + str);
     } catch (e) {
         if(e.message)
             alert(e.message);
