@@ -7,10 +7,11 @@ function OnHello()
     try{
 		var str 	= "";
 		var obj 	= document.getElementById('NPWebPlugin');
-        str = obj.Hello({'h1':'ha', h2:function(str){
+      /*  str = obj.Hello({'h1':'ha', h2:function(str){
 				alert(str);
 			}
-		});
+		}); */
+		str = obj.Cookie();
 		alert("return: " + str);
     } catch (e) {
         if(e.message)

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IENAPAI.h"
 #include <map>
+#include <MsHTML.h>
 
 NPNetscapeFuncs		gIENpFuncs		= {
 	sizeof(NPNetscapeFuncs),
@@ -135,7 +136,48 @@ NPError      IE_NPN_PostURLNotify(NPP instance, const char* url, const char* win
 }
 NPError      IE_NPN_GetValue(NPP instance, NPNVariable variable, void *ret_value)
 {
-	ATLASSERT(FALSE);
+	if(NPNVWindowNPObject == variable)
+	{
+		// 获取WINDOWS对像
+		IDispatch*					pDisp		= (IDispatch *)instance->ndata;
+		CComPtr<IOleObject>			spCtrl;
+		CComPtr<IOleClientSite>		spSite;
+		HRESULT						hres;
+		CComPtr<IOleContainer>		spContainer;
+		CComPtr<IHTMLDocument2>		spDoc;
+		CComPtr<IHTMLWindow2>		spWnd;
+
+		if(NULL == ret_value)
+			return NPERR_INVALID_PARAM;
+		if(NULL == pDisp)
+			return NPERR_INVALID_INSTANCE_ERROR;
+		hres = pDisp->QueryInterface(IID_IOleObject, (void **)&spCtrl);
+		if(FAILED(hres))
+			return NPERR_INVALID_INSTANCE_ERROR;
+		hres = spCtrl->GetClientSite(&spSite);
+		if(FAILED(hres))
+			return NPERR_INVALID_INSTANCE_ERROR;
+		hres = spSite->GetContainer(&spContainer);
+		if(FAILED(hres))
+			return NPERR_INVALID_INSTANCE_ERROR;
+		hres = spContainer->QueryInterface(IID_IHTMLDocument2, (void **)&spDoc);
+		if(FAILED(hres))
+			return NPERR_INVALID_INSTANCE_ERROR;
+		hres = spDoc->get_parentWindow(&spWnd);
+		if(FAILED(hres))
+			return NPERR_INVALID_INSTANCE_ERROR;
+		// 构建返回值
+		NPP_t					nppt		= {0};
+		CComPtr<IDispatch>		spDisp;
+
+		spWnd->QueryInterface(IID_IDispatch, (void **)&spDisp);
+		nppt.ndata = (void *)(IDispatch *)spDisp;
+		*((NPObject **)(__int64)ret_value) = gIENpFuncs.createobject(&nppt, &gNPDispatch);
+	}
+	else
+	{
+		ATLASSERT(FALSE);
+	}
 	return NPERR_NO_ERROR;
 }
 NPError      IE_NPN_SetValue(NPP instance, NPPVariable variable, void *value)

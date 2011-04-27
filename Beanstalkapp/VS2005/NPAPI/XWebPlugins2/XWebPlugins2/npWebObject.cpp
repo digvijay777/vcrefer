@@ -108,6 +108,8 @@ bool CNPWebObject::HasMethod(NPIdentifier methodName)
 
 	if(strcmp("Hello", lpName) == 0)
 		return true;
+	else if(strcmp("Cookie", lpName) == 0)
+		return true;
 	
 // 	if(-1 != m_pPlugObject->GetIDOfName(szName))
 // 		return true;
@@ -203,6 +205,28 @@ bool CNPWebObject::Invoke(NPIdentifier methodName, const NPVariant *args, uint32
 		{
 			StringToNPVariant(*result, "这是返回值测试");
 		}
+		return true;
+	}
+	if(strcmp("Cookie", pMethod) == 0)
+	{
+		NPObject*		pDoc		= NULL;
+		NPIdentifier	cookie;
+		NPVariant		valCookie;
+
+		gpnpf->getvalue(m_npp, NPNVWindowNPObject, &pDoc);
+		cookie = gpnpf->getstringidentifier((NPUTF8*)"document");
+		gpnpf->getproperty(m_npp, pDoc, cookie, &valCookie);
+		if(NPVARIANT_IS_OBJECT(valCookie))
+		{
+			pDoc = NPVARIANT_TO_OBJECT(valCookie);
+		}
+		cookie = gpnpf->getstringidentifier((NPUTF8*)"cookie");
+		gpnpf->getproperty(m_npp, pDoc, cookie, &valCookie);
+		if(NPVARIANT_IS_STRING(valCookie))
+		{
+			*result = valCookie;
+		}
+		gpnpf->releaseobject(pDoc);
 		return true;
 	}
 // 	for(int i = 0; i < (int)argCount; i++)
