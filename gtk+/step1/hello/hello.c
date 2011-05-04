@@ -1,7 +1,15 @@
 #include <gtk/gtk.h>
 
+#ifdef WIN32
+#include <windows.h>
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	int		argc	= __argc;
+	char**	argv	= __argv;
+#else
 int main(int argc, char* argv[])
 {
+#endif
 	GtkWidget*		window;
 	
 	gtk_init(&argc, &argv);
