@@ -1,6 +1,8 @@
-﻿#ifdef WIN32
+#ifdef WIN32
 #include <windows.h>
 #include <locale.h>
+#pragma setlocale(".65001")
+// #pragma code_page(65001)
 #endif
 #include <gtk/gtk.h>
 
@@ -22,7 +24,7 @@ int main(int argc, char* argv[])
 	GtkWidget*		button;
 	gchar*			pWndTitle		= "一个功能完善的窗口";
 	gchar*			pBtnTitle		= "按此按钮会在终端上显示一行信息";
-#ifdef WIN32
+#if 0
 	wchar_t			szBuf[1024]		= {0};
 	char			szWndTitle[128]	= {0};
 	char			szBtnTitle[128] = {0};
@@ -35,9 +37,13 @@ int main(int argc, char* argv[])
 	WideCharToMultiByte(CP_UTF8, 0, szBuf, wcslen(szBuf), szBtnTitle, sizeof(szBtnTitle), NULL, NULL);
 	pBtnTitle = szBtnTitle;
 #endif
+#ifdef WIN32
+	setlocale(LC_ALL, "zh_CN.UTF-8");
+#endif
 	gtk_init(&argc, &argv);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	// 1.2 完善的窗口
+
 	g_signal_connect(G_OBJECT(window), "delete_event",
 	                 G_CALLBACK(gtk_main_quit), NULL);
 	gtk_window_set_title (GTK_WINDOW(window), pWndTitle);
@@ -62,7 +68,7 @@ int main(int argc, char* argv[])
 void on_button_clicked(GtkWidget* buttun, gpointer userdata)
 {
 	gchar*			pHello			= "你好， 这是Hello功能的测试.";
-#ifdef WIN32
+#if 0
 	wchar_t			szBuf[1024]		= {0};
 	char			szHello[128]	= {0};
 
