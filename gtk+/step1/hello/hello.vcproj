@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="F:\gtk+\lib\gtk-win32-2.0.lib"
+				AdditionalDependencies="F:\gtk+\lib\gtk-win32-2.0.lib F:\gtk+\lib\gobject-2.0.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="F:\gtk+\lib\gtk-win32-2.0.lib"
+				AdditionalDependencies="F:\gtk+\lib\gtk-win32-2.0.lib F:\gtk+\lib\gobject-2.0.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
