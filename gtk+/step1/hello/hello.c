@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	gtk_window_set_title (GTK_WINDOW(window), "一个功能完善的窗口");
 	gtk_window_set_default_size (GTK_WINDOW(window), 500, 300);
 	gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-	
+	// 退出窗体	
 	gtk_widget_show(window);
 	gtk_main();
 	
