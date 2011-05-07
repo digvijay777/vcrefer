@@ -1,0 +1,11 @@
+TARGETNAME=KeyFilter
+TARGETTYPE=DRIVER
+TARGETPATH=OBJ
+
+TARGETLIBS=
+
+
+INCLUDES=$(BASEDIR)\inc;\
+         $(BASEDIR)\inc\ddk;\
+
+SOURCES=KeyFilter.cpp\
