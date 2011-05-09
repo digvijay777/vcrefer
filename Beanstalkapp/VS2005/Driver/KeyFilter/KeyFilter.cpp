@@ -44,6 +44,8 @@ extern "C" NTSTATUS DriverEntry( IN PDRIVER_OBJECT  DriverObject, IN PUNICODE_ST
 	pDevice->Characteristics = pDevExt->TopOfStack->Characteristics;
 	pDevice->Flags &= ~DO_DEVICE_INITIALIZING;
 	pDevice->Flags |= (pDevExt->TopOfStack->Flags & (DO_BUFFERED_IO | DO_DIRECT_IO));
+	pDevExt->bDetach = false;
+	pDevExt->lAttach = 0;
 
 	LogWrite("KeyFilter Attach Success.\r\n");
 	return STATUS_SUCCESS;
@@ -58,13 +60,9 @@ VOID KeyFilterUnload(IN PDRIVER_OBJECT Driver)
 	while(NULL != pNexObj)
 	{
 		PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)pNexObj->DeviceExtension;
-		PDEVICE_OBJECT			pDelDev		= pNexObj;
 		
+		pDevExt->bDetach = true;
 		pNexObj = pNexObj->NextDevice;
-		if(NULL != pDevExt->TopOfStack)
-			IoDetachDevice(pDevExt->TopOfStack);
-		IoDeleteDevice(pDelDev);
-		LogWrite("KeyFilter Detach Success.\r\n");
 	}
 }
 
@@ -73,10 +71,18 @@ NTSTATUS KeyFilterRead( IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp )
 {
 	PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
 
-	// 复制IRP
-	IoCopyCurrentIrpStackLocationToNext(Irp);
-	// 设置完成例程
-	IoSetCompletionRoutine(Irp, KeyReadComplate, DeviceObject, TRUE, TRUE, TRUE);
+	if(!pDevExt->bDetach)
+	{
+		// 复制IRP
+		IoCopyCurrentIrpStackLocationToNext(Irp);
+		// 设置完成例程
+		IoSetCompletionRoutine(Irp, KeyReadComplate, DeviceObject, TRUE, TRUE, TRUE);
+		InterlockedIncrement(&pDevExt->lAttach);
+	}
+	else
+	{
+		IoSkipCurrentIrpStackLocation(Irp);
+	}
 
 	return IoCallDriver(pDevExt->TopOfStack, Irp);
 }
@@ -110,6 +116,15 @@ NTSTATUS KeyReadComplate(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID C
 	if(Irp->PendingReturned)
 	{
 		IoMarkIrpPending(Irp);
+	}
+
+	PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
+	if(InterlockedDecrement(&pDevExt->lAttach) <= 0 && pDevExt->bDetach)
+	{
+		// 御载
+		if(NULL != pDevExt->TopOfStack)
+			IoDetachDevice(pDevExt->TopOfStack);
+		IoDeleteDevice(DeviceObject);
 	}
 
 	return Irp->IoStatus.Status;

@@ -18,9 +18,11 @@ extern "C"{
 
 #define arrayof(p)		( sizeof(p) / sizeof((p)[0]) )
 
-// À©Õ¹
+// ï¿½Õ¹
 typedef struct _DEVICE_EXTENSION{
 	PDEVICE_OBJECT			TopOfStack;
+	bool					bDetach;
+	LONG					lAttach;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
