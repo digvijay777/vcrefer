@@ -1,0 +1,8 @@
+step 1: 解压zlib库
+step 2: 编译zlib库
+	在[VS Command Prompt]里进入"~/zlib-1.2.3/"目录，输入"nmake -f win32/Makefile.msc"则在"~/zlib-1.2.3/"目录里生成相应的文件
+step 3: 拷贝文件
+	1) 拷贝[step 2]生成的zlib.lib(静态库)
+	2) 拷贝"~/zlib-1.2.3/"下的zlib.h、zconf.h等两个头文件
+	3) 拷贝"~/zlib-1.2.3/contrib/minizip/"下面的crypt.h、ioapi.h(.c)、unzip.h(.c)等五个文件
+	4) memunzip.h(.cpp) 为自定义扩展类
