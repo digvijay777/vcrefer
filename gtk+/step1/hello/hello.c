@@ -1,7 +1,7 @@
-#ifdef WIN32
+﻿#ifdef WIN32
 #include <windows.h>
 #include <locale.h>
-#pragma setlocale(".65001")
+// #pragma setlocale(".65001")
 // #pragma code_page(65001)
 #endif
 #include <gtk/gtk.h>
@@ -38,7 +38,8 @@ int main(int argc, char* argv[])
 	pBtnTitle = szBtnTitle;
 #endif
 #ifdef WIN32
-	setlocale(LC_ALL, "zh_CN.UTF-8");
+	setlocale(LC_ALL, "zh_CN.GB2312");
+	//g_locale_to_utf8();
 #endif
 	gtk_init(&argc, &argv);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
