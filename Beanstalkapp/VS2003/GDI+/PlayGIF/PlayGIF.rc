@@ -92,7 +92,7 @@ FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
     PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
-    LTEXT           "ttttttttt",IDC_STATIC,68,158,115,31
+    LTEXT           "ttttttttt",IDC_STATIC,68,158,115,31,0,WS_EX_TRANSPARENT
     LTEXT           "Static",IDC_STATIC1,42,19,162,94
 END
 
