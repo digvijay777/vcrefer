@@ -192,6 +192,13 @@
 				FileType="2">
 			</File>
 		</Filter>
+		<Filter
+			Name="GDIP"
+			Filter="">
+			<File
+				RelativePath="..\..\..\ExtClass\Gdi+\TGdipStatic.h">
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\res\PlayGIF.manifest">
 		</File>

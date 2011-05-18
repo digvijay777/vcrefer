@@ -11,6 +11,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGIF", "PlayGIF\PlayGIF.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tab", "Tab\Tab.vcproj", "{ABC4DA62-A33C-4049-82D4-445186FB4E49}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -29,6 +33,10 @@ Global
 		{E92D3122-DC2F-47B7-954C-834F378C52D7}.Debug.Build.0 = Debug|Win32
 		{E92D3122-DC2F-47B7-954C-834F378C52D7}.Release.ActiveCfg = Release|Win32
 		{E92D3122-DC2F-47B7-954C-834F378C52D7}.Release.Build.0 = Release|Win32
+		{ABC4DA62-A33C-4049-82D4-445186FB4E49}.Debug.ActiveCfg = Debug|Win32
+		{ABC4DA62-A33C-4049-82D4-445186FB4E49}.Debug.Build.0 = Debug|Win32
+		{ABC4DA62-A33C-4049-82D4-445186FB4E49}.Release.ActiveCfg = Release|Win32
+		{ABC4DA62-A33C-4049-82D4-445186FB4E49}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
