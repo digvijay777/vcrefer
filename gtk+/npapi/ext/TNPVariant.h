@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
-// È«¾ÖµÄNetscapeº¯Êı
+// å…¨å±€çš„Netscapeå‡½æ•°
 extern NPNetscapeFuncs*	gpnpf;
 
 /*
- *	NPVariantÀàÄ£°å
+ *	NPVariantç±»æ¨¡æ¿
  */
 template <class T = void>
 class TNPVariant : public NPVariant
@@ -13,11 +13,26 @@ public:
 	TNPVariant()
 	{
 	}
+	TNPVariant(long ul)
+	{
+		*this = ul;
+	}
+	TNPVariant(double d)
+	{
+		*this = d;
+	}
+	TNPVariant(bool b)
+	{
+		*this = b;
+	}
+	TNPVariant(const char* pstr)
+	{
+		*this = pstr;
+	}
 	~TNPVariant()
 	{
 		Clear();
 	}
-
 public:
 	bool Clear()
 	{
@@ -70,7 +85,7 @@ public:
 
 		char*			pMem		= NULL;
 
-		pMem = (char *)gpnpf->memalloc(strlen(pstr)+1);
+		pMem = (char *)gpnpf->memalloc((uint32_t)strlen(pstr)+1);
 		strncpy(pMem, pstr, strlen(pstr)+1);
 		STRINGZ_TO_NPVARIANT(pMem, *this);
 		return *this;
@@ -82,7 +97,7 @@ public:
 		NPVariant		var;
 
 		var = *this;
-		NULL_TO_NPVARIANT(var);
+		NULL_TO_NPVARIANT(*this);
 		return var;
 	}
 };

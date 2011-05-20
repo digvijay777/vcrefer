@@ -1,12 +1,10 @@
-#pragma once
+﻿#pragma once
 
 template <class T>
 NPObject* TNPAllocate(NPP npp, NPClass *aClass)
 {
 	NPObject*		pObject		= (NPObject *)new T(npp);
 
-	if(NULL != pObject)
-		pObject->_class = aClass;
 	return pObject;
 }
 

@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;F:\gtk+\include\gtk-2.0&quot;;&quot;F:\gtk+\include\glib-2.0&quot;;&quot;F:\gtk+\include\cairo&quot;;&quot;F:\gtk+\include\pango-1.0&quot;;&quot;F:\gtk+\include\atk-1.0&quot;;&quot;F:\gtk+\lib\glib-2.0\include&quot;;&quot;F:\gtk+\lib\gtk-2.0\include&quot;"
+				AdditionalIncludeDirectories="&quot;F:\gtk+\include\gtk-2.0&quot;;&quot;F:\gtk+\include\glib-2.0&quot;;&quot;F:\gtk+\include\cairo&quot;;&quot;F:\gtk+\include\pango-1.0&quot;;&quot;F:\gtk+\include\atk-1.0&quot;;&quot;F:\gtk+\lib\glib-2.0\include&quot;;&quot;F:\gtk+\lib\gtk-2.0\include&quot;;&quot;F:\gtk+\include\gdk-pixbuf-2.0&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;F:\gtk+\include\gtk-2.0&quot;;&quot;F:\gtk+\include\glib-2.0&quot;;&quot;F:\gtk+\include\cairo&quot;;&quot;F:\gtk+\include\pango-1.0&quot;;&quot;F:\gtk+\include\atk-1.0&quot;;&quot;F:\gtk+\lib\glib-2.0\include&quot;;&quot;F:\gtk+\lib\gtk-2.0\include&quot;"
+				AdditionalIncludeDirectories="&quot;F:\gtk+\include\gtk-2.0&quot;;&quot;F:\gtk+\include\glib-2.0&quot;;&quot;F:\gtk+\include\cairo&quot;;&quot;F:\gtk+\include\pango-1.0&quot;;&quot;F:\gtk+\include\atk-1.0&quot;;&quot;F:\gtk+\lib\glib-2.0\include&quot;;&quot;F:\gtk+\lib\gtk-2.0\include&quot;;&quot;F:\gtk+\include\gdk-pixbuf-2.0&quot;"
 				PreprocessorDefinitions="WIN32"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;F:\gtk+\include\gtk-2.0&quot;;&quot;F:\gtk+\include\glib-2.0&quot;;&quot;F:\gtk+\include\cairo&quot;;&quot;F:\gtk+\include\pango-1.0&quot;;&quot;F:\gtk+\include\atk-1.0&quot;;&quot;F:\gtk+\lib\glib-2.0\include&quot;;&quot;F:\gtk+\lib\gtk-2.0\include&quot;"
-				PreprocessorDefinitions="WIN32"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_X86_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -220,6 +220,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TestApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestApp.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TestPlug.cpp"
 				>
 			</File>
@@ -232,7 +240,15 @@
 			Name="npapi"
 			>
 			<File
+				RelativePath="..\..\npapi\ext\npext.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\npapi\ext\TNPObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\npapi\ext\TNPPluginFuncs.h"
 				>
 			</File>
 			<File
