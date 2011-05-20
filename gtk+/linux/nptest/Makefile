@@ -1,20 +1,20 @@
 ﻿CC = g++
 
 all: nptest.o testplug.o testapp.o
-	$(CC) nptest.o testplug.o testapp.o -fPIC -shared -o nptest.so
+	$(CC) nptest.o testplug.o testapp.o -shared -o nptest.so
 	cp nptest.so /usr/lib/mozilla/plugins/libnptest.so   
-	   
-testapp.o: TestApp.cpp TestApp.h
-	$(CC) -c Test.cpp -o testapp.o
+	rm *.o	
+   
+testapp.o: testapp.cpp testapp.h
+	$(CC) -c testapp.cpp -DXP_UNIX=1 -DMOZ_X11=1 -D_X86_=1
 	
-testplug.o: TestPlug.o TestPlug.h
-	$(CC) -c TestPlug.cpp -o testplug.o
+testplug.o: testplug.cpp testplug.h
+	$(CC) -c testplug.cpp -DXP_UNIX=1 -DMOZ_X11=1 -D_X86_=1
 	
 nptest.o: nptest.cpp nptest.h
-	$(CC) -c nptest.cpp -o nptest.o
+	$(CC) -fPIC  -DXP_UNIX=1 -DMOZ_X11=1 -D_X86_=1 -c nptest.cpp
 
 clean:
-	rm /usr/lib/mozilla/plugins/libnptest.so
 	rm *.so
-	rm *.o
+	rm /usr/lib/mozilla/plugins/libnptest.so
 

@@ -1,5 +1,5 @@
 #include "nptest.h"
-#include "TestPlug.h"
+#include "testplug.h"
 
 CTestPlug::CTestPlug(NPP npp)
 : TNPObject<CTestPlug>(npp)

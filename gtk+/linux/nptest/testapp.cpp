@@ -1,6 +1,6 @@
 #include "nptest.h"
-#include "TestApp.h"
-#include "TestPlug.h"
+#include "testapp.h"
+#include "testplug.h"
 
 CTestApp::CTestApp(void)
 {
@@ -15,6 +15,7 @@ NPError CTestApp::New(NPMIMEType pluginType, NPP instance, uint16_t mode
 {
 	if(strcmp((char *)pluginType, "application/x-yuanjie-test") == 0)
 	{
+		printf("[CTestApp::New] new application/x-yuanjie-test\n");
 		instance->pdata = gpnpf->createobject(instance, (NPClass *)&CTestPlug::Object);
 	}
 	return NPERR_NO_ERROR;
@@ -37,10 +38,10 @@ NPError CTestApp::GetValue(NPP instance, NPPVariable variable, void *ret_value)
 	default:
 		return NPERR_GENERIC_ERROR;
 	case NPPVpluginNameString:
-		*((char **)ret_value) = "TestNPP";
+		*((char **)ret_value) = (char *)"TestNPP";
 		break;
 	case NPPVpluginDescriptionString:
-		*((char **)ret_value) = "<a href=\"www.yunjie.org\">yuanjie.org</a> plugin.";
+		*((char **)ret_value) = (char *)"<a href=\"www.yunjie.org\">yuanjie.org</a> plugin.";
 		break;
 	case NPPVpluginScriptableNPObject:
 		gpnpf->retainobject((NPObject *)instance->pdata);
