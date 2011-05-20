@@ -1,0 +1,19 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script language="javascript">
+function OnTest()
+{
+	try{
+		alert(document.getElementById('idtest').test());
+	} catch (e){
+		alert(e);
+	}
+}
+</script>
+</head>
+<body>
+<object type="application/x-yuanjie-test" data="data:application/x-yuanjie-test," id="idtest" width="0" height="0"></object>
+<button onClick="OnTest()">测试</button>
+</body>
+</html>
