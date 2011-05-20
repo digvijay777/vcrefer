@@ -25,8 +25,21 @@ char* NP_GetMIMEDescription(void)
 // linux/unix 版本 
 NPError OSCALL NP_Initialize(NPNetscapeFuncs* npnf, NPPluginFuncs* nppfuncs)
 {
-	printf("[NP_Initialize] enter\n");
+	NPError 		err			= NPERR_NO_ERROR;
+	PRBool			supXEmbed	= PR_FALSE;
+	NPNToolkitType	toolkit		= (NPNToolkitType)0;
+
+	// 确定浏览器支持
+	
 	*nppfuncs = CTestApp::PluginFuncs;
+	err = npnf->getvalue(NULL, NPNVSupportsXEmbedBool, (void *)&supXEmbed);
+	if(err != NPERR_NO_ERROR || supXEmbed != PR_TRUE)
+		return NPERR_INCOMPATIBLE_VERSION_ERROR;
+
+	err = npnf->getvalue(NULL, NPNVToolkit, (void *)&toolkit);
+	if(err != NPERR_NO_ERROR || NPNVGtk2 != toolkit)
+	return NPERR_INCOMPATIBLE_VERSION_ERROR;
+
 	
 	if(npnf == NULL)
 		return NPERR_INVALID_FUNCTABLE_ERROR;

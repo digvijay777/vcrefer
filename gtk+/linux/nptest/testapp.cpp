@@ -48,7 +48,13 @@ NPError CTestApp::GetValue(NPP instance, NPPVariable variable, void *ret_value)
 		*((NPObject **)ret_value) = (NPObject *)instance->pdata;
 		break;
 	case NPPVpluginNeedsXEmbed:
+		// https://developer.mozilla.org/en/XEmbed_Extension_for_Mozilla_Plugins
+		// 如果设为PR_FALSE测linux-chrome不能正常工作
+#if defined(XP_UNIX)
+		*((PRBool *)ret_value) = PR_TRUE;
+#else
 		*((PRBool *)ret_value) = PR_FALSE;
+#endif
 		break;
 	}
 	return NPERR_NO_ERROR;
