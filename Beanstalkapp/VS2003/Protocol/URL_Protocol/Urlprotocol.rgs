@@ -1,14 +1,21 @@
-HKCR
+
+HKLM
 {
-	yj = s 'yuan jie protocol'
+	NoRemove SOFTWARE
 	{
-		val 'URL Protocol' = s '%MODULE%'
-		DefaultIcon = s '%MODULE%, 128'
-		ForceRemove shell
+		NoRemove Classes
 		{
-			ForceRemove open
+			yj = s 'URL:yuan jie protocol'
 			{
-				command = s '"%MODULE%" "%%1"'
+				val 'URL Protocol' = s '%MODULE%'
+				DefaultIcon = s 'X:\VS2003\Protocol\URL_Protocol\res\URL_Protocol.ico'
+				ForceRemove shell
+				{
+					ForceRemove open
+					{
+						command = s '"%MODULE%" "%%1"'
+					}
+				}
 			}
 		}
 	}

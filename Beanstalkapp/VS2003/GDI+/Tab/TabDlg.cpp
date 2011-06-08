@@ -1,13 +1,9 @@
-// URL_ProtocolDlg.cpp : 实现文件
+// TabDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
-#include "URL_Protocol.h"
-#include "URL_ProtocolDlg.h"
-#include ".\url_protocoldlg.h"
-
-#include <atlbase.h>
-#include <statreg.h>
+#include "Tab.h"
+#include "TabDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -45,34 +41,32 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CURL_ProtocolDlg 对话框
+// CTabDlg 对话框
 
 
 
-CURL_ProtocolDlg::CURL_ProtocolDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CURL_ProtocolDlg::IDD, pParent)
+CTabDlg::CTabDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CTabDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CURL_ProtocolDlg::DoDataExchange(CDataExchange* pDX)
+void CTabDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CURL_ProtocolDlg, CDialog)
+BEGIN_MESSAGE_MAP(CTabDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDOK, OnBnClickedOk)
-	ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
-// CURL_ProtocolDlg 消息处理程序
+// CTabDlg 消息处理程序
 
-BOOL CURL_ProtocolDlg::OnInitDialog()
+BOOL CTabDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -100,11 +94,14 @@ BOOL CURL_ProtocolDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	SetDlgItemText(IDC_EDIT1, GetCommandLine());
+	m_ctlText.SubclassWindow(GetDlgItem(IDC_ST_INFO)->GetSafeHwnd());
+	
+	m_ctlText.SetFont(L"宋体", 14);
+	m_ctlText.SetColor(255, 175, 0, 0);
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE
 }
 
-void CURL_ProtocolDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CTabDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -121,7 +118,7 @@ void CURL_ProtocolDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CURL_ProtocolDlg::OnPaint() 
+void CTabDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
@@ -147,70 +144,7 @@ void CURL_ProtocolDlg::OnPaint()
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标显示。
-HCURSOR CURL_ProtocolDlg::OnQueryDragIcon()
+HCURSOR CTabDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
-
-void CURL_ProtocolDlg::OnBnClickedOk()
-{
-	// 注册
-	CRegObject			reg;
-	WCHAR				szModule[MAX_PATH];
-	HRESULT				hres;
-	CString				strMsg;
-
-	memset(szModule, 0, sizeof(szModule));
-	GetModuleFileNameW(AfxGetInstanceHandle(), szModule, sizeof(szModule));
-	reg.AddReplacement(L"MODULE", szModule);
-	hres = reg.ResourceRegister(szModule, IDR_URLPROTOCOL, L"REGISTRY");
-	if(S_OK != hres)
-	{
-		strMsg.Format("注册失败: %08x", hres);
-		AfxMessageBox(strMsg);
-	}
-	else
-	{
-		AfxMessageBox("注册成功!");
-	}
-}
-
-void CURL_ProtocolDlg::OnBnClickedButton1()
-{
-	CRegObject			reg;
-	WCHAR				szModule[MAX_PATH];
-	HRESULT				hres;
-	CString				strMsg;
-
-	memset(szModule, 0, sizeof(szModule));
-	GetModuleFileNameW(AfxGetInstanceHandle(), szModule, sizeof(szModule));
-	reg.AddReplacement(L"MODULE", szModule);
-	hres = reg.ResourceUnregister(szModule, IDR_URLPROTOCOL, L"REGISTRY");
-	if(S_OK != hres)
-	{
-		strMsg.Format("御载失败: %08x", hres);
-		AfxMessageBox(strMsg);
-	}
-	else
-	{
-		AfxMessageBox("御载成功!");
-	}
-}
-
-/*
-HKCR
-{
-yj = s 'URL:yuan jie protocol'
-{
-val 'URL Protocol' = s '%MODULE%'
-DefaultIcon = s '%MODULE%, 128'
-ForceRemove shell
-{
-ForceRemove open
-{
-command = s '"%MODULE%" "%%1"'
-}
-}
-}
-}
- */

@@ -37,7 +37,7 @@ int main(int, char **, char **)
 		{
 			addr.sin_port = htons(8603);
 			addr.sin_family = AF_INET;
-			addr.sin_addr.S_un.S_addr = inet_addr("161.250.41.200")/*htonl(INADDR_ANY)*/;
+			addr.sin_addr.S_un.S_addr = /*inet_addr("161.250.41.200")*/htonl(INADDR_ANY);
 			//°ð¶¨
 			nRet = bind(server, (SOCKADDR *)&addr, sizeof(SOCKADDR));
 			if(0 != nRet)

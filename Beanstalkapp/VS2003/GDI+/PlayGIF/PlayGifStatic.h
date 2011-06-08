@@ -16,12 +16,12 @@ protected:
 
 public:
 	BOOL						Load(LPCTSTR lpStr);
+	BOOL						Load(HINSTANCE hInst, LPCSTR lpName, LPCSTR lpType);
 	BOOL						Play();
 	BOOL						Stop();
 
 protected:
 	BOOL						Load(Gdiplus::Image* pImage);
-	BOOL						Load(HINSTANCE hInst, LPCSTR lpName, LPCSTR lpType);
 
 private:
 	Gdiplus::Image*				m_pImage;

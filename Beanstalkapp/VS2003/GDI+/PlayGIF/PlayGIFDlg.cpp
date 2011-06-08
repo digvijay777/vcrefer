@@ -99,7 +99,8 @@ BOOL CPlayGIFDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	m_gif.Load("LOAD.GIF");
+	//m_gif.Load("LOAD.GIF");
+	m_gif.Load(AfxGetInstanceHandle(), "LOADING.GIF", "GIF");
 	m_gif.Play();
 
 	//SetTimer(1, 1000, NULL);

@@ -57,19 +57,15 @@ BOOL CPlayGifStatic::Load(HINSTANCE hInst, LPCSTR lpName, LPCSTR lpType)
 	if(NULL == hResorce)
 		return FALSE;
 	// 构造Stream
+	CreateStreamOnHGlobal(NULL, TRUE, &spStream);
+
 	dwSize = SizeofResource(hInst, hRsrc);
-	hStream = GlobalAlloc(GMEM_FIXED, dwSize);
-	CreateStreamOnHGlobal(hStream, TRUE, &spStream);
-	if(spStream == NULL)
-	{
-		GlobalFree(hStream);
-		return FALSE;
-	}
 	spStream->Write(LockResource(hResorce), dwSize, &dwSize);
-	UnlockResource(hResorce);
-	FreeResource(hResorce);
 	// 创建图片
 	m_pImage = new Gdiplus::Image(spStream);
+
+	UnlockResource(hResorce);
+	FreeResource(hResorce);
 
 	return Load(m_pImage);
 }
@@ -132,10 +128,10 @@ void CPlayGifStatic::OnPaint()
 	int						nWidth			= 0;
 	int						nHeight			= 0;
 	Gdiplus::Color			col(255, 0, 0, 0);
-	HDC						hDC			= g.GetHDC();
+// 	HDC						hDC			= g.GetHDC();
 
-	SendMessage(WM_ERASEBKGND, (WPARAM)hDC);
-	g.ReleaseHDC(hDC);
+//	SendMessage(WM_ERASEBKGND, (WPARAM)hDC);
+// 	g.ReleaseHDC(hDC);
 	GetClientRect(&rtClient);
 	nWidth = m_pImage->GetWidth();
 	nHeight = m_pImage->GetHeight();
