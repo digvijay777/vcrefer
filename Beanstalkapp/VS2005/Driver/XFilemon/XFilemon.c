@@ -30,7 +30,40 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 #pragma INITCODE
 NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 {
-	return STATUS_SUCCESS;
+	UNICODE_STRING				usDevice;
+	NTSTATUS					status;
+	DEVICE_OBJECT*				devObj;
+	
+	RtlInitUnicodeString( &usDevice, L"\\FileSystem\\Filters\\XFilter" );
+	status = IoCreateDevice(pDriverObject
+		, sizeof(DEVICE_EXTENSION)
+		, &usDevice
+		, FILE_DEVICE_DISK_FILE_SYSTEM
+		, FILE_DEVICE_SECURE_OPEN
+		, FALSE
+		, &devObj);
+	// 如果因为路径没找到生成失败
+	if(STATUS_OBJECT_PATH_NOT_FOUND == status)
+	{
+		// 这是因为一些低版本的操作系统没有\FileSystem\Filters\这个目录
+		// 如果没有，我们则改变位置，生成到\FileSystem\下.
+		RtlInitUnicodeString( &usDevice, L"\\FileSystem\\XFilterCDO" );
+		status = IoCreateDevice(pDriverObject
+			, sizeof(DEVICE_EXTENSION)
+			, &usDevice
+			, FILE_DEVICE_DISK_FILE_SYSTEM
+			, FILE_DEVICE_SECURE_OPEN
+			, FALSE
+			, &devObj);
+	}
+	if(NT_SUCCESS(status))
+	{
+		PDEVICE_EXTENSION		pExt		= (PDEVICE_EXTENSION)devObj->DeviceExtension;
+
+		pExt->pDevice = devObj;
+	}
+	DbgPrint("创建设备\"%S\": %d\r\n", usDevice.Buffer, status);
+	return status;
 }
 // 御载函数
 #pragma PAGEDCODE
@@ -46,7 +79,6 @@ void DDKXFilemonUnload(PDRIVER_OBJECT pDriverObject)
 		
 		pNexObj = pNexObj->NextDevice;
 		IoDeleteDevice(pDevExt->pDevice);
-
 	}
 	DbgPrint("Leave LogDDKUnload\r\n");
 }
