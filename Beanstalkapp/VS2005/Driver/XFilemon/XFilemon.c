@@ -2,14 +2,15 @@
  *	注册表监控
  */
 #include "XFilemon.h"
+#include "FastIoFunction.h"
 
 //////////////////////////////////////////////////////////////////////////
 // 入口函数
 #pragma INITCODE
 NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
 {
-	NTSTATUS		status = STATUS_SUCCESS;
-	int				i = 0;
+	NTSTATUS					status				= STATUS_SUCCESS;
+	int							i					= 0;
 
 	DbgPrint("Enter DriverEntry\r\n");
 	// 注册其他驱动调用函数入口
@@ -17,9 +18,14 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	{
 		pDriverObject->MajorFunction[i] = DDKXFilemonDispatchRoutine;
 	}
-
 	pDriverObject->DriverUnload = DDKXFilemonUnload;
-
+	// 文件过滤
+	pDriverObject->MajorFunction[IRP_MJ_CREATE] = SfCreate;
+	pDriverObject->MajorFunction[IRP_MJ_CREATE_NAMED_PIPE] = SfCreate;
+	pDriverObject->MajorFunction[IRP_MJ_CREATE_MAILSLOT] = SfCreate;
+	pDriverObject->MajorFunction[IRP_MJ_FILE_SYSTEM_CONTROL] = SfFsControl;
+	pDriverObject->MajorFunction[IRP_MJ_CLEANUP] = SfCleanupClose;
+	pDriverObject->MajorFunction[IRP_MJ_CLOSE] = SfCleanupClose;
 	// 创建REGMON设备
 	status = CreateXFilemonDevice(pDriverObject);
 	
@@ -33,7 +39,8 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	UNICODE_STRING				usDevice;
 	NTSTATUS					status;
 	DEVICE_OBJECT*				devObj;
-	
+	PFAST_IO_DISPATCH			fastIoDispatch		= NULL;
+
 	RtlInitUnicodeString( &usDevice, L"\\FileSystem\\Filters\\XFilter" );
 	status = IoCreateDevice(pDriverObject
 		, sizeof(DEVICE_EXTENSION)
@@ -61,8 +68,21 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 		PDEVICE_EXTENSION		pExt		= (PDEVICE_EXTENSION)devObj->DeviceExtension;
 
 		pExt->pDevice = devObj;
+		pExt->AttachedToDeviceObject = NULL;
 	}
 	DbgPrint("创建设备\"%S\": %d\r\n", usDevice.Buffer, status);
+	// fast io function
+	fastIoDispatch = ExAllocatePoolWithTag(NonPagedPool, sizeof(FAST_IO_DISPATCH), SFLT_POOL_TAG);
+	if(NULL == fastIoDispatch)
+	{
+		IoDeleteDevice(devObj);
+		DbgPrint("ExAllocatePoolWithTag SFLT_POOL_TAG failed.");
+		return STATUS_INSUFFICIENT_RESOURCES;
+	}
+	RtlZeroMemory(fastIoDispatch, sizeof(FAST_IO_DISPATCH));
+	fastIoDispatch->SizeOfFastIoDispatch = sizeof(FAST_IO_DISPATCH);
+
+	// 7
 	return status;
 }
 // 御载函数
@@ -87,8 +107,9 @@ void DDKXFilemonUnload(PDRIVER_OBJECT pDriverObject)
 // // #pragma PAGEDCODE
 NTSTATUS DDKXFilemonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 {
-	PIO_STACK_LOCATION stack = IoGetCurrentIrpStackLocation(pIrp);
-	NTSTATUS status = STATUS_SUCCESS;
+	PIO_STACK_LOCATION		stack		= IoGetCurrentIrpStackLocation(pIrp);
+	PDEVICE_EXTENSION		pExt		= (PDEVICE_EXTENSION)pDevObj->DeviceExtension;
+
 	//建立一个字符串数组与IRP类型对应起来
 	static char* irpname[] = 
 	{
@@ -131,14 +152,25 @@ NTSTATUS DDKXFilemonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	else
 		DbgPrint("\t%s\r\n", irpname[type]);
 
+	/* 过滤驱动 */
+	IoSkipCurrentIrpStackLocation( pIrp );
 
-	//对一般IRP的简单操作，后面会介绍对IRP更复杂的操作
-	// 完成IRP
-	pIrp->IoStatus.Status = status;
-	pIrp->IoStatus.Information = 0;	// bytes xfered
-	IoCompleteRequest( pIrp, IO_NO_INCREMENT );
-
-	DbgPrint("Leave HelloDDKDispatchRoutin\r\n");
-
-	return status;
+	return IoCallDriver(pExt->AttachedToDeviceObject, pIrp);
 }
+
+/************************************************************************/
+/* 文件过滤处理函数                                                      */
+/************************************************************************/
+NTSTATUS SfCreate(PDEVICE_OBJECT pDevObj, PIRP pIrp)
+{
+	return STATUS_SUCCESS;
+}
+NTSTATUS SfFsControl(PDEVICE_OBJECT pDevObj, PIRP pIrp)
+{
+	return STATUS_SUCCESS;
+}
+NTSTATUS SfCleanupClose(PDEVICE_OBJECT pDevObj, PIRP pIrp)
+{
+	return STATUS_SUCCESS;
+}
+
