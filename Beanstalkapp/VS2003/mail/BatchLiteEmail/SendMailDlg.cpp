@@ -387,7 +387,7 @@ void CSendMailDlg::OnBnClickedBtTest()
 	}
 	else
 	{
-		MessageBox("发送邮件 " + m_strName + ":" + m_strEmail + "失败!", NULL, MB_OK|MB_ICONERROR);
+		MessageBox("发送邮件 " + m_strName + ":" + m_strEmail + "失败:" + mail.GetLastError(), NULL, MB_OK|MB_ICONERROR);
 	}
 
 	delete [] pData;

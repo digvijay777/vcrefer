@@ -113,7 +113,7 @@ void CBatchLiteEmailView::OnSendmail()
 		strUrl = strUrl.Right(strUrl.GetLength()-8);
 	if(FALSE == PathFileExists(strUrl))
 	{
-		MessageBox("请选择要发送的网页");
+		MessageBox("请选择要发送的网页:" + strUrl);
 		return;
 	}
 
