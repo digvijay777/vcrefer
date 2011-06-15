@@ -70,7 +70,7 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 		pExt->pDevice = devObj;
 		pExt->AttachedToDeviceObject = NULL;
 	}
-	DbgPrint("创建设备\"%S\": %d\r\n", usDevice.Buffer, status);
+	DbgPrint("Create device\"%S\": %d\r\n", usDevice.Buffer, status);
 	// fast io function
 	fastIoDispatch = ExAllocatePoolWithTag(NonPagedPool, sizeof(FAST_IO_DISPATCH), SFLT_POOL_TAG);
 	if(NULL == fastIoDispatch)
@@ -82,7 +82,33 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	RtlZeroMemory(fastIoDispatch, sizeof(FAST_IO_DISPATCH));
 	fastIoDispatch->SizeOfFastIoDispatch = sizeof(FAST_IO_DISPATCH);
 
-	// 7
+	fastIoDispatch->FastIoCheckIfPossible = SfFastIoCheckIfPossible;
+	fastIoDispatch->AcquireFileForNtCreateSection = SfAcquireFileForNtCreateSection;
+	fastIoDispatch->AcquireForCcFlush = SfAcquireForCcFlush;
+	fastIoDispatch->FastIoDetachDevice = SfFastIoDetachDevice;
+	fastIoDispatch->FastIoDeviceControl = SfFastIoDeviceControl;
+	fastIoDispatch->FastIoLock = SfFastIoLock;
+	fastIoDispatch->FastIoQueryBasicInfo = SfFastIoQueryBasicInfo;
+	fastIoDispatch->FastIoQueryNetworkOpenInfo = SfFastIoQueryNetworkOpenInfo;
+	fastIoDispatch->FastIoQueryOpen = SfFastIoQueryOpen;
+	fastIoDispatch->FastIoQueryStandardInfo = SfFastIoQueryStandardInfo;
+	fastIoDispatch->FastIoRead = SfFastIoRead;
+	fastIoDispatch->FastIoReadCompressed = SfFastIoReadCompressed;
+	fastIoDispatch->FastIoUnlockAll = SfFastIoUnlockAll;
+	fastIoDispatch->FastIoUnlockAllByKey = SfFastIoUnlockAllByKey;
+	fastIoDispatch->FastIoUnlockSingle = SfFastIoUnlockSingle;
+	fastIoDispatch->FastIoWrite = SfFastIoWrite;
+	fastIoDispatch->FastIoWriteCompressed = SfFastIoWriteCompressed;
+	fastIoDispatch->MdlRead = SfMdlRead;
+	fastIoDispatch->MdlReadComplete = SfMdlReadComplete;
+	fastIoDispatch->MdlReadCompleteCompressed = SfMdlReadCompleteCompressed;
+	fastIoDispatch->MdlWriteComplete = SfMdlWriteComplete;
+	fastIoDispatch->MdlWriteCompleteCompressed = SfMdlWriteCompleteCompressed;
+	fastIoDispatch->PrepareMdlWrite = SfPrepareMdlWrite;
+	fastIoDispatch->ReleaseFileForNtCreateSection = SfReleaseFileForNtCreateSection;
+	fastIoDispatch->ReleaseForCcFlush = SfReleaseForCcFlush;
+	fastIoDispatch->ReleaseForModWrite = SfReleaseForModWrite;
+
 	return status;
 }
 // 御载函数

@@ -9,3 +9,5 @@ INCLUDES=$(BASEDIR)\inc;\
          $(BASEDIR)\inc\ddk;\
 
 SOURCES=XFilemon.c\
+        FastIoFunction.c\
+        
