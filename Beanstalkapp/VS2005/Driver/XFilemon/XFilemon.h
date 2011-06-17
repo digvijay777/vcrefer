@@ -37,7 +37,5 @@ NTSTATUS SfCreate(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS SfFsControl(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS SfCleanupClose(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 
-NTSTATUS SfAttachDeviceToDeviceStack (IN PDEVICE_OBJECT SourceDevice, IN PDEVICE_OBJECT TargetDevice
-									  , IN OUT PDEVICE_OBJECT *AttachedToDeviceObject);
-typedef PDEVICE_OBJECT fnIoAttachDeviceToDeviceStack(IN PDEVICE_OBJECT  SourceDevice
-													 , IN PDEVICE_OBJECT  TargetDevice);
+NTSTATUS SfAttatchDevice(PDEVICE_EXTENSION pex);
+

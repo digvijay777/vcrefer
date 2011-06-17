@@ -109,6 +109,18 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	fastIoDispatch->ReleaseForCcFlush = SfReleaseForCcFlush;
 	fastIoDispatch->ReleaseForModWrite = SfReleaseForModWrite;
 
+	pDriverObject->FastIoDispatch = fastIoDispatch;
+
+	status = SfAttatchDevice((PDEVICE_EXTENSION)devObj->DeviceExtension);
+	if(!NT_SUCCESS(status))
+	{
+		pDriverObject->FastIoDispatch = NULL;
+		ExFreePoolWithTag(fastIoDispatch, SFLT_POOL_TAG);
+		IoDeleteDevice(devObj);
+		DbgPrint("CreateXFilemonDevice: attachdevice failed: %d\n", status);
+		return status;
+	}
+
 	return status;
 }
 // ÓùÔØº¯Êý
@@ -200,8 +212,55 @@ NTSTATUS SfCleanupClose(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	return STATUS_SUCCESS;
 }
 
-
-NTSTATUS SfAttachDeviceToDeviceStack (IN PDEVICE_OBJECT SourceDevice, IN PDEVICE_OBJECT TargetDevice)
+NTSTATUS SfAttatchDevice(PDEVICE_EXTENSION pex)
 {
-	return IoAttachDeviceToDeviceStack(SourceDevice, TargetDevice);
+	UNICODE_STRING			uclink;
+	OBJECT_ATTRIBUTES		objectattribute;
+	HANDLE					hSymbolc;
+	NTSTATUS				ntStatus;
+	ULONG					uLen;
+	UNICODE_STRING			ucDevice;
+	WCHAR					szBuff[128]				= {0};
+	PFILE_OBJECT			fileobject				= NULL;
+	PDEVICE_OBJECT			deviceobject			= NULL;
+
+	DbgPrint("Open 'c:' Link\n");
+	RtlInitUnicodeString(&uclink, L"\\??\\c:");
+	InitializeObjectAttributes(&objectattribute
+		, &uclink
+		, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE
+		, NULL, NULL);
+	ntStatus = ZwOpenSymbolicLinkObject(&hSymbolc, FILE_ALL_ACCESS, &objectattribute);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("Get 'c:' device.\n");
+	ucDevice.Buffer = szBuff;
+	ucDevice.Length = arrayof(szBuff);
+	ntStatus = ZwQuerySymbolicLinkObject(hSymbolc, &ucDevice, &uLen);
+	DbgPrint("Get 'c:' device name: %S\n", szBuff);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("Open 'c:' device\n");
+	ntStatus = IoGetDeviceObjectPointer(&ucDevice, SYNCHRONIZE|FILE_ANY_ACCESS, &fileobject, &deviceobject);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("attach device to device stack.\n");
+	pex->AttachedToDeviceObject = IoAttachDeviceToDeviceStack(pex->pDevice, deviceobject);
+	ObDereferenceObject(fileobject);
+	if(pex->AttachedToDeviceObject)
+	{
+		DbgPrint("attach 'c:' success.\n");
+		pex->AttachedToDeviceObject = deviceobject;
+	}
+	else
+	{
+		DbgPrint("attach 'c:' faild.\n");
+		return -1;
+	}
+
+	DbgPrint("Enter SfAttatchDevice\n");
+	return STATUS_SUCCESS;
 }
