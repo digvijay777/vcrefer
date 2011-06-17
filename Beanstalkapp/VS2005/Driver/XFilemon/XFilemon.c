@@ -200,3 +200,8 @@ NTSTATUS SfCleanupClose(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	return STATUS_SUCCESS;
 }
 
+
+NTSTATUS SfAttachDeviceToDeviceStack (IN PDEVICE_OBJECT SourceDevice, IN PDEVICE_OBJECT TargetDevice)
+{
+	return IoAttachDeviceToDeviceStack(SourceDevice, TargetDevice);
+}
