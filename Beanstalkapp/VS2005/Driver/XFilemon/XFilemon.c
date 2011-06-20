@@ -112,6 +112,7 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	pDriverObject->FastIoDispatch = fastIoDispatch;
 
 	status = SfAttatchDevice((PDEVICE_EXTENSION)devObj->DeviceExtension);
+
 	if(!NT_SUCCESS(status))
 	{
 		pDriverObject->FastIoDispatch = NULL;
@@ -120,6 +121,12 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 		DbgPrint("CreateXFilemonDevice: attachdevice failed: %d\n", status);
 		return status;
 	}
+
+	devObj->DeviceType = ((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->DeviceType;
+	devObj->Characteristics = ((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->Characteristics;
+	devObj->Flags &= ~DO_DEVICE_INITIALIZING;
+	devObj->Flags |= (((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->Flags 
+		& (DO_DIRECT_IO | DO_BUFFERED_IO));
 
 	return status;
 }
@@ -136,6 +143,8 @@ void DDKXFilemonUnload(PDRIVER_OBJECT pDriverObject)
 		PDEVICE_EXTENSION		pDevExt		= (PDEVICE_EXTENSION)pNexObj->DeviceExtension;
 		
 		pNexObj = pNexObj->NextDevice;
+		if(NULL != pDevExt->AttachedToDeviceObject)
+			IoDetachDevice(pDevExt->AttachedToDeviceObject);
 		IoDeleteDevice(pDevExt->pDevice);
 	}
 	DbgPrint("Leave LogDDKUnload\r\n");
