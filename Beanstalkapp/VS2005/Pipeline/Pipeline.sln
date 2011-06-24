@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InPipe", "InPipe\InPipe.vcproj", "{FE281694-0422-4929-90FF-B889D5BE09F7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestPipe", "TestPipe\TestPipe.vcproj", "{4CA280AA-9444-4701-AA48-1F6760FE3657}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE281694-0422-4929-90FF-B889D5BE09F7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FE281694-0422-4929-90FF-B889D5BE09F7}.Debug|Win32.Build.0 = Debug|Win32
+		{FE281694-0422-4929-90FF-B889D5BE09F7}.Release|Win32.ActiveCfg = Release|Win32
+		{FE281694-0422-4929-90FF-B889D5BE09F7}.Release|Win32.Build.0 = Release|Win32
+		{4CA280AA-9444-4701-AA48-1F6760FE3657}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4CA280AA-9444-4701-AA48-1F6760FE3657}.Debug|Win32.Build.0 = Debug|Win32
+		{4CA280AA-9444-4701-AA48-1F6760FE3657}.Release|Win32.ActiveCfg = Release|Win32
+		{4CA280AA-9444-4701-AA48-1F6760FE3657}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
