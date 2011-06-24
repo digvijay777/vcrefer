@@ -28,12 +28,12 @@ public:
 	DECLARE_MESSAGE_MAP()
 	virtual int Run();
 public:
-	HHOOK		m_hook				= NULL;
-	DWORD		m_dwMainThreadID	= 0;
-	HDESK		m_hDeskDown			= NULL;
-	HDESK		m_hDeskLeft			= NULL;
-	HDESK		m_hDeskRight		= NULL;
-	HDESK		m_hDeskUp			= NULL;
+	HHOOK		m_hook				/*= NULL*/;
+	DWORD		m_dwMainThreadID	/*= 0*/;
+	HDESK		m_hDeskDown			/*= NULL*/;
+	HDESK		m_hDeskLeft			/*= NULL*/;
+	HDESK		m_hDeskRight		/*= NULL*/;
+	HDESK		m_hDeskUp			/*= NULL*/;
 };
 
 extern CDesktopMgrApp theApp;

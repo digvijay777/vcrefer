@@ -1,7 +1,7 @@
 // #include <Windows.h>
 #include "stdafx.h"
 #include <stdio.h>
-#include "../../../common/DebugLog.h"
+//#include "../../../common/DebugLog.h"
 
 #include <Wtsapi32.h>
 
@@ -21,7 +21,7 @@ VOID	CreateSampleService();
 void	ServiceTestCreateProcess();
 void	ServiceTestMsgBox();
 
-CDebugLog	g_debuglog("C:\\debug.log");
+//CDebugLog	g_debuglog("C:\\debug.log");
 //////////////////////////////////////////////////////////////////////////
 // main函数
 int WINAPI WinMain(HINSTANCE hInstance, 
@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				   int nShowCmd )
 {
   	g_hInst = hInstance;
-	g_debuglog.Write("Enter WinMain.");
+//	g_debuglog.Write("Enter WinMain.");
 	if(_tcsstr(lpCmdLine, "/create") > 0)
 	{
 		CreateSampleService();
@@ -47,9 +47,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	// 启动服务的控制分派线程
 	if(!StartServiceCtrlDispatcher(ServiceTable))
 	{
-		g_debuglog.Write("StartServiceCtrlDispatcher filead.");
+//		g_debuglog.Write("StartServiceCtrlDispatcher filead.");
 	}
-	g_debuglog.Write("End WinMain");
+//	g_debuglog.Write("End WinMain");
 	return 0;
 }
 
@@ -59,7 +59,7 @@ void WINAPI MyServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 {
 //	__asm int 3
 
-	g_debuglog.Write("Enter MyServiceMain");
+//	g_debuglog.Write("Enter MyServiceMain");
 	int			nErr			= 0;
 	
 	g_sServiceStatus.dwServiceType = SERVICE_WIN32;
@@ -77,7 +77,7 @@ void WINAPI MyServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 	{
 		TRACE("[MY_SERVICE] RegisterServiceCtrlHandler \
 			failed %d\n", GetLastError()); 
-		g_debuglog.Write("RegisterServiceCtrlHandler failed");
+//		g_debuglog.Write("RegisterServiceCtrlHandler failed");
 		return;
 	}
 
@@ -88,7 +88,7 @@ void WINAPI MyServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 		g_sServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		g_sServiceStatus.dwWin32ExitCode = -1;
 		SetServiceStatus(g_hStatus, &g_sServiceStatus);
-		g_debuglog.Write("InitService failed.");
+//		g_debuglog.Write("InitService failed.");
 		return;
 	}
 
@@ -146,7 +146,7 @@ VOID	WINAPI ControlHandler(	DWORD fdwControl)
 		SetServiceStatus(g_hStatus, &g_sServiceStatus);
 		break;
 	}
-	g_debuglog.Write("ControlHandler");
+//	g_debuglog.Write("ControlHandler");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -253,25 +253,99 @@ void ServiceTestMsgBox()
 	DWORD				dwCount				= 0;
 	HANDLE				hToken				= NULL;
 	HANDLE				hDumToken			= NULL;
+	HWINSTA				hWinSta				= NULL;
+	CString				str;
+	CString				strTemp;
+
 
 	WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, 
 		&pwtsSessionInfo, &dwCount);
 
 	for(DWORD i = 0; i < dwCount; i++)
 	{
-		if(WTSActive == pwtsSessionInfo[i].State)
+		strTemp.Format("[%d]:%s\n", i, pwtsSessionInfo[i].pWinStationName);
+		str += strTemp;
+		if(WTSActive == pwtsSessionInfo[i].State && NULL == hToken)
 		{
 			WTSQueryUserToken(pwtsSessionInfo[i].SessionId, &hToken);
-			break;
+// 			hWinSta = OpenWindowStation("winsta0"/*pwtsSessionInfo[i].pWinStationName*/, FALSE, WINSTA_ACCESSCLIPBOARD   |
+// 				WINSTA_ACCESSGLOBALATOMS |
+// 				WINSTA_CREATEDESKTOP     |
+// 				WINSTA_ENUMDESKTOPS      |
+// 				WINSTA_ENUMERATE         |
+// 				WINSTA_EXITWINDOWS       |
+// 				WINSTA_READATTRIBUTES    |
+// 				WINSTA_READSCREEN        |
+// 				WINSTA_WRITEATTRIBUTES);
+// 			strTemp.Format("[HWINSTA]: %d[%d]\n", hWinSta, GetLastError());
+// 			str += strTemp;
+			//break;
 		}
 	}
 
 	if(NULL == hToken)
 		return;
 
-	ImpersonateLoggedOnUser(hToken);
+	HDESK			hDeskTop		= NULL;
 
-	MessageBox(NULL, "Service", "This is a services test.", MB_OK|MB_ICONERROR);
+//	ImpersonateLoggedOnUser(hToken);
+
+/*
+	if(NULL != hWinSta)
+	{
+		HDESK		hDesk		= NULL;
+
+		if(FALSE == SetProcessWindowStation(hWinSta))
+		{
+			strTemp.Format("[SetProcessWindowStation] [%d]\n", GetLastError());
+			str += strTemp;
+		}
+// 		hDesk = OpenDesktop("default", 0, FALSE,  DESKTOP_CREATEMENU |
+// 			DESKTOP_CREATEWINDOW |
+// 			DESKTOP_ENUMERATE    |
+// 			DESKTOP_HOOKCONTROL  |
+// 			DESKTOP_JOURNALPLAYBACK |
+// 			DESKTOP_JOURNALRECORD |
+// 			DESKTOP_READOBJECTS |
+// 			DESKTOP_SWITCHDESKTOP |
+// 			DESKTOP_WRITEOBJECTS);
+// 		strTemp.Format("[HDESK]: %d[%d]\n", hDesk, GetLastError());
+// 		str += strTemp;
+// 		SetThreadDesktop(hDesk);
+	}*/
+
+
+
+//	ImpersonateLoggedOnUser(hToken);
+
+	
+	// 以用户身份启动进程成功代码
+	STARTUPINFO					si		= {0};
+	PROCESS_INFORMATION			pi		= {0};
+
+	if(FALSE == CreateProcessAsUser(hToken, "notepad.exe", NULL, NULL
+		, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	{
+		strTemp.Format("[CreateProcessAsUser]: [%d]\n", GetLastError());
+		str += strTemp;
+	}
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	
+	
+/*
+	//查找窗体
+		HWND					hWnd		= FindWindowEx(NULL, NULL, "_skynet_mon_mgr_", "_skynet_mon_mgr_");
+		COPYDATASTRUCT			cpData		= {0};
+	
+		strTemp.Format("[FindWindowEx]: %d[%d]\n", hWnd, GetLastError());
+		str += strTemp;
+		cpData.dwData = 0;
+		cpData.cbData = str.GetLength()+1;
+		cpData.lpData = str.GetBuffer();
+		SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM)&cpData);*/
+
+
+	MessageBox(NULL, str.GetBuffer(), "Service", MB_OK|MB_ICONERROR);
 
 	CloseHandle(hToken);
 	RevertToSelf();

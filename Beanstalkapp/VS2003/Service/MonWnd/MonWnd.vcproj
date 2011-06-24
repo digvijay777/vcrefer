@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="First"
-	ProjectGUID="{326E9F7B-AB21-4A85-BB06-5A271BC343F3}"
+	Name="MonWnd"
+	ProjectGUID="{C2C687DE-9D9F-410A-9ED8-C4E5009BBB9C}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -15,7 +15,6 @@
 			OutputDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			IntermediateDirectory="X:\BUILD\$(SolutionName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
-			UseOfMFC="0"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -23,8 +22,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
+				RuntimeLibrary="5"
+				UsePrecompiledHeader="3"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"/>
@@ -35,7 +34,7 @@
 				OutputFile="X:\BUILD\$(ConfigurationName)\$(SolutionName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/First.pdb"
+				ProgramDatabaseFile="$(OutDir)/MonWnd.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -68,8 +67,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
+				RuntimeLibrary="4"
+				UsePrecompiledHeader="3"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
@@ -110,48 +109,59 @@
 	</References>
 	<Files>
 		<Filter
-			Name="源文件"
+			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\main.cpp">
+				RelativePath=".\MonWnd.cpp">
 			</File>
 			<File
-				RelativePath=".\main2.cpp">
+				RelativePath=".\stdafx.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
-			Name="头文件"
+			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath=".\MonWnd.h">
+			</File>
+			<File
+				RelativePath=".\Resource.h">
+			</File>
 			<File
 				RelativePath=".\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
-			Name="资源文件"
+			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			<File
+				RelativePath=".\MonWnd.ico">
+			</File>
+			<File
+				RelativePath=".\MonWnd.rc">
+			</File>
+			<File
+				RelativePath=".\small.ico">
+			</File>
 		</Filter>
-		<Filter
-			Name="common"
-			Filter="">
-		</Filter>
-		<Filter
-			Name="ExtClass"
-			Filter="">
-			<Filter
-				Name="Project"
-				Filter="">
-				<File
-					RelativePath="..\..\..\ExtClass\project\service\ServiceBase.h">
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="ATL"
-			Filter="">
-		</Filter>
+		<File
+			RelativePath=".\ReadMe.txt">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
