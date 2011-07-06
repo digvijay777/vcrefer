@@ -11,6 +11,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 {
 	NTSTATUS					status				= STATUS_SUCCESS;
 	int							i					= 0;
+	PFAST_IO_DISPATCH			fastIoDispatch		= NULL;
 
 	DbgPrint("Enter DriverEntry\r\n");
 	// 注册其他驱动调用函数入口
@@ -26,57 +27,11 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	pDriverObject->MajorFunction[IRP_MJ_FILE_SYSTEM_CONTROL] = SfFsControl;
 	pDriverObject->MajorFunction[IRP_MJ_CLEANUP] = SfCleanupClose;
 	pDriverObject->MajorFunction[IRP_MJ_CLOSE] = SfCleanupClose;
-	// 创建REGMON设备
-	status = CreateXFilemonDevice(pDriverObject);
-	
-	return status;
-}
-
-// 创建设备
-#pragma INITCODE
-NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
-{
-	UNICODE_STRING				usDevice;
-	NTSTATUS					status;
-	DEVICE_OBJECT*				devObj;
-	PFAST_IO_DISPATCH			fastIoDispatch		= NULL;
-
-	RtlInitUnicodeString( &usDevice, L"\\FileSystem\\Filters\\XFilter" );
-	status = IoCreateDevice(pDriverObject
-		, sizeof(DEVICE_EXTENSION)
-		, &usDevice
-		, FILE_DEVICE_DISK_FILE_SYSTEM
-		, FILE_DEVICE_SECURE_OPEN
-		, FALSE
-		, &devObj);
-	// 如果因为路径没找到生成失败
-	if(STATUS_OBJECT_PATH_NOT_FOUND == status)
-	{
-		// 这是因为一些低版本的操作系统没有\FileSystem\Filters\这个目录
-		// 如果没有，我们则改变位置，生成到\FileSystem\下.
-		RtlInitUnicodeString( &usDevice, L"\\FileSystem\\XFilterCDO" );
-		status = IoCreateDevice(pDriverObject
-			, sizeof(DEVICE_EXTENSION)
-			, &usDevice
-			, FILE_DEVICE_DISK_FILE_SYSTEM
-			, FILE_DEVICE_SECURE_OPEN
-			, FALSE
-			, &devObj);
-	}
-	if(NT_SUCCESS(status))
-	{
-		PDEVICE_EXTENSION		pExt		= (PDEVICE_EXTENSION)devObj->DeviceExtension;
-
-		pExt->pDevice = devObj;
-		pExt->AttachedToDeviceObject = NULL;
-	}
-	DbgPrint("Create device\"%S\": %d\r\n", usDevice.Buffer, status);
+	// FastIo
 	// fast io function
 	fastIoDispatch = ExAllocatePoolWithTag(NonPagedPool, sizeof(FAST_IO_DISPATCH), SFLT_POOL_TAG);
 	if(NULL == fastIoDispatch)
 	{
-		IoDeleteDevice(devObj);
-		DbgPrint("ExAllocatePoolWithTag SFLT_POOL_TAG failed.");
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 	RtlZeroMemory(fastIoDispatch, sizeof(FAST_IO_DISPATCH));
@@ -110,13 +65,55 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	fastIoDispatch->ReleaseForModWrite = SfReleaseForModWrite;
 
 	pDriverObject->FastIoDispatch = fastIoDispatch;
+	// 创建REGMON设备
+	status = CreateXFilemonDevice(pDriverObject);
+	
+	return status;
+}
 
+// 创建设备
+#pragma INITCODE
+NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
+{
+	UNICODE_STRING				usDevice;
+	NTSTATUS					status;
+	DEVICE_OBJECT*				devObj;
+
+	RtlInitUnicodeString( &usDevice, L"\\FileSystem\\Filters\\XFilter" );
+	status = IoCreateDevice(pDriverObject
+		, sizeof(DEVICE_EXTENSION)
+		, &usDevice
+		, FILE_DEVICE_DISK_FILE_SYSTEM
+		, FILE_DEVICE_SECURE_OPEN
+		, FALSE
+		, &devObj);
+	// 如果因为路径没找到生成失败
+	if(STATUS_OBJECT_PATH_NOT_FOUND == status)
+	{
+		// 这是因为一些低版本的操作系统没有\FileSystem\Filters\这个目录
+		// 如果没有，我们则改变位置，生成到\FileSystem\下.
+		RtlInitUnicodeString( &usDevice, L"\\FileSystem\\XFilterCDO" );
+		status = IoCreateDevice(pDriverObject
+			, sizeof(DEVICE_EXTENSION)
+			, &usDevice
+			, FILE_DEVICE_DISK_FILE_SYSTEM
+			, FILE_DEVICE_SECURE_OPEN
+			, FALSE
+			, &devObj);
+	}
+	if(NT_SUCCESS(status))
+	{
+		PDEVICE_EXTENSION		pExt		= (PDEVICE_EXTENSION)devObj->DeviceExtension;
+
+		pExt->pDevice = devObj;
+		pExt->AttachedToDeviceObject = NULL;
+	}
+	DbgPrint("Create device\"%S\": %d\r\n", usDevice.Buffer, status);
+	
 	status = SfAttatchDevice((PDEVICE_EXTENSION)devObj->DeviceExtension);
 
 	if(!NT_SUCCESS(status))
 	{
-		pDriverObject->FastIoDispatch = NULL;
-		ExFreePoolWithTag(fastIoDispatch, SFLT_POOL_TAG);
 		IoDeleteDevice(devObj);
 		DbgPrint("CreateXFilemonDevice: attachdevice failed: %d\n", status);
 		return status;
@@ -146,6 +143,11 @@ void DDKXFilemonUnload(PDRIVER_OBJECT pDriverObject)
 		if(NULL != pDevExt->AttachedToDeviceObject)
 			IoDetachDevice(pDevExt->AttachedToDeviceObject);
 		IoDeleteDevice(pDevExt->pDevice);
+	}
+	if(NULL != pDriverObject->FastIoDispatch)
+	{
+		ExFreePoolWithTag(pDriverObject->FastIoDispatch, SFLT_POOL_TAG);
+		pDriverObject->FastIoDispatch = NULL;
 	}
 	DbgPrint("Leave LogDDKUnload\r\n");
 }

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0361 */
-/* at Tue Sep 08 08:32:06 2009
+/* at Tue Jul 05 14:53:13 2011
  */
 /* Compiler settings for .\ATLService.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

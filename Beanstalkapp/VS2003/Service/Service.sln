@@ -78,6 +78,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MonWnd", "MonWnd\MonWnd.vcp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowStation", "WindowStation\WindowStation.vcproj", "{A8E89F63-7FD0-4D10-9BFD-5F7ABD7D90F5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -143,6 +147,10 @@ Global
 		{C2C687DE-9D9F-410A-9ED8-C4E5009BBB9C}.Debug.Build.0 = Debug|Win32
 		{C2C687DE-9D9F-410A-9ED8-C4E5009BBB9C}.Release.ActiveCfg = Release|Win32
 		{C2C687DE-9D9F-410A-9ED8-C4E5009BBB9C}.Release.Build.0 = Release|Win32
+		{A8E89F63-7FD0-4D10-9BFD-5F7ABD7D90F5}.Debug.ActiveCfg = Debug|Win32
+		{A8E89F63-7FD0-4D10-9BFD-5F7ABD7D90F5}.Debug.Build.0 = Debug|Win32
+		{A8E89F63-7FD0-4D10-9BFD-5F7ABD7D90F5}.Release.ActiveCfg = Release|Win32
+		{A8E89F63-7FD0-4D10-9BFD-5F7ABD7D90F5}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

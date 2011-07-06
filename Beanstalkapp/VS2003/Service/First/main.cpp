@@ -4,8 +4,10 @@
 //#include "../../../common/DebugLog.h"
 
 #include <Wtsapi32.h>
+#include <Rpc.h>
 
 #pragma comment(lib, "Wtsapi32.lib")
+#pragma comment(lib, "Rpcrt4.lib")
 
 SERVICE_STATUS				g_sServiceStatus			= {0};
 SERVICE_STATUS_HANDLE		g_hStatus					= NULL;
@@ -20,6 +22,7 @@ LRESULT CALLBACK ServerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 VOID	CreateSampleService();
 void	ServiceTestCreateProcess();
 void	ServiceTestMsgBox();
+int		ServiceTestMsgBox2();
 
 //CDebugLog	g_debuglog("C:\\debug.log");
 //////////////////////////////////////////////////////////////////////////
@@ -129,7 +132,8 @@ int InitService()
 // 	_asm int 3
 	// RtlOpenCurrentUser
 	// ServiceTestCreateProcess();
-	ServiceTestMsgBox();
+	//ServiceTestMsgBox();
+	ServiceTestMsgBox2();
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -350,3 +354,169 @@ void ServiceTestMsgBox()
 	CloseHandle(hToken);
 	RevertToSelf();
 }
+BOOL CALLBACK EnumWindowStationProc(LPSTR  lpszWindowStation, LPARAM lParam)
+{
+	CString			str;
+	CString*		pStr		= (CString *)lParam;
+
+	str.Format("Find station: %s\n", lpszWindowStation);
+	*pStr += str;
+
+	return TRUE;
+}
+	
+int ServiceTestMsgBox2()
+{
+	CString				str;
+	CString				strbuf;
+	//
+	WTS_SESSION_INFO*	pwtsSessionInfo;
+	DWORD				dwCount				= 0;
+	HANDLE				hToken				= NULL;
+	HANDLE				hDumToken			= NULL;
+	HWINSTA				hWinSta				= NULL;
+	CString				strTemp;
+
+
+	WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, 
+		&pwtsSessionInfo, &dwCount);
+
+	for(DWORD i = 0; i < dwCount; i++)
+	{
+		strTemp.Format("[%d]:%s\n", i, pwtsSessionInfo[i].pWinStationName);
+		str += strTemp;
+		if(WTSActive == pwtsSessionInfo[i].State && NULL == hToken)
+		{
+			WTSQueryUserToken(pwtsSessionInfo[i].SessionId, &hToken);
+		}
+	}
+
+	if(NULL == hToken)
+		return 0;
+	strbuf += str;
+// 	if( !ImpersonateLoggedOnUser(hToken) )
+// 	{
+// 		str.Format("ImpersonateLoggedOnUser: %d", GetLastError());
+// 		strbuf += str;
+// 	}
+	/*GetStartupInfo*/
+	//
+	DWORD				dwThreadId			= 0;
+	HWINSTA				hwinstaSave			= NULL; 
+	HDESK				hdeskSave			= NULL; 
+	HWINSTA				hwinstaUser			= NULL; 
+	HDESK				hdeskUser			= NULL; 
+	int					result				= 0;
+	CHAR				szName[512]			= {0};
+	DWORD				dwSize				= sizeof(szName);
+
+	EnumWindowStations(EnumWindowStationProc, (LPARAM)&str);
+	strbuf += str;
+
+	hwinstaSave = GetProcessWindowStation(); 
+	dwThreadId = GetCurrentThreadId(); 
+	hdeskSave = GetThreadDesktop(dwThreadId); 
+
+	GetUserObjectInformationA((HANDLE)hwinstaSave, UOI_NAME, szName, dwSize, &dwSize);
+	str.Format("Current WindowStation: %s\n", szName);
+	strbuf += str;
+	memset(szName, 0, sizeof(szName));
+	dwSize = sizeof(szName);
+	GetUserObjectInformationA((HANDLE)hdeskSave, UOI_NAME, szName, dwSize, &dwSize);
+	str.Format("Current desktop: %s\n", szName);
+	strbuf += str;
+// 	RpcImpersonateClient(NULL);
+
+	hwinstaUser = OpenWindowStation("WinSta0", FALSE, MAXIMUM_ALLOWED);
+	if(NULL == hwinstaUser)
+	{
+		str.Format("OpenWindowStation:%d\n", GetLastError());
+		strbuf += str;
+	}
+	if( !SetProcessWindowStation(hwinstaUser) )
+	{
+		str.Format("SetProcessWindowStation:%d\n", GetLastError());
+		strbuf += str;
+	}
+	else
+	{
+		strbuf += "SetProcessWindowStation success.\n";
+	}
+
+	hdeskUser = OpenDesktop("default", 0, FALSE, MAXIMUM_ALLOWED);
+	if( !SetThreadDesktop(hdeskUser) )
+	{
+		str.Format("SetThreadDesktop:%d\n", GetLastError());
+		strbuf += str;
+	}
+	else
+	{
+		strbuf += "SetThreadDesktop success.\n";
+	}
+
+
+	str.Format("Station:%x, Desktop: %x\n", hwinstaUser, hdeskUser);
+	strbuf += str;
+	MessageBox(NULL, strbuf.GetBuffer(), "Error", MB_OK|MB_ICONERROR);
+
+	SetThreadDesktop(hdeskSave); 
+	SetProcessWindowStation(hwinstaSave); 
+	CloseDesktop(hdeskUser); 
+	CloseWindowStation(hwinstaUser);
+
+// 	RpcRevertToSelf();
+	/*
+	DWORD dwThreadId; 
+		HWINSTA hwinstaSave; 
+		HDESK hdeskSave; 
+		HWINSTA hwinstaUser; 
+		HDESK hdeskUser; 
+		int result; 
+	
+		// Ensure connection to service window station and desktop, and 
+		// save their handles. 
+	
+		GetDesktopWindow(); 
+		hwinstaSave = GetProcessWindowStation(); 
+		dwThreadId = GetCurrentThreadId(); 
+		hdeskSave = GetThreadDesktop(dwThreadId); 
+	
+		// Impersonate the client and connect to the User's 
+		// window station and desktop. 
+	
+		RpcImpersonateClient(h); 
+		hwinstaUser = OpenWindowStation(lpszWindowStation, FALSE, MAXIMUM_ALLOWED); 
+		if (hwinstaUser == NULL) 
+		{ 
+			RpcRevertToSelf(); 
+			return 0; 
+		} 
+		SetProcessWindowStation(hwinstaUser); 
+		hdeskUser = OpenDesktop(lpszDesktop, 0, FALSE, MAXIMUM_ALLOWED); 
+		RpcRevertToSelf(); 
+		if (hdeskUser == NULL) 
+		{ 
+			SetProcessWindowStation(hwinstaSave); 
+			CloseWindowStation(hwinstaUser); 
+			return 0; 
+		} 
+		SetThreadDesktop(hdeskUser); 
+	
+		// Display message box. 
+	
+		dwGuiThreadId = dwThreadId; 
+		result = MessageBox(NULL, lpszText, lpszTitle, fuStyle); 
+		dwGuiThreadId = 0; 
+	
+		// Restore window station and desktop. 
+	
+		SetThreadDesktop(hdeskSave); 
+		SetProcessWindowStation(hwinstaSave); 
+		CloseDesktop(hdeskUser); 
+		CloseWindowStation(hwinstaUser); */
+	
+	RevertToSelf();
+	return result; 
+}
+
+
