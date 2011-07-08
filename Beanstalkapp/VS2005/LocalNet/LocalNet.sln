@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BroadCastServer", "BroadCastServer\BroadCastServer.vcproj", "{3617EA03-180F-4768-8B8E-B43061238716}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LANServer", "LANServer\LANServer.vcproj", "{A3063815-CB17-4C22-A432-3FCA9DCA691F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{3617EA03-180F-4768-8B8E-B43061238716}.Debug|Win32.Build.0 = Debug|Win32
 		{3617EA03-180F-4768-8B8E-B43061238716}.Release|Win32.ActiveCfg = Release|Win32
 		{3617EA03-180F-4768-8B8E-B43061238716}.Release|Win32.Build.0 = Release|Win32
+		{A3063815-CB17-4C22-A432-3FCA9DCA691F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3063815-CB17-4C22-A432-3FCA9DCA691F}.Debug|Win32.Build.0 = Debug|Win32
+		{A3063815-CB17-4C22-A432-3FCA9DCA691F}.Release|Win32.ActiveCfg = Release|Win32
+		{A3063815-CB17-4C22-A432-3FCA9DCA691F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
