@@ -3,6 +3,8 @@
  */
 #include "TDISimple.h"
 
+LONG			gLock			= 0;
+
 //////////////////////////////////////////////////////////////////////////
 // 入口函数
 #pragma INITCODE
@@ -24,7 +26,12 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject
 
 	// 创建REGMON设备
 	status = CreateXRegmonDevice(pDriverObject);
-	
+
+	KdPrint(("Enter DriverEntry: %x:%x:%x\r\n"
+		, pDriverObject->DeviceObject
+		, ((DEVICE_EXTENSION *)pDriverObject->DeviceObject->DeviceExtension)->pDevice
+		, ((DEVICE_EXTENSION *)pDriverObject->DeviceObject->DeviceExtension)->pAttatchDev));
+
 	return status;
 }
 
@@ -55,7 +62,8 @@ NTSTATUS CreateXRegmonDevice(PDRIVER_OBJECT pDriverObject)
 	pDevObj->Flags |= DO_DIRECT_IO;
 	RtlInitUnicodeString(&ustrTcp, L"\\Device\\Tcp");
 	status = IoAttachDevice(pDevObj, &ustrTcp, &pDevExt->pAttatchDev);
-	KdPrint(("[IoAttachDevice] return: %d\r\n", status));
+	KdPrint(("Enter CreateXRegmonDevice: %x:%x:%x\r\n"
+		, pDevObj, ((DEVICE_EXTENSION *)pDevObj)->pDevice, ((DEVICE_EXTENSION *)pDevObj)->pAttatchDev));
 	if(!NT_SUCCESS(status) || NULL == pDevExt->pAttatchDev)
 	{
 		IoDeleteDevice(pDevObj);
@@ -69,6 +77,16 @@ NTSTATUS CreateXRegmonDevice(PDRIVER_OBJECT pDriverObject)
 		& (DO_DIRECT_IO | DO_BUFFERED_IO));
 
 	return STATUS_SUCCESS;
+}
+// 定时御载
+void OnTimer(IN PDEVICE_OBJECT DeviceObject, IN PVOID Context)
+{
+	KdPrint(("Enter OnTimer: %d.\n", gLock));
+	if(gLock > 0)
+		return;
+	IoStopTimer(DeviceObject);
+	IoDeleteDevice(DeviceObject);
+	KdPrint(("OnTimer: Delete device.\n"));
 }
 // 御载函数
 #pragma PAGEDCODE
@@ -86,8 +104,17 @@ void DDKXRegmonUnload(PDRIVER_OBJECT pDriverObject)
 		pNexObj = pNexObj->NextDevice;
 		if(NULL != pAttatch)
 			IoDetachDevice(pDevExt->pAttatchDev);
-		pDevExt->pAttatchDev = NULL;
-		IoDeleteDevice(pDevExt->pDevice);
+		// pDevExt->pAttatchDev = NULL;
+		if(0 < gLock)
+		{
+			IoInitializeTimer(pDevExt->pDevice, OnTimer, NULL);
+			IoStartTimer(pDevExt->pDevice);
+		}
+		else
+		{
+			IoDeleteDevice(pDevExt->pDevice);
+			KdPrint(("Delete device.\n"));
+		}
 	}
 	KdPrint(("Leave LogDDKUnload\r\n"));
 }
@@ -98,8 +125,9 @@ NTSTATUS DDKXRegmonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 {
 	PIO_STACK_LOCATION	stack		= IoGetCurrentIrpStackLocation(pIrp);
 	NTSTATUS			status		= STATUS_SUCCESS;
-	PDEVICE_OBJECT		pAttatch	= ((DEVICE_EXTENSION *)pDevObj)->pAttatchDev;
+	PDEVICE_OBJECT		pAttatch	= ((DEVICE_EXTENSION *)pDevObj->DeviceExtension)->pAttatchDev;
 	UCHAR				type;
+
 	//建立一个字符串数组与IRP类型对应起来
 	static char* irpname[] = 
 	{
@@ -133,9 +161,10 @@ NTSTATUS DDKXRegmonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 		"IRP_MJ_PNP",
 	};
 
+	InterlockedIncrement(&gLock);
+
 	type = stack->MajorFunction;
 
-	KdPrint(("Enter HelloDDKDispatchRoutin\r\n"));
 
 	if (type >= arrayof(irpname))
 		KdPrint((" - Unknown IRP, major type %X\r\n", type));
@@ -147,12 +176,15 @@ NTSTATUS DDKXRegmonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 		pIrp->IoStatus.Information = 0;
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
 		IoCompleteRequest( pIrp, IO_NO_INCREMENT );
+		InterlockedDecrement(&gLock);
 		return STATUS_SUCCESS;
 	}
 	//对一般IRP的简单操作，后面会介绍对IRP更复杂的操作
-	IoSkipCurrentIrpStackLocation(pIrp);
-	
-	return IoCallDriver( (((DEVICE_EXTENSION *)pDevObj)->pAttatchDev), pIrp );
+	KdPrint(("Enter DDKXRegmonDispatchRoutine IoCallDriver\r\n"));
+
+	IoCopyCurrentIrpStackLocationToNext(pIrp);
+	IoSetCompletionRoutine(pIrp, DispatchRoutineComplate, pDevObj, TRUE, TRUE, TRUE);
+	return IoCallDriver( pAttatch, pIrp );
 }
 // IOCONTROL例程
 #pragma PAGEDCODE
@@ -172,3 +204,20 @@ NTSTATUS DDKXRegmonDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp)
 	return IoCallDriver(((DEVICE_EXTENSION *)pDevObj)->pAttatchDev, pIrp);
 }
 
+#pragma PAGEDCODE
+NTSTATUS DispatchRoutineComplate(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
+{
+	PIO_STACK_LOCATION		stack		= IoGetCurrentIrpStackLocation(Irp);
+	int						numkey		= 0;
+
+	KdPrint(("Enter DispatchRoutineComplate. \r\n"));
+
+	if(Irp->PendingReturned)
+	{
+		IoMarkIrpPending(Irp);
+	}
+
+
+	InterlockedDecrement(&gLock);
+	return Irp->IoStatus.Status;
+}

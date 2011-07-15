@@ -31,4 +31,4 @@ NTSTATUS CreateXRegmonDevice(PDRIVER_OBJECT pDriverObject);
 void DDKXRegmonUnload(PDRIVER_OBJECT pDriverObject);
 NTSTATUS DDKXRegmonDispatchRoutine(PDEVICE_OBJECT pDevObj, PIRP pIrp);
 NTSTATUS DDKXRegmonDispatchControl(PDEVICE_OBJECT pDevObj, PIRP pIrp);
-
+NTSTATUS DispatchRoutineComplate(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context);
