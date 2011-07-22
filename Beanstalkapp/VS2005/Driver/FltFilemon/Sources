@@ -1,0 +1,13 @@
+TARGETNAME=XFilemon
+TARGETTYPE=DRIVER
+TARGETPATH=OBJ
+
+TARGETLIBS= $(TARGETLIBS) \
+  $(IFSKIT_LIB_PATH)\fltMgr.lib
+
+INCLUDES=$(BASEDIR)\inc;\
+         $(BASEDIR)\inc\ddk;\
+
+SOURCES=XFilemon.c\
+        FastIoFunction.c\
+        
