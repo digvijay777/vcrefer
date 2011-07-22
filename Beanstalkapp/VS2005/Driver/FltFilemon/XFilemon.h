@@ -60,6 +60,12 @@ typedef struct _SCANNER_DATA {
 
     PFLT_PORT ClientPort;
 
+	// 模块所在目录
+	UNICODE_STRING		usModulePath;
+	// 模块所在组
+	PFLT_VOLUME			fltVolume;
+	HANDLE				hSysFile;
+
 } SCANNER_DATA, *PSCANNER_DATA;
 
 extern SCANNER_DATA ScannerData;
@@ -145,6 +151,10 @@ ScannerInstanceSetup (
     __in FLT_FILESYSTEM_TYPE VolumeFilesystemType
     );
 
+// 读取注册表
+NTSTATUS	MyGetKeyValue(PUNICODE_STRING pKeyPath, PUNICODE_STRING pValueName, PUNICODE_STRING pValue);
+
+LONG	PathIsWorkPath(PWSTR pPath);
 
 #endif /* __SCANNER_H__ */
 
