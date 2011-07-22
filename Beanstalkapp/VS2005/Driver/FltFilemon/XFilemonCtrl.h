@@ -1,39 +1,49 @@
-#pragma once
+/*++
 
-#ifndef _NTDDK_
-#include <WinIoCtl.h>
-#endif
+Copyright (c) 1999-2002  Microsoft Corporation
 
-#define MAXPATHLEN 1024
+Module Name:
 
-/*
- *	开启监控
- *  无输入输出参数
- */
-#define IOCTRL_REGMON_START			CTL_CODE(\
-	FILE_DEVICE_UNKNOWN \
-	, 0x800 \
-	, METHOD_BUFFERED \
-	, FILE_ANY_ACCESS)
+    scanuk.h
 
-/*
- *	关闭监控
- *  无输入输出参数
- */
-#define IOCTRL_REGMON_STOP			CTL_CODE(\
-	FILE_DEVICE_UNKNOWN \
-	, 0x801 \
-	, METHOD_BUFFERED \
-	, FILE_ANY_ACCESS)
+Abstract:
 
-// 发现一个非法操作结构
-struct FindBadOptItem
-{
-	WCHAR		szRegPath[MAXPATHLEN+4];
-	WCHAR		szExePath[512];
-	WCHAR		szName[MAXPATHLEN];
-	WCHAR		szValue[MAXPATHLEN];
-	ULONG		nPID;
-	ULONG		Type;
-};
+    Header file which contains the structures, type definitions,
+    constants, global variables and function prototypes that are
+    shared between kernel and user mode.
+
+Environment:
+
+    Kernel & user mode
+
+--*/
+
+#ifndef __SCANUK_H__
+#define __SCANUK_H__
+
+//
+//  Name of port used to communicate
+//
+
+const PWSTR ScannerPortName = L"\\SkynetProcPort";
+
+
+#define SCANNER_READ_BUFFER_SIZE   1024
+
+typedef struct _SCANNER_NOTIFICATION {
+
+    ULONG BytesToScan;
+    ULONG Reserved;             // for quad-word alignement of the Contents structure
+    UCHAR Contents[SCANNER_READ_BUFFER_SIZE];
+    
+} SCANNER_NOTIFICATION, *PSCANNER_NOTIFICATION;
+
+typedef struct _SCANNER_REPLY {
+
+    BOOLEAN SafeToOpen;
+    
+} SCANNER_REPLY, *PSCANNER_REPLY;
+
+#endif //  __SCANUK_H__
+
 
