@@ -181,19 +181,24 @@ DriverEntry (
 	DbgPrint("[DriverEntry] (%d)%S\n", status, ScannerData.usModulePath.Buffer);
 	// 打开文件
 	ScannerData.hSysFile = NULL;
-	if(NULL != usImagePath.Buffer)
+	if(NULL != ScannerData.usModulePath.Buffer)
 	{
-		wcscpy(szFilePath, usImagePath.Buffer);
-		pPoint = wcsstr(szFilePath, L':');
+/*
+		wcscpy(szFilePath, ScannerData.usModulePath.Buffer);
+		pPoint = wcschr(szFilePath, L':');
 		if(NULL != pPoint)
 		{
 			pPoint++;
 			*pPoint = 0;
 		}
+*/
+		wcscpy(szFilePath, L"\\??\\D:" );
 	}
-	usFilePath.Buffer = szFilePath;
-	usFilePath.Length = wcslen(szFilePath);
-	usFilePath.MaximumLength = 512;
+// 	usFilePath.Buffer = szFilePath;
+// 	usFilePath.Length = wcslen(szFilePath);
+// 	usFilePath.MaximumLength = 512;
+	//RtlInitUnicodeString(&usFilePath, L"\\??\\D:");
+	//RtlCopyUnicodeString(&usFilePath, &ScannerData.usModulePath);
 	/*
 	InitializeObjectAttributes(&objFile, &usFilePath, OBJ_CASE_INSENSITIVE, NULL, NULL);
 		status = ZwCreateFile(&ScannerData.hSysFile
@@ -220,12 +225,12 @@ DriverEntry (
         return status;
     }
 
-	status = IoGetDeviceObjectPointer(&usFilePath, FILE_READ_DATA, &fileobj, &driverobj);
-	DbgPrint("[DriverEntry] IoGetDeviceObjectPointer %S(%d)", usFilePath.Buffer, status);
+	status = IoGetDeviceObjectPointer(&ScannerData.usModulePath, SYNCHRONIZE|FILE_ANY_ACCESS, &fileobj, &driverobj);
+	DbgPrint("[DriverEntry] IoGetDeviceObjectPointer %S(0x%X)", ScannerData.usModulePath.Buffer, status);
 	if(NULL != fileobj)
 	{
 		status = FltGetVolumeFromFileObject(ScannerData.Filter, fileobj, &ScannerData.fltVolume);
-		DbgPrint("[DriverEntry] FltGetVolumeFromFileObject (%d)", status);
+		DbgPrint("[DriverEntry] FltGetVolumeFromFileObject (0x%X)", status);
 	}
     //
     //  Create a communication port.
@@ -1225,4 +1230,59 @@ LONG	PathIsWorkPath(PWSTR pPath)
 			return 0;
 	}
 	return 1;
+}
+
+// 得到工作目录信息
+NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr)
+{
+	OBJECT_ATTRIBUTES		objectattribute;
+	HANDLE					hSymbolc;
+	NTSTATUS				ntStatus;
+	ULONG					uLen;
+	UNICODE_STRING			ucDevice;
+	WCHAR					szBuff[512]				= {0};
+	PFILE_OBJECT			fileobject				= NULL;
+	PDEVICE_OBJECT			deviceobject			= NULL;
+
+	PAGED_CODE();
+
+	DbgPrint("[GetWorkDirInfo] work path: %S\n", pUstr->Buffer);
+	wcsncpy(szBuff, pUstr->Buffer, 512);
+	InitializeObjectAttributes(&objectattribute
+		, &uclink
+		, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE
+		, NULL, NULL);
+	ntStatus = ZwOpenSymbolicLinkObject(&hSymbolc, FILE_ALL_ACCESS, &objectattribute);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("Get 'c:' device.\n");
+	ucDevice.Buffer = szBuff;
+	ucDevice.Length = arrayof(szBuff);
+	ntStatus = ZwQuerySymbolicLinkObject(hSymbolc, &ucDevice, &uLen);
+	DbgPrint("Get 'c:' device name: %S\n", szBuff);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("Open 'c:' device\n");
+	ntStatus = IoGetDeviceObjectPointer(&ucDevice, SYNCHRONIZE|FILE_ANY_ACCESS, &fileobject, &deviceobject);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("attach device to device stack.\n");
+	pex->AttachedToDeviceObject = IoAttachDeviceToDeviceStack(pex->pDevice, deviceobject);
+	ObDereferenceObject(fileobject);
+	if(pex->AttachedToDeviceObject)
+	{
+		DbgPrint("attach 'c:' success.\n");
+		pex->AttachedToDeviceObject = deviceobject;
+	}
+	else
+	{
+		DbgPrint("attach 'c:' faild.\n");
+		return -1;
+	}
+
+	DbgPrint("Enter SfAttatchDevice\n");
+	return STATUS_SUCCESS;
 }

@@ -155,6 +155,7 @@ ScannerInstanceSetup (
 NTSTATUS	MyGetKeyValue(PUNICODE_STRING pKeyPath, PUNICODE_STRING pValueName, PUNICODE_STRING pValue);
 
 LONG	PathIsWorkPath(PWSTR pPath);
+NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr);
 
 #endif /* __SCANNER_H__ */
 
