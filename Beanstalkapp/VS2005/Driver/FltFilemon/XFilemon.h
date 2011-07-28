@@ -62,6 +62,7 @@ typedef struct _SCANNER_DATA {
 
 	// 模块所在目录
 	UNICODE_STRING		usModulePath;
+	UNICODE_STRING		usVolumePath;
 	// 模块所在组
 	PFLT_VOLUME			fltVolume;
 	HANDLE				hSysFile;
@@ -153,9 +154,12 @@ ScannerInstanceSetup (
 
 // 读取注册表
 NTSTATUS	MyGetKeyValue(PUNICODE_STRING pKeyPath, PUNICODE_STRING pValueName, PUNICODE_STRING pValue);
+NTSTATUS	MyGetVolumnPath(PUNICODE_STRING pPath, PUNICODE_STRING pVolumnPath);
 
 LONG	PathIsWorkPath(PWSTR pPath);
 NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr);
+
+#define arrayof(p)		( sizeof(p) / sizeof((p)[0]) )
 
 #endif /* __SCANNER_H__ */
 

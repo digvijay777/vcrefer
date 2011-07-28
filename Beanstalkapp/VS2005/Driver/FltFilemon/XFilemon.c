@@ -1,24 +1,3 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    scanner.c
-
-Abstract:
-
-    This is the main module of the scanner filter.
-
-    This filter scans the data in a file before allowing an open to proceed.  This is similar
-    to what virus checkers do.
-
-Environment:
-
-    Kernel mode
-
---*/
-
 #include <fltKernel.h>
 #include <dontuse.h>
 #include <suppress.h>
@@ -26,18 +5,11 @@ Environment:
 #include "XFilemon.h"
 #include "XFilemonCtrl.h"
 
+
 #pragma prefast(disable:__WARNING_ENCODE_MEMBER_FUNCTION_POINTER, "Not valid for kernel mode drivers")
 
-//
-//  Structure that contains all the global data structures
-//  used throughout the scanner.
-//
 
 SCANNER_DATA ScannerData;
-
-//
-//  This is a static list of file name extensions files we are interested in scanning
-//
 
 const UNICODE_STRING ScannerExtensionsToScan[] =
     { RTL_CONSTANT_STRING( L"doc"),
@@ -167,54 +139,17 @@ DriverEntry (
 	UNICODE_STRING			usImagePath		= RTL_CONSTANT_STRING( L"ImagePath" );
 	OBJECT_ATTRIBUTES		objFile;
 	IO_STATUS_BLOCK			iostatus;
-	PFILE_OBJECT			fileobj			= NULL;
-	PDRIVER_OBJECT			driverobj		= NULL;
-	UNICODE_STRING			usFilePath;
-	WCHAR					szFilePath[512]		= {0};
-	WCHAR*					pPoint					= NULL;
 
     UNREFERENCED_PARAMETER( RegistryPath );
 
     // 获取注册表
 	RtlInitUnicodeString(&ScannerData.usModulePath, L"");
 	status = MyGetKeyValue(RegistryPath, &usImagePath, &ScannerData.usModulePath);
-	DbgPrint("[DriverEntry] (%d)%S\n", status, ScannerData.usModulePath.Buffer);
+	DbgPrint("[DriverEntry] (%X)%S\n", status, ScannerData.usModulePath.Buffer);
 	// 打开文件
 	ScannerData.hSysFile = NULL;
-	if(NULL != ScannerData.usModulePath.Buffer)
-	{
-/*
-		wcscpy(szFilePath, ScannerData.usModulePath.Buffer);
-		pPoint = wcschr(szFilePath, L':');
-		if(NULL != pPoint)
-		{
-			pPoint++;
-			*pPoint = 0;
-		}
-*/
-		wcscpy(szFilePath, L"\\??\\D:" );
-	}
-// 	usFilePath.Buffer = szFilePath;
-// 	usFilePath.Length = wcslen(szFilePath);
-// 	usFilePath.MaximumLength = 512;
-	//RtlInitUnicodeString(&usFilePath, L"\\??\\D:");
-	//RtlCopyUnicodeString(&usFilePath, &ScannerData.usModulePath);
-	/*
-	InitializeObjectAttributes(&objFile, &usFilePath, OBJ_CASE_INSENSITIVE, NULL, NULL);
-		status = ZwCreateFile(&ScannerData.hSysFile
-			, FILE_READ_DATA
-			, &objFile
-			, &iostatus
-			, NULL
-			, FILE_ATTRIBUTE_NORMAL
-			, FILE_SHARE_READ
-			, FILE_OPEN
-			, FILE_SYNCHRONOUS_IO_NONALERT
-			, NULL
-			, 0);
-		DbgPrint("[DriverEntry] ZwCreateFile %S(%d)", usFilePath.Buffer, status);*/
-	
-	
+	status = MyGetVolumnPath(&ScannerData.usModulePath, &ScannerData.usVolumePath);
+	DbgPrint("[DriverEntry] (%X)%S\n", status, ScannerData.usVolumePath.Buffer);
 
     status = FltRegisterFilter( DriverObject,
                                 &FilterRegistration,
@@ -224,14 +159,6 @@ DriverEntry (
 
         return status;
     }
-
-	status = IoGetDeviceObjectPointer(&ScannerData.usModulePath, SYNCHRONIZE|FILE_ANY_ACCESS, &fileobj, &driverobj);
-	DbgPrint("[DriverEntry] IoGetDeviceObjectPointer %S(0x%X)", ScannerData.usModulePath.Buffer, status);
-	if(NULL != fileobj)
-	{
-		status = FltGetVolumeFromFileObject(ScannerData.Filter, fileobj, &ScannerData.fltVolume);
-		DbgPrint("[DriverEntry] FltGetVolumeFromFileObject (0x%X)", status);
-	}
     //
     //  Create a communication port.
     //
@@ -577,7 +504,19 @@ ScannerPostCreate (
     }
 
     FltParseFileNameInformation( nameInfo );
+	DbgPrint("[ScannerPreCreate] Open File \"%S\".\n"
+		, nameInfo->Name.Buffer);
+	if(FltObjects->FileObject->WriteAccess && 0 != PathIsWorkPath(nameInfo->Name.Buffer))
+	{
+		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
 
+		Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+		Data->IoStatus.Information = 0;
+
+		return FLT_POSTOP_FINISHED_PROCESSING;
+	}
+	FltReleaseFileNameInformation( nameInfo );
+	return FLT_POSTOP_FINISHED_PROCESSING;
     //
     //  Check if the extension matches the list of extensions we are interested in
     //
@@ -1190,7 +1129,55 @@ end:
 
 	return status;
 }
-
+// 得到
+NTSTATUS MyGetVolumnPath(PUNICODE_STRING pPath, PUNICODE_STRING pVolumnPath)
+{
+	NTSTATUS			status			= STATUS_PATH_NOT_COVERED;
+	WCHAR				szPath[32]		= {0};
+	PWCHAR				pPot			= NULL;
+	UNICODE_STRING		usLink;
+	OBJECT_ATTRIBUTES	objattr;
+	HANDLE				hSymbLink		= NULL;
+	
+	pPot = wcschr(pPath->Buffer, L':');
+	if(NULL == pPot)
+	{
+		return status;
+	}
+	pPot--;
+	wcscpy(szPath, L"\\??\\X:");
+	szPath[4] = *pPot;
+	usLink.Buffer = szPath;
+	usLink.MaximumLength = sizeof(szPath);
+	usLink.Length = wcslen(szPath) * sizeof(WCHAR);
+	pPot += 2;
+	InitializeObjectAttributes(&objattr
+		, &usLink
+		, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE
+		, NULL, NULL);
+	status = ZwOpenSymbolicLinkObject(&hSymbLink, FILE_ALL_ACCESS, &objattr);
+	if(STATUS_SUCCESS != status)
+	{
+		DbgPrint("[MyGetVolumnPath] (%X)%S", status, usLink.Buffer);
+		return status;
+	}
+	pVolumnPath->MaximumLength = 1024;
+	pVolumnPath->Length = 1024;
+	pVolumnPath->Buffer = ExAllocatePool(NonPagedPool, pVolumnPath->MaximumLength);
+	status = ZwQuerySymbolicLinkObject(hSymbLink, pVolumnPath, &pVolumnPath->Length);
+	if(STATUS_SUCCESS == status)
+	{
+		wcscat(pVolumnPath->Buffer, pPot);
+		pPot = wcsrchr(pVolumnPath->Buffer, L'\\');
+		if(NULL == pPot)
+			pPot = wcsrchr(pVolumnPath->Buffer, L'/');
+		if(NULL != pPot)
+			*pPot = 0;
+		pVolumnPath->Length = sizeof(WCHAR)*wcslen(pVolumnPath->Buffer);
+	}
+	ZwClose(hSymbLink);
+	return status;
+}
 // 路径是不是工作目录
 LONG	PathIsWorkPath(PWSTR pPath)
 {
@@ -1203,14 +1190,8 @@ LONG	PathIsWorkPath(PWSTR pPath)
 	PAGED_CODE();
 	if(NULL == pWorkDir)
 	{
-		pWorkDir = wcschr(ScannerData.usModulePath.Buffer, L':');
-		if(NULL != pWorkDir)
-			pWorkDir++;
-		pFile = wcsrchr(pWorkDir, L'\\');
-		if(NULL == pFile)
-			nWorkDir = wcslen(pWorkDir);
-		else
-			nWorkDir = (pFile - pWorkDir) + 1;
+		pWorkDir = ScannerData.usVolumePath.Buffer;
+		nWorkDir = wcslen(pWorkDir);
 	}
 	if(NULL == pWorkDir || NULL == pPath)
 		return 0;
@@ -1229,12 +1210,13 @@ LONG	PathIsWorkPath(PWSTR pPath)
 		if(pPath[i] != wcTmp)
 			return 0;
 	}
-	return 1;
+	return i == nWorkDir;
 }
 
 // 得到工作目录信息
 NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr)
 {
+/*
 	OBJECT_ATTRIBUTES		objectattribute;
 	HANDLE					hSymbolc;
 	NTSTATUS				ntStatus;
@@ -1283,6 +1265,7 @@ NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr)
 		return -1;
 	}
 
-	DbgPrint("Enter SfAttatchDevice\n");
+	DbgPrint("Enter SfAttatchDevice\n");*/
+
 	return STATUS_SUCCESS;
 }
