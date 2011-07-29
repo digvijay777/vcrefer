@@ -156,7 +156,7 @@ ScannerInstanceSetup (
 NTSTATUS	MyGetKeyValue(PUNICODE_STRING pKeyPath, PUNICODE_STRING pValueName, PUNICODE_STRING pValue);
 NTSTATUS	MyGetVolumnPath(PUNICODE_STRING pPath, PUNICODE_STRING pVolumnPath);
 
-LONG	PathIsWorkPath(PWSTR pPath);
+LONG	PathIsWorkPath(PWSTR pPath, LONG isDir);
 NTSTATUS GetWorkDirInfo(PUNICODE_STRING pUstr);
 
 #define arrayof(p)		( sizeof(p) / sizeof((p)[0]) )

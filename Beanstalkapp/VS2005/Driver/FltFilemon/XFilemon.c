@@ -461,7 +461,8 @@ ScannerPreCreate (
 	}
 
 	FltParseFileNameInformation( nameInfo );
-	if(0 != PathIsWorkPath(nameInfo->Name.Buffer))
+	if( 0 != PathIsWorkPath(nameInfo->Name.Buffer
+		, FlagOn(FILE_DIRECTORY_FILE, Data->Iopb->Parameters.Create.Options)) )
 	{
 // 		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
 // 
@@ -595,7 +596,7 @@ ScannerPostCreate (
     FltParseFileNameInformation( nameInfo );
 // 	DbgPrint("[ScannerPreCreate] Open File \"%S\".\n"
 // 		, nameInfo->Name.Buffer);
-	if(FltObjects->FileObject->WriteAccess && 0 != PathIsWorkPath(nameInfo->Name.Buffer))
+	if(FltObjects->FileObject->WriteAccess)
 	{
 		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
 
@@ -1268,7 +1269,7 @@ NTSTATUS MyGetVolumnPath(PUNICODE_STRING pPath, PUNICODE_STRING pVolumnPath)
 	return status;
 }
 // 路径是不是工作目录
-LONG	PathIsWorkPath(PWSTR pPath)
+LONG	PathIsWorkPath(PWSTR pPath, LONG isDir)
 {
 	static	WCHAR*		pWorkDir		= NULL;
 	static	LONG		nWorkDir		= 0;
@@ -1298,6 +1299,11 @@ LONG	PathIsWorkPath(PWSTR pPath)
 			return 0;
 		if(pPath[i] != wcTmp)
 			return 0;
+	}
+	if(0 != isDir)
+	{
+		if( (i + 1) == nWorkDir )
+			return 1;
 	}
 	return i == nWorkDir;
 }
