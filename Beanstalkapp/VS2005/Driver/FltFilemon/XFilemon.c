@@ -78,15 +78,26 @@ const FLT_OPERATION_REGISTRATION Callbacks[] = {
       ScannerPreCreate,
       ScannerPostCreate},
 
+/*
     { IRP_MJ_CLEANUP,
       0,
       ScannerPreCleanup,
-      NULL},
+      NULL},*/
 
+
+
+	{ IRP_MJ_DIRECTORY_CONTROL,
+	  0,
+	  ScannerPreCreate,
+	  ScannerPostCreate} ,
+
+
+/*
     { IRP_MJ_WRITE,
       0,
       ScannerPreWrite,
-      NULL},
+      NULL},*/
+
 
     { IRP_MJ_OPERATION_END}
 };
@@ -410,6 +421,10 @@ ScannerPreCreate (
     __deref_out_opt PVOID *CompletionContext
     )
 {
+	PFLT_FILE_NAME_INFORMATION nameInfo;
+	NTSTATUS status;
+
+
     UNREFERENCED_PARAMETER( FltObjects );
     UNREFERENCED_PARAMETER( CompletionContext );
 
@@ -422,7 +437,50 @@ ScannerPreCreate (
         return FLT_PREOP_SUCCESS_NO_CALLBACK;
     }
 
-    return FLT_PREOP_SUCCESS_WITH_CALLBACK;
+
+	//
+	//  If this create was failing anyway, don't bother scanning now.
+	//
+
+	if (!NT_SUCCESS( Data->IoStatus.Status ) ||
+		(STATUS_REPARSE == Data->IoStatus.Status)) 
+	{
+		//DbgPrint("[ScannerPreCreate] Data->IoStatus.Status:%d.\n", Data->IoStatus.Status);
+		return FLT_PREOP_SUCCESS_NO_CALLBACK;
+	}
+
+
+	status = FltGetFileNameInformation( Data,
+		FLT_FILE_NAME_NORMALIZED |
+		FLT_FILE_NAME_QUERY_DEFAULT,
+		&nameInfo );
+
+	if (!NT_SUCCESS( status )) {
+
+		return FLT_POSTOP_FINISHED_PROCESSING;
+	}
+
+	FltParseFileNameInformation( nameInfo );
+	if(0 != PathIsWorkPath(nameInfo->Name.Buffer))
+	{
+// 		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
+// 
+// 		Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+// 		Data->IoStatus.Information = 0;
+		DbgPrint("[ScannerPreCreate] monitoer:%wZ \n", &nameInfo->Name);
+		if(FlagOn( (FILE_CREATE<<24), Data->Iopb->Parameters.Create.Options ))
+		{
+			Data->IoStatus.Information = 0;
+			Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+			return FLT_PREOP_COMPLETE;
+		}
+		FltReleaseFileNameInformation( nameInfo );
+		return FLT_PREOP_SUCCESS_WITH_CALLBACK;
+	}
+	//DbgPrint("[ScannerPreCreate] not monitoer:%wZ \n", &nameInfo->Name);
+	FltReleaseFileNameInformation( nameInfo );
+	return FLT_PREOP_SUCCESS_NO_CALLBACK;
+   // return FLT_PREOP_SUCCESS_WITH_CALLBACK;
 }
 
 BOOLEAN
@@ -481,7 +539,18 @@ ScannerPostCreate (
     //
     //  If this create was failing anyway, don't bother scanning now.
     //
-	
+	// ÎÄ¼þÎ´ÕÒµ½
+// 	if(STATUS_OBJECT_NAME_NOT_FOUND == Data->IoStatus.Status)
+// 	{
+// 		DbgPrint("[ScannerPosCreate] create file:(0x%X)%wZ \n", FltObjects->Instance, &FltObjects->FileObject->FileName);
+// 		// IoCancelFileOpen(FltObjects->FileObject->DeviceObject, FltObjects->FileObject);	
+// 
+// 		Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+// 		Data->IoStatus.Information = 0;
+// 		//IoCompleteRequest()
+// 		return FLT_POSTOP_FINISHED_PROCESSING;
+// 	}
+
     if (!NT_SUCCESS( Data->IoStatus.Status ) ||
         (STATUS_REPARSE == Data->IoStatus.Status)) 
 	{
@@ -489,6 +558,26 @@ ScannerPostCreate (
         return FLT_POSTOP_FINISHED_PROCESSING;
     }
 
+	if(FltObjects->FileObject->WriteAccess)
+	{
+		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
+		DbgPrint("[ScannerPreCreate] CancelFile(0x%X):%wZ.\n", FltObjects->Instance, &FltObjects->FileObject->FileName);
+
+		Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+		Data->IoStatus.Information = 0;
+
+		return FLT_POSTOP_FINISHED_PROCESSING;
+	}
+	if(FltObjects->FileObject->DeleteAccess)
+	{
+		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
+		Data->IoStatus.Status = STATUS_ACCESS_DENIED;
+		Data->IoStatus.Information = 0;
+
+		return FLT_POSTOP_FINISHED_PROCESSING;
+	}
+
+	return FLT_POSTOP_FINISHED_PROCESSING;
     //
     //  Check if we are interested in this file.
     //
@@ -504,8 +593,8 @@ ScannerPostCreate (
     }
 
     FltParseFileNameInformation( nameInfo );
-	DbgPrint("[ScannerPreCreate] Open File \"%S\".\n"
-		, nameInfo->Name.Buffer);
+// 	DbgPrint("[ScannerPreCreate] Open File \"%S\".\n"
+// 		, nameInfo->Name.Buffer);
 	if(FltObjects->FileObject->WriteAccess && 0 != PathIsWorkPath(nameInfo->Name.Buffer))
 	{
 		FltCancelFileOpen( FltObjects->Instance, FltObjects->FileObject );
@@ -1172,7 +1261,7 @@ NTSTATUS MyGetVolumnPath(PUNICODE_STRING pPath, PUNICODE_STRING pVolumnPath)
 		if(NULL == pPot)
 			pPot = wcsrchr(pVolumnPath->Buffer, L'/');
 		if(NULL != pPot)
-			*pPot = 0;
+			*(pPot+1) = 0;
 		pVolumnPath->Length = sizeof(WCHAR)*wcslen(pVolumnPath->Buffer);
 	}
 	ZwClose(hSymbLink);
@@ -1196,7 +1285,7 @@ LONG	PathIsWorkPath(PWSTR pPath)
 	if(NULL == pWorkDir || NULL == pPath)
 		return 0;
 	
-	for(i = 0; pPath[0] && i < nWorkDir; i++)
+	for(i = 0; pPath[i] && i < nWorkDir; i++)
 	{
 		if(pPath[i] == pWorkDir[i])
 			continue;
