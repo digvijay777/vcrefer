@@ -52,6 +52,7 @@ void CEHomeList::PreSubclassWindow()
 	// 更改扩展样式
 	dwStyle = GetWindowLong(GetSafeHwnd(), GWL_EXSTYLE);
 	dwStyle |= LVS_EX_GRIDLINES;		// 网格线
+	// dwStyle |= LVS_EX_LABELTIP;			// 提示语
 	SetWindowLong(GetSafeHwnd(), GWL_EXSTYLE, dwStyle);
 	
 	// 扩展标题栏
@@ -190,7 +191,39 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 	return CListCtrl::WindowProc(message, wParam, lParam);
 }
+BOOL CEHomeList::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	LPNMHDR			pNMHDR			= (LPNMHDR)lParam;
 
+
+	if(TTN_NEEDTEXT == pNMHDR->code)
+	{
+		LPNMTTDISPINFO		pTipInfo		= (LPNMTTDISPINFO)lParam;
+		LVHITTESTINFO		info		= {0};
+
+		GetCursorPos(&info.pt);
+		ScreenToClient(&info.pt);
+		SubItemHitTest(&info);
+
+		if(-1 == info.iItem || -1 == info.iSubItem)
+			return FALSE;
+		switch(m_vctColumnFmt[info.iSubItem].fmt)
+		{
+		case EHLF_Title:
+			pTipInfo->lpszText = (LPTSTR)_tcsstr(m_vctData[info.iItem].vctstr[info.iSubItem].c_str(), _T("\r\n"));
+			break;
+		case EHLF_Normal:
+			pTipInfo->lpszText = (LPTSTR)m_vctData[info.iItem].vctstr[info.iSubItem].c_str();
+			break;
+		default:
+			pTipInfo->lpszText = NULL;
+		}
+		*pResult = 0;
+		return TRUE;
+	}
+
+	return FALSE;
+}
 // 绘制普通项
 void		CEHomeList::Draw_NormalItem(CDC* pDC, RECT rect, LPCTSTR lpText, UINT nColumnFmt)
 {
@@ -470,7 +503,7 @@ void CEHomeList::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 				Draw_MuiltButtonItem(&dc, rtButton, m_vctColumnFmt[i].hImgList
 					, _ttol(m_vctData[lpDrawItemStruct->itemID].vctstr[i].c_str())
-					, m_dwMuiltIndex);
+					, (LOWORD(m_dwMouseItem) == lpDrawItemStruct->itemID)?m_dwMuiltIndex:-1);
 				m_vctData[lpDrawItemStruct->itemID].mapMouse[i] = rtButton;
 			}
 			break;
@@ -597,3 +630,4 @@ int CEHomeList::MuiltButtonHitTest(POINT pt, CRect &rect, HIMAGELIST hImage)
 	}
 	return -1;
 }
+

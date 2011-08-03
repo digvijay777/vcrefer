@@ -89,6 +89,7 @@ protected:
 
 	virtual void PreSubclassWindow();
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 public:
 	afx_msg void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItem);
 public:

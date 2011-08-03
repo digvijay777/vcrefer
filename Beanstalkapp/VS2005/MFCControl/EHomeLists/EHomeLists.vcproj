@@ -296,6 +296,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\img\huibiao.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\img\icon2.bmp"
 				>
 			</File>
@@ -311,6 +315,14 @@
 		<Filter
 			Name="EHomeList"
 			>
+			<File
+				RelativePath=".\EHomeList\EHomeImgList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EHomeList\EHomeImgList.h"
+				>
+			</File>
 			<File
 				RelativePath=".\EHomeList\EHomeList.cpp"
 				>

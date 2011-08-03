@@ -46,6 +46,7 @@ void CEHomeListsView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST3, m_listtime);
 	DDX_Control(pDX, IDC_LIST4, m_listtype);
 	DDX_Control(pDX, IDC_LIST5, m_listsoftuse);
+	DDX_Control(pDX, IDC_LIST6, m_listimage);
 }
 
 BOOL CEHomeListsView::PreCreateWindow(CREATESTRUCT& cs)
@@ -257,6 +258,20 @@ void CEHomeListsView::OnInitialUpdate()
 	m_listsoftuse.SetItemText(nItem, 2, _T("今天"));
 	m_listsoftuse.SetItemText(nItem, 3, _T("7"));
 	m_listsoftuse.SetItemText(nItem, 4, _T("2"));
+	//////////////////////////////////////////////////////////////////////////
+	// 图片列表
+	m_listimage.InsertItem(0, _T("images\\01.jpg"));
+	m_listimage.InsertItem(0, _T("images\\02.jpg"));
+	m_listimage.InsertItem(0, _T("images\\03.jpg"));
+	m_listimage.InsertItem(0, _T("images\\04.jpg"));
+	m_listimage.InsertItem(0, _T("images\\05.jpg"));
+	m_listimage.InsertItem(0, _T("images\\06.jpg"));
+	m_listimage.InsertItem(0, _T("images\\07.jpg"));
+	m_listimage.InsertItem(0, _T("images\\08.jpg"));
+	m_listimage.InsertItem(0, _T("images\\09.jpg"));
+	m_listimage.InsertItem(0, _T("images\\10.jpg"));
+	//m_listimage.SetIconSpacing(200, 200);
+	m_listimage.SetLogoIcon(LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1)));
 }
 
 

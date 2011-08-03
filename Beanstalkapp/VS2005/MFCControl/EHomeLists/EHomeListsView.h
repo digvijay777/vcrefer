@@ -5,6 +5,7 @@
 #pragma once
 #include "afxcmn.h"
 #include "EHomeList/EHomeList.h"
+#include "EHomeList/EHomeImgList.h"
 
 class CEHomeListsView : public CFormView
 {
@@ -51,11 +52,12 @@ protected:
 	afx_msg LRESULT OnUmEHomeListClickItem(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUmEHomeListClickMuiltButton(WPARAM wParam, LPARAM lParam);
 public:
-	CEHomeList	 m_listsoft;
-	CEHomeList	 m_listurl;
-	CEHomeList	 m_listtime;
-	CEHomeList	 m_listtype;
-	CEHomeList	 m_listsoftuse;
+	CEHomeList			m_listsoft;
+	CEHomeList			m_listurl;
+	CEHomeList			m_listtime;
+	CEHomeList			m_listtype;
+	CEHomeList			m_listsoftuse;
+	CEHomeImgList		m_listimage;
 };
 
 #ifndef _DEBUG  // EHomeListsView.cpp 中的调试版本
