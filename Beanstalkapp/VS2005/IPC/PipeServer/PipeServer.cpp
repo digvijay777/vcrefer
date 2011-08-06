@@ -6,6 +6,8 @@
 #include <windows.h>
 
 HANDLE		hStopEvent		= NULL;
+HANDLE		hCompletPort		= NULL;		;
+
 
 #define BUFSIZE 4096
 
@@ -18,7 +20,10 @@ VOID CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	KillTimer(hwnd, idEvent);
 	printf("Set stop event handler.\r\n");
-	SetEvent(hStopEvent);
+	if(NULL != hStopEvent)
+		SetEvent(hStopEvent);
+	if(NULL != hCompletPort)
+		CloseHandle(hCompletPort);
 }
 
 DWORD CALLBACK ThreadProc(LPVOID lpParameter);
@@ -28,7 +33,7 @@ void TestCompletPort();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	SetTimer(NULL, 1, 1000 * 60 * 10, TimerProc); // 10分钟后断开
+	//SetTimer(NULL, 0, 1000 /** 10*/ /** 10*/, TimerProc); // 10分钟后断开
 	atexit(mywait);
 
 	// 普通模式
@@ -117,7 +122,6 @@ typedef struct _PipeOVERLAPPED{
 // 测试完成端口
 void TestCompletPort()
 {
-	HANDLE				hCompletPort		= NULL;		;
 	HANDLE				hThreads[5]			= {0};
 	HANDLE				hNamePipes[5]		= {0};
 	PIPEOVERLAPPED		over				= {0};
@@ -167,7 +171,7 @@ void TestCompletPort()
 
 		pipeovers[i].hPipe = hNamePipes[i];
 		//hThreads[i] = CreateThread(NULL, 0, ThreadProc2, (LPVOID)hCPNamedPipe, 0, NULL);
-		bRes = ConnectNamedPipe(hNamePipes[i], (LPOVERLAPPED)&pipeovers);
+		bRes = ConnectNamedPipe(hNamePipes[i], (LPOVERLAPPED)&pipeovers[i]);
 		if(FALSE == bRes && ERROR_IO_PENDING != GetLastError())
 		{
 			printf("Connect NO.%d named pipe failed: %d\r\n", i, GetLastError());
