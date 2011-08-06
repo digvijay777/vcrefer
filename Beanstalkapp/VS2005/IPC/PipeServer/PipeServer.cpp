@@ -113,7 +113,6 @@ close:
 typedef struct _PipeOVERLAPPED{
 	OVERLAPPED			over;
 	HANDLE				hPipe;
-	HANDLE				hOverPipe;
 }PIPEOVERLAPPED, *LPPIPEOVERLAPPED;
 // 测试完成端口
 void TestCompletPort()
@@ -122,7 +121,9 @@ void TestCompletPort()
 	HANDLE				hThreads[5]			= {0};
 	HANDLE				hNamePipes[5]		= {0};
 	PIPEOVERLAPPED		over				= {0};
+	PIPEOVERLAPPED		pipeovers[5]		= {0};
 
+	hStopEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	// 创建完成端口
 	hCompletPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	if(NULL == hCompletPort)
@@ -152,19 +153,26 @@ void TestCompletPort()
 			PostQueuedCompletionStatus(hCompletPort, 0, 0, (LPOVERLAPPED)&over);
 			continue;
 		}
-		LPPIPEOVERLAPPED	lpOver			= new PIPEOVERLAPPED;
-		HANDLE				hCPNamedPipe	= NULL;
-		BOOL				bRes			= FALSE;
 
-		hCPNamedPipe = CreateIoCompletionPort(hNamePipes[i], hCompletPort, 0xff, 5);
-		memset(lpOver, 0, sizeof(PIPEOVERLAPPED));
-		lpOver->hPipe = hNamePipes[i];
-		lpOver->hOverPipe = hCPNamedPipe;
-		bRes = ConnectNamedPipe(hCPNamedPipe,(LPOVERLAPPED)&lpOver);
+		BOOL				bRes			= FALSE;
+		
+		// 关连端口
+		if(NULL == CreateIoCompletionPort(hNamePipes[i], hCompletPort, i, 0))
+		{
+			printf("Create io NO.%d named pipe failed: %d\r\n", i, GetLastError());
+			PostQueuedCompletionStatus(hCompletPort, 0, 0, (LPOVERLAPPED)&over);
+			CloseHandle(hNamePipes[i]);
+			continue;
+		}
+
+		pipeovers[i].hPipe = hNamePipes[i];
+		//hThreads[i] = CreateThread(NULL, 0, ThreadProc2, (LPVOID)hCPNamedPipe, 0, NULL);
+		bRes = ConnectNamedPipe(hNamePipes[i], (LPOVERLAPPED)&pipeovers);
 		if(FALSE == bRes && ERROR_IO_PENDING != GetLastError())
 		{
 			printf("Connect NO.%d named pipe failed: %d\r\n", i, GetLastError());
 			PostQueuedCompletionStatus(hCompletPort, 0, 0, (LPOVERLAPPED)&over);
+			CloseHandle(hNamePipes[i]);
 			continue;
 		}
 	}
@@ -204,14 +212,14 @@ DWORD CALLBACK ThreadProc2(LPVOID lpParameter)
 		memset(szBuff, 0, sizeof(szBuff));
 		ReadFile(lpOver->hPipe, szBuff, dwSize, &dwSize, NULL);
 		printf("(%d)%d: recv %s\r\n", GetCurrentThreadId(), nRef, szBuff);
-		Sleep(1000 * 30);
+		Sleep(1000 * 10);
 		printf("(%d)%d: send.\r\n", GetCurrentThreadId(), nRef);
-		itoa(nRef, szBuff, 10);
+		itoa(nRef++, szBuff, 10);
 		dwSize = strlen(szBuff)+1;
 		WriteFile(lpOver->hPipe, szBuff, dwSize, &dwSize, NULL);
 		// 下一个连接	
 		DisconnectNamedPipe(lpOver->hPipe);
-		ConnectNamedPipe(lpOver->hOverPipe, (LPOVERLAPPED)lpOver);
+		ConnectNamedPipe(lpOver->hPipe, (LPOVERLAPPED)lpOver);
 	}
 	return 0;
 }
