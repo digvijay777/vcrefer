@@ -78,13 +78,18 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	UNICODE_STRING				usDevice;
 	NTSTATUS					status;
 	DEVICE_OBJECT*				devObj;
+	PDEVICE_OBJECT				fileDev;
+
+	status = XGetDeviceByLinkName(L"\\??\\C:", &fileDev);
+	if(!NT_SUCCESS(status))
+		return status;
 
 	RtlInitUnicodeString( &usDevice, L"\\FileSystem\\Filters\\XFilter" );
 	status = IoCreateDevice(pDriverObject
 		, sizeof(DEVICE_EXTENSION)
-		, &usDevice
-		, FILE_DEVICE_DISK_FILE_SYSTEM
-		, FILE_DEVICE_SECURE_OPEN
+		, /*&usDevice*/ NULL
+		, /*FILE_DEVICE_DISK_FILE_SYSTEM*/ fileDev->DeviceType
+		, /*FILE_DEVICE_SECURE_OPEN*/ 0
 		, FALSE
 		, &devObj);
 	// 如果因为路径没找到生成失败
@@ -110,7 +115,9 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 	}
 	DbgPrint("Create device\"%S\": %d\r\n", usDevice.Buffer, status);
 	
-	status = SfAttatchDevice((PDEVICE_EXTENSION)devObj->DeviceExtension);
+//	status = SfAttatchDevice((PDEVICE_EXTENSION)devObj->DeviceExtension);
+//	status = SfAttatchDevice2((PDEVICE_EXTENSION)devObj->DeviceExtension);
+	status = SfAttatchDevice3((PDEVICE_EXTENSION)devObj->DeviceExtension, fileDev);
 
 	if(!NT_SUCCESS(status))
 	{
@@ -121,9 +128,10 @@ NTSTATUS CreateXFilemonDevice(PDRIVER_OBJECT pDriverObject)
 
 	devObj->DeviceType = ((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->DeviceType;
 	devObj->Characteristics = ((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->Characteristics;
+	devObj->Flags = fileDev->Flags;
 	devObj->Flags &= ~DO_DEVICE_INITIALIZING;
-	devObj->Flags |= (((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->Flags 
-		& (DO_DIRECT_IO | DO_BUFFERED_IO));
+// 	devObj->Flags |= (((PDEVICE_EXTENSION)devObj->DeviceExtension)->AttachedToDeviceObject->Flags 
+// 		& (DO_DIRECT_IO | DO_BUFFERED_IO));
 
 	return status;
 }
@@ -234,14 +242,16 @@ NTSTATUS SfAttatchDevice(PDEVICE_EXTENSION pex)
 	WCHAR					szBuff[128]				= {0};
 	PFILE_OBJECT			fileobject				= NULL;
 	PDEVICE_OBJECT			deviceobject			= NULL;
+	PDEVICE_OBJECT			fileSysDevice			= NULL;
 
 	DbgPrint("Open 'c:' Link\n");
 	RtlInitUnicodeString(&uclink, L"\\??\\c:");
+	RtlInitUnicodeString(&uclink, L"\\DosDevices\\c:");
 	InitializeObjectAttributes(&objectattribute
 		, &uclink
 		, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE
 		, NULL, NULL);
-	ntStatus = ZwOpenSymbolicLinkObject(&hSymbolc, FILE_ALL_ACCESS, &objectattribute);
+	ntStatus = ZwOpenSymbolicLinkObject(&hSymbolc, SYNCHRONIZE|FILE_ANY_ACCESS /*FILE_ALL_ACCESS*/, &objectattribute);
 	if(!NT_SUCCESS(ntStatus))
 		return ntStatus;
 
@@ -258,6 +268,27 @@ NTSTATUS SfAttatchDevice(PDEVICE_EXTENSION pex)
 	if(!NT_SUCCESS(ntStatus))
 		return ntStatus;
 
+	//////////////////////////////////////////////////////////////////////////
+	fileSysDevice = IoGetRelatedDeviceObject( fileobject );
+	if( fileSysDevice ) 
+	{
+		DbgPrint("IoGetRelatedDeviceObject: %x, IoGetDeviceObjectPointer: %x\n", fileSysDevice, deviceobject);		
+		DbgPrint("File Device type: %d, device type: %d \n", fileSysDevice->DeviceType, pex->pDevice->DeviceType);
+	}
+	//////////////////////////////////////////////////////////////////////////
+// 	ntStatus = IoAttachDeviceByPointer(pex->pDevice, deviceobject);
+// 	if(NT_SUCCESS(ntStatus))
+// 	{
+// 		DbgPrint("attach 'c:' success.\n");
+// 		pex->AttachedToDeviceObject = deviceobject;
+// 	}
+// 	else
+// 	{
+// 		DbgPrint("attach 'c:' faild.\n");
+// 		return -1;
+// 	}
+// 	return ntStatus;
+	//////////////////////////////////////////////////////////////////////////
 	DbgPrint("attach device to device stack.\n");
 	pex->AttachedToDeviceObject = IoAttachDeviceToDeviceStack(pex->pDevice, deviceobject);
 	ObDereferenceObject(fileobject);
@@ -274,4 +305,115 @@ NTSTATUS SfAttatchDevice(PDEVICE_EXTENSION pex)
 
 	DbgPrint("Enter SfAttatchDevice\n");
 	return STATUS_SUCCESS;
+}
+
+NTSTATUS SfAttatchDevice2(PDEVICE_EXTENSION pex)
+{
+	UNICODE_STRING			fileNameUnicodeString;
+	OBJECT_ATTRIBUTES		objectAttributes;
+	NTSTATUS				ntStatus;
+	IO_STATUS_BLOCK			ioStatus;
+	HANDLE					ntFileHandle;   
+	PFILE_OBJECT			fileObject;
+	PDEVICE_OBJECT			fileSysDevice;
+
+
+	RtlInitUnicodeString(&fileNameUnicodeString, L"\\DosDevices\\C:");
+	InitializeObjectAttributes( &objectAttributes, &fileNameUnicodeString, 
+		OBJ_CASE_INSENSITIVE, NULL, NULL );
+	ntStatus = ZwCreateFile( &ntFileHandle, SYNCHRONIZE|FILE_ANY_ACCESS, 
+		&objectAttributes, &ioStatus, NULL, 0, FILE_SHARE_READ|FILE_SHARE_WRITE, 
+		FILE_OPEN, 
+		FILE_SYNCHRONOUS_IO_NONALERT|FILE_DIRECTORY_FILE, 
+		NULL, 0 );
+	if( !NT_SUCCESS( ntStatus ) ) 
+	{
+		DbgPrint("XFilemon: Could not open drive %c: %x\n", 'C', ntStatus );
+		return ntStatus;
+	}
+
+	ntStatus = ObReferenceObjectByHandle( ntFileHandle, FILE_READ_DATA, 
+		NULL, KernelMode, &fileObject, NULL );
+	if( !NT_SUCCESS( ntStatus )) 
+	{
+		DbgPrint("XFilemon: Could not get fileobject from handle: %c\n", 'C' );
+		ZwClose( ntFileHandle );
+		return ntStatus;
+	}
+
+	fileSysDevice = IoGetRelatedDeviceObject( fileObject );
+	if( ! fileSysDevice ) 
+	{
+		DbgPrint("XFilemon: Could not get related device object: %c\n", 'C' );
+		ObDereferenceObject( fileObject );
+		ZwClose( ntFileHandle );
+		return ntStatus;
+	}
+
+	pex->AttachedToDeviceObject = IoAttachDeviceToDeviceStack(pex->pDevice, fileSysDevice);
+	if(NULL != pex->AttachedToDeviceObject)
+	{
+		DbgPrint("XFilemon: IoAttachDeviceToDeviceStack success.\n");
+	}
+	else
+	{
+		DbgPrint("XFilemon: IoAttachDeviceToDeviceStack failed.\n");
+		ntStatus = -1;
+	}
+
+	ZwClose( ntFileHandle );
+	return ntStatus;
+}
+NTSTATUS SfAttatchDevice3(PDEVICE_EXTENSION pex, PDEVICE_OBJECT pAttDev)
+{
+	pex->AttachedToDeviceObject = IoAttachDeviceToDeviceStack(pex->pDevice, pAttDev);
+
+	if(pex->AttachedToDeviceObject)
+	{
+		DbgPrint("attach 'c:' success %x=%x.\n", pex->AttachedToDeviceObject, pAttDev);
+		return STATUS_SUCCESS;
+	}
+	else
+	{
+		DbgPrint("attach 'c:' faild.\n");
+	}
+
+	return -1;
+}
+
+NTSTATUS XGetDeviceByLinkName(LPCWSTR lpLinkName, PDEVICE_OBJECT* ppDevObj)
+{
+	UNICODE_STRING			uclink;
+	OBJECT_ATTRIBUTES		objectattribute;
+	HANDLE					hSymbolc;
+	NTSTATUS				ntStatus;
+	ULONG					uLen;
+	UNICODE_STRING			ucDevice;
+	WCHAR					szBuff[128]				= {0};
+	PFILE_OBJECT			fileobject				= NULL;
+
+	RtlInitUnicodeString(&uclink, lpLinkName);
+	InitializeObjectAttributes(&objectattribute
+		, &uclink
+		, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE
+		, NULL, NULL);
+	ntStatus = ZwOpenSymbolicLinkObject(&hSymbolc, SYNCHRONIZE|FILE_ANY_ACCESS /*FILE_ALL_ACCESS*/, &objectattribute);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	DbgPrint("Get '%S' device.\n", lpLinkName);
+	ucDevice.Buffer = szBuff;
+	ucDevice.Length = arrayof(szBuff);
+	ntStatus = ZwQuerySymbolicLinkObject(hSymbolc, &ucDevice, &uLen);
+	DbgPrint("Get '%S' device name: %S\n", lpLinkName, szBuff);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	ntStatus = IoGetDeviceObjectPointer(&ucDevice, SYNCHRONIZE|FILE_ANY_ACCESS, &fileobject, ppDevObj);
+	DbgPrint("Open '%S' device: %d\n", lpLinkName, ntStatus);
+	if(!NT_SUCCESS(ntStatus))
+		return ntStatus;
+
+	ObDereferenceObject( fileobject );
+	return ntStatus;
 }
