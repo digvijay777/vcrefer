@@ -10,6 +10,7 @@ COLORREF CTimeSelectCtrl::s_WeekBk[7] = {
 COLORREF CTimeSelectCtrl::s_TopBk[2] = {
 	RGB(0xD7, 0xEE, 0xFC), RGB(0x97, 0xD4, 0xF3)
 };
+// 灰度算法 [R,G,B] = (r * 3 + g * 6 + g) / 10;
 
 CTimeSelectCtrl::CTimeSelectCtrl(void)
 {
@@ -17,6 +18,7 @@ CTimeSelectCtrl::CTimeSelectCtrl(void)
 	wcscpy(m_szWeek, L"日一二三四五六");
 	memset(m_WeekFlags, 0, sizeof(m_WeekFlags));
 	m_bMouseStat = 0;
+	m_bEnabled = -1;
 }
 
 CTimeSelectCtrl::~CTimeSelectCtrl(void)
@@ -49,6 +51,28 @@ void CTimeSelectCtrl::GetWeekFlag(BYTE* pWeekFlag, int nSize)
 		}
 	}
 }
+// 获取颜色
+COLORREF CTimeSelectCtrl::GetRGBValue(short r, short g, short b, BOOL bGray /* = TRUE */)
+{
+	if(m_bEnabled || FALSE == bGray)
+		return RGB(r, g, b);
+	// 灰度算法 [r,g,b] = (r * 3 + g * 6 + g) / 10;
+	r = g = b = (r * 3 + g * 6 + g) / 10;
+	return RGB(r, g, b);
+}
+COLORREF CTimeSelectCtrl::GetRGBValue(COLORREF col, BOOL bGray /* = TRUE */)
+{
+	if(m_bEnabled || FALSE == bGray)
+		return col;
+
+	short			r		= GetRValue(col);
+	short			g		= GetGValue(col);
+	short			b		= GetBValue(col);
+
+	// 灰度算法 [r,g,b] = (r * 3 + g * 6 + g) / 10;
+	r = g = b = (r * 3 + g * 6 + g) / 10;
+	return RGB(r, g, b);
+}
 //////////////////////////////////////////////////////////////////////////
 // 绘制一项
 void CTimeSelectCtrl::DrawItem(HDC hDC, LPRECT lpRect)
@@ -58,7 +82,7 @@ void CTimeSelectCtrl::DrawItem(HDC hDC, LPRECT lpRect)
 
 	if(NULL == m_penLine)
 	{
-		m_penLine = ::CreatePen(PS_SOLID, 1, RGB(0xD9, 0xE4, 0xE3));
+		m_penLine = ::CreatePen(PS_SOLID, 1, GetRGBValue(0xD9, 0xE4, 0xE3));
 	}
 	if(NULL != m_penLine)
 		::SelectObject(hDC, m_penLine);
@@ -84,7 +108,7 @@ void CTimeSelectCtrl::Draw_Top_Bk(HDC hDC, LPRECT lpRect)
 	// 画上部份
 	for(int i = 0; i < nHeight; i++)
 	{
-		COLORREF		col			= RGB(stepR * i + GetRValue(s_TopBk[0])
+		COLORREF		col			= GetRGBValue(stepR * i + GetRValue(s_TopBk[0])
 			, stepG * i + GetGValue(s_TopBk[0])
 			, stepB * i + GetBValue(s_TopBk[0]));
 		RECT			rt;
@@ -99,7 +123,7 @@ void CTimeSelectCtrl::Draw_Top_Bk(HDC hDC, LPRECT lpRect)
 	// 画下部份
 	for(int i = nHeight; i < (lpRect->bottom - lpRect->top); i++)
 	{
-		COLORREF		col			= RGB(GetRValue(s_TopBk[1]) - stepR * (i - nHeight)
+		COLORREF		col			= GetRGBValue(GetRValue(s_TopBk[1]) - stepR * (i - nHeight)
 			, GetGValue(s_TopBk[1]) - stepG * (i - nHeight)
 			, GetBValue(s_TopBk[1]) - stepB * (i - nHeight));
 		RECT			rt;
@@ -165,7 +189,7 @@ void CTimeSelectCtrl::Draw_Left(HDC hDC, LPRECT lpRect)
 		rt.top = lpRect->top + (i - 1) * nHeight;
 		rt.bottom = rt.top + nHeight - 1;
 		// 绘制背景
-		::SetBkColor(hDC, s_WeekBk[i - 1]);
+		::SetBkColor(hDC, GetRGBValue(s_WeekBk[i - 1]));
 		::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rt, NULL, 0, NULL);
 		// 绘制边框
 		MoveToEx(hDC, lpRect->left, lpRect->top + i * nHeight - 1, &pt);
@@ -181,7 +205,7 @@ void CTimeSelectCtrl::Draw_Body(HDC hDC, LPRECT lpRect)
 	int			nHeight		= (lpRect->bottom - lpRect->top) / 7;
 	POINT		pt;
 
-	::SetBkColor(hDC, RGB(0x68, 0xD3, 0x73));
+	::SetBkColor(hDC, GetRGBValue(0x68, 0xD3, 0x73));
 	for(int i = 0; i < 7; i++)
 	{
 		for(int k = 0; k < 24; k++)
@@ -212,7 +236,7 @@ void CTimeSelectCtrl::Draw_Body(HDC hDC, LPRECT lpRect)
 // 绘制选区虚线框
 void CTimeSelectCtrl::Draw_SelRect(HDC hDC, LPRECT lpRect)
 {
-	::SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
+	::SetBkColor(hDC, GetRGBValue(0xff, 0xff, 0xff));
 	::DrawFocusRect(hDC, lpRect);
 }
 
@@ -434,6 +458,7 @@ LRESULT CTimeSelectCtrl::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 	HBITMAP				hBitmap			= NULL;
 	int					nSaveDC			= 0;
 
+	m_bEnabled = IsWindowEnabled();
 	bHandled = TRUE;
 	hDC = BeginPaint(&paint);
 	GetClientRect(&rect);
@@ -443,10 +468,12 @@ LRESULT CTimeSelectCtrl::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 	::SelectObject(hMemDC, hBitmap);
 	::SelectObject(hMemDC, GetFont());
-	::SetBkColor(hMemDC, RGB(0xff, 0xff, 0xff));
+	::SetBkColor(hMemDC, GetRGBValue(0xff, 0xff, 0xff));
 	::ExtTextOut(hMemDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 
+	// 绘制区域
 	DrawItem(hMemDC, &rect);
+	// 复制内存DC
 	::BitBlt(hDC, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top
 		, hMemDC, 0, 0, SRCCOPY);
 
@@ -513,5 +540,11 @@ LRESULT CTimeSelectCtrl::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lP
 		InvalidateRect(&rtBody);
 	}
 
+	return 0;
+}
+
+LRESULT CTimeSelectCtrl::OnEnable(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+{
+	Invalidate(TRUE);
 	return 0;
 }

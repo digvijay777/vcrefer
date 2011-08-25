@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CTimeSelectDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDOK, &CTimeSelectDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -96,3 +97,13 @@ HCURSOR CTimeSelectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CTimeSelectDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+	//OnOK();
+	static	int		i = 0;
+
+	m_timesel.EnableWindow(i);
+	i = (i + 1) % 2;
+}

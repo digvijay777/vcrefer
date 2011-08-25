@@ -13,11 +13,14 @@ public:
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
 		MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
 		MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
+		MESSAGE_HANDLER(WM_ENABLE, OnEnable)
 	END_MSG_MAP()
 
 public:
 	void		SetWeekFlag(BYTE* pWeekFlag, int nSize);
 	void		GetWeekFlag(BYTE* pWeekFlag, int nSize);
+	COLORREF	GetRGBValue(short r, short g, short b, BOOL bGray = TRUE);
+	COLORREF	GetRGBValue(COLORREF col, BOOL bGray = TRUE);
 private:
 	HPEN		m_penLine;
 	WCHAR		m_szWeek[8];
@@ -25,6 +28,7 @@ private:
 	bool		m_WeekFlags[7][24];
 	POINT		m_ptMouseDown;
 	RECT		m_rtMouseSel;
+	BOOL		m_bEnabled;
 protected:
 	void		DrawItem(HDC hDC, LPRECT lpRect);
 	void		Draw_Top_Bk(HDC hDC, LPRECT lpRect);
@@ -51,5 +55,6 @@ public:
 	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEnable(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
