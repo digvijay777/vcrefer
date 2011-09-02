@@ -103,7 +103,7 @@ BOOL CPlayGIFDlg::OnInitDialog()
 	m_gif.Load(AfxGetInstanceHandle(), "LOADING.GIF", "GIF");
 	m_gif.Play();
 
-	//SetTimer(1, 1000, NULL);
+	SetTimer(1, 1000, NULL);
 	return TRUE;  // 除非设置了控件的焦点，否则返回 TRUE
 }
 
