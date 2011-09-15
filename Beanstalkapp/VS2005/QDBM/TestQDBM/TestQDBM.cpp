@@ -59,8 +59,8 @@ void testread()
 }
 int _tmain(int argc, _TCHAR* argv[])
 {
-	// testput();
-	testread();
+	testput();
+	//testread();
 
 	system("Pause");
 	return 0;

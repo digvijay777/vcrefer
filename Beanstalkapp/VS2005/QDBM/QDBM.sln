@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestQDBM", "TestQDBM\TestQDBM.vcproj", "{4DD2AFB7-C547-4EF1-891C-2743FF2E2D6D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyReg", "MyReg\MyReg.vcproj", "{EA55ADEE-E6A2-4A89-A45C-C9DE767C4BC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{4DD2AFB7-C547-4EF1-891C-2743FF2E2D6D}.Debug|Win32.Build.0 = Debug|Win32
 		{4DD2AFB7-C547-4EF1-891C-2743FF2E2D6D}.Release|Win32.ActiveCfg = Release|Win32
 		{4DD2AFB7-C547-4EF1-891C-2743FF2E2D6D}.Release|Win32.Build.0 = Release|Win32
+		{EA55ADEE-E6A2-4A89-A45C-C9DE767C4BC0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA55ADEE-E6A2-4A89-A45C-C9DE767C4BC0}.Debug|Win32.Build.0 = Debug|Win32
+		{EA55ADEE-E6A2-4A89-A45C-C9DE767C4BC0}.Release|Win32.ActiveCfg = Release|Win32
+		{EA55ADEE-E6A2-4A89-A45C-C9DE767C4BC0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

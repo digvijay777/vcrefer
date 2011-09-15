@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EHomeLists", "EHomeLists\EH
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TimeSelect", "TimeSelect\TimeSelect.vcproj", "{972F2FE5-5E84-47E8-9829-5BF032A8411D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebInfo", "WebInfo\WebInfo.vcproj", "{7645AF6E-7031-4BAE-9953-11CE2CC6F99F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{972F2FE5-5E84-47E8-9829-5BF032A8411D}.Debug|Win32.Build.0 = Debug|Win32
 		{972F2FE5-5E84-47E8-9829-5BF032A8411D}.Release|Win32.ActiveCfg = Release|Win32
 		{972F2FE5-5E84-47E8-9829-5BF032A8411D}.Release|Win32.Build.0 = Release|Win32
+		{7645AF6E-7031-4BAE-9953-11CE2CC6F99F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7645AF6E-7031-4BAE-9953-11CE2CC6F99F}.Debug|Win32.Build.0 = Debug|Win32
+		{7645AF6E-7031-4BAE-9953-11CE2CC6F99F}.Release|Win32.ActiveCfg = Release|Win32
+		{7645AF6E-7031-4BAE-9953-11CE2CC6F99F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
