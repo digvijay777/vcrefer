@@ -13,6 +13,10 @@
 // CWebInfoDlg dialog
 
 BEGIN_DHTML_EVENT_MAP(CWebInfoDlg)
+	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOUT, _T("button"), OnButtonMouseLeave)
+	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOVER, _T("button"), OnButtonMouseHover)
+	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("button"), OnButtonMouseDown)
+	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("button"), OnButtonMouseUp)
 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("body"), OnBodyLButtonDown)
 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("body"), OnBodyLButtonUp)
 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("body"), OnBodyLButtonMove)
@@ -97,6 +101,38 @@ HCURSOR CWebInfoDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+LRESULT CWebInfoDlg::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if(WM_LBUTTONUP == message || WM_RBUTTONUP == message)
+	{
+		if(::GetCapture() == GetSafeHwnd())
+		{
+			ReleaseCapture();
+			if(NULL != m_spCapture)
+			{
+				LONG			nX = 0, nY = 0, nCX = 0, nCY = 0;
+				CRect			rect(0, 0, 0, 0);
+
+				m_spCapture->get_offsetLeft(&nX);
+				m_spCapture->get_offsetTop(&nY);
+				m_spCapture->get_offsetWidth(&nCX);
+				m_spCapture->get_offsetHeight(&nCY);
+				rect.left = nX;
+				rect.top = nY;
+				rect.right = rect.left + nCX;
+				rect.bottom = rect.top + nCY;
+				if(rect.PtInRect(CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
+					OnButtonMouseUp(m_spCapture);
+				else
+					OnButtonMouseLeave(m_spCapture);
+			}
+			m_spCapture.Release();
+			return 0;
+		}
+	}
+	return CDialog::WindowProc(message, wParam, lParam);
+}
+
 HRESULT CWebInfoDlg::OnBodyLButtonDown(IHTMLElement *pElement)
 {
 	// SendMessage(WM_SYSCOMMAND, SC_MOVE, 0);
@@ -129,5 +165,102 @@ HRESULT CWebInfoDlg::OnBodyLButtonMove(IHTMLElement *pElement)
 
 HRESULT CWebInfoDlg::OnBodyContextMenu(IHTMLElement *pElement)
 {
+	return S_FALSE;
+}
+
+HRESULT CWebInfoDlg::OnButtonMouseLeave(IHTMLElement *pElement)
+{
+	CComPtr<IHTMLStyle>		spStyle;
+	CComVariant				varPos;
+
+	if(::GetCapture() == GetSafeHwnd())
+		return S_FALSE;
+
+	pElement->get_style(&spStyle);
+	if(NULL == spStyle)
+		return S_FALSE;
+	// 改变背景索引
+	varPos = 0L;
+	spStyle->put_backgroundPositionX(varPos);
+
+	return S_FALSE;
+}
+
+HRESULT CWebInfoDlg::OnButtonMouseHover(IHTMLElement *pElement)
+{
+	CComPtr<IHTMLStyle>		spStyle;
+	LONG					nWidth		= 0;
+	CComVariant				varPos;
+	CComBSTR				bstrDis("disabled");
+	CComVariant				varDis;
+
+	if(::GetCapture() == GetSafeHwnd())
+		return S_FALSE;
+
+	pElement->getAttribute(bstrDis.m_str, 0, &varDis);
+	if(VT_BOOL == varDis.vt && VARIANT_FALSE != varDis.boolVal)
+		return S_FALSE;
+	pElement->get_style(&spStyle);
+	if(NULL == spStyle)
+		return S_FALSE;
+	// 获取大小
+	pElement->get_offsetWidth(&nWidth);
+	// 改变背景索引
+	varPos = -nWidth;
+	spStyle->put_backgroundPositionX(varPos);
+
+	return S_FALSE;
+}
+
+HRESULT CWebInfoDlg::OnButtonMouseDown(IHTMLElement *pElement)
+{
+	CComBSTR				bstrDis("disabled");
+	CComVariant				varDis;
+
+	pElement->getAttribute(bstrDis.m_str, 0, &varDis);
+	if(VT_BOOL == varDis.vt && VARIANT_FALSE != varDis.boolVal)
+		return S_FALSE;
+
+	m_spCapture.Release();
+	m_spCapture = pElement;
+	SetCapture();
+	
+	CComPtr<IHTMLStyle>		spStyle;
+	LONG					nWidth		= 0;
+	CComVariant				varPos;
+
+	pElement->get_style(&spStyle);
+	if(NULL == spStyle)
+		return S_FALSE;
+	// 获取大小
+	pElement->get_offsetWidth(&nWidth);
+	// 改变背景索引
+	varPos = -nWidth * 2;
+	spStyle->put_backgroundPositionX(varPos);
+	return S_FALSE;
+}
+
+HRESULT CWebInfoDlg::OnButtonMouseUp(IHTMLElement *pElement)
+{
+	OnButtonMouseHover(pElement);
+
+	pElement->click();
+	return S_FALSE;
+}
+
+HRESULT CWebInfoDlg::OnNull(IHTMLElement *pElement)
+{
+#ifdef DEBUG
+	CComBSTR			bstrTagName;
+	CComBSTR			bstrClass;
+	CComBSTR			bstrID;
+
+	pElement->get_tagName(&bstrTagName);
+	pElement->get_className(&bstrClass);
+	pElement->get_id(&bstrClass);
+	
+	TRACE("[CWebInfoDlg::OnNull] TagName:%S, class: %S, id: %S"
+		, bstrTagName.m_str, bstrClass.m_str, bstrID.m_str);
+#endif
 	return S_FALSE;
 }
