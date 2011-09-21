@@ -30,4 +30,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
+public:
+	afx_msg void OnBnClickedCancel();
 };

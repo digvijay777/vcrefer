@@ -6,6 +6,8 @@
 #include "NoManifestDlg.h"
 #include <shlobj.h>
 
+#include "UACAutoRun.h"
+
 #pragma comment(lib, "shell32.lib")
 
 #ifdef _DEBUG
@@ -66,6 +68,7 @@ BEGIN_MESSAGE_MAP(CNoManifestDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDOK, &CNoManifestDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON1, &CNoManifestDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -165,4 +168,40 @@ void CNoManifestDlg::OnBnClickedOk()
 	{
 		MessageBox(_T("不是管理员权限"));
 	}
+}
+
+void CNoManifestDlg::OnBnClickedCancel()
+{
+	// TODO: Add your control notification handler code here
+	HANDLE hToken = NULL; 
+	TOKEN_PRIVILEGES tkp; 
+	tkp.PrivilegeCount = 1; 
+	tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
+	if(OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS,   &hToken)   ) 
+	{ 
+		if(LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &tkp.Privileges[0].Luid)   ) 
+		{ 
+			if(!AdjustTokenPrivileges(hToken, FALSE, &tkp, 0x10, (PTOKEN_PRIVILEGES)NULL, 0))
+				MessageBox(_T("Errored step:3"));
+		} 
+		else MessageBox(_T("Errored step:2"));
+	} 
+	else MessageBox(_T("Errored step:1"));
+	if(hToken)
+		CloseHandle(hToken); 
+	//
+// 	HANDLE		hToken		= NULL;
+	HANDLE		hUser		= NULL;
+	HANDLE		hUserToken	= NULL;
+	BOOL		bRest		= FALSE;
+
+	GetTokenByProcName(hToken, _T("winlogon.exe"));
+	OpenProcessToken(hToken, MAXIMUM_ALLOWED, &hUser);
+
+// 	DuplicateTokenEx(hUser, MAXIMUM_ALLOWED, NULL
+// 		, SecurityIdentification, TokenPrimary, &hUserToken);
+
+	bRest = ImpersonateLoggedOnUser(hUser);
+	RunAsUAC();
+	RevertToSelf();
 }
