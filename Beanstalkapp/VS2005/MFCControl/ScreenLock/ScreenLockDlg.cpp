@@ -84,4 +84,3 @@ HCURSOR CScreenLockDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
-

@@ -4,6 +4,8 @@
 
 CSwitchDesktop::CSwitchDesktop(LPCTSTR lpDesktop)
 {
+	m_dwHotKey = 0;
+	m_Timer = NULL;
 	SwitchTo(lpDesktop);
 }
 
@@ -19,11 +21,11 @@ BOOL CSwitchDesktop::SwitchTo(LPCTSTR lpDesktop)
 	HDESK		hTdDesk		= GetThreadDesktop(GetCurrentThreadId());
 
 	// 打开并创建桌面
-	hDesk = ::OpenDesktop(lpDesktop, DF_ALLOWOTHERACCOUNTHOOK, FALSE, MAXIMUM_ALLOWED);
+	hDesk = ::OpenDesktop(lpDesktop, 0, FALSE, MAXIMUM_ALLOWED);
 	if(NULL == hDesk)
 	{
 		hDesk = ::CreateDesktop(lpDesktop, NULL, NULL
-			, DF_ALLOWOTHERACCOUNTHOOK
+			, 0
 			, MAXIMUM_ALLOWED
 			, NULL);
 	}
@@ -41,6 +43,7 @@ BOOL CSwitchDesktop::SwitchTo(LPCTSTR lpDesktop)
 				m_hCreateDesk = NULL;
 			else
 				m_hCreateDesk = hDesk;
+			m_Timer = SetTimer(NULL, 1, 100, CSwitchDesktop::TimerProc);
 			return TRUE;
 		}
 		::SetThreadDesktop(hTdDesk);
@@ -50,8 +53,32 @@ BOOL CSwitchDesktop::SwitchTo(LPCTSTR lpDesktop)
 	return FALSE;
 }
 
+// 定时器回调函数
+VOID CALLBACK CSwitchDesktop::TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+{
+	EnumWindows(CSwitchDesktop::EnumWindowsProc, (LPARAM)GetCurrentProcessId());
+}
+
+// 枚举窗体
+BOOL  CALLBACK CSwitchDesktop::EnumWindowsProc(HWND hwnd, LPARAM lParam)
+{
+	DWORD			dwProcID		= 0;
+	DWORD			dwPreProcID		= 0;
+	HWND			hParent			= NULL;
+	HWND			hTop			= NULL;
+
+	GetWindowThreadProcessId(hwnd, &dwProcID);
+	if(dwProcID == (DWORD)lParam)
+		return TRUE;
+	// 不是当前线程的窗体就结束
+	PostMessage(hwnd, WM_CLOSE, 0, 0);
+
+	return TRUE;
+}
+
 BOOL CSwitchDesktop::SwitchToDefault()
 {
+	KillTimer(NULL, m_Timer);
 	return SwitchTo(_T("Default"));
 }
 
