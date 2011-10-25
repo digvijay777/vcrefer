@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebInfo", "WebInfo\WebInfo.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScreenLock", "ScreenLock\ScreenLock.vcproj", "{BD35209A-33A6-464A-86B4-5E7178C6E4F7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinWnd", "SkinWnd\SkinWnd.vcproj", "{A45BB091-B890-4337-914E-E59ABB9D7BE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{BD35209A-33A6-464A-86B4-5E7178C6E4F7}.Debug|Win32.Build.0 = Debug|Win32
 		{BD35209A-33A6-464A-86B4-5E7178C6E4F7}.Release|Win32.ActiveCfg = Release|Win32
 		{BD35209A-33A6-464A-86B4-5E7178C6E4F7}.Release|Win32.Build.0 = Release|Win32
+		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Debug|Win32.Build.0 = Debug|Win32
+		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Release|Win32.ActiveCfg = Release|Win32
+		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
