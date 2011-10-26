@@ -17,6 +17,7 @@ public:
 	CBitmap							m_bmpBk;
 	std::vector<CSkinNcControl*>	m_SkinControl;
 	BOOL							m_bTrackMouseEvent;
+	COLORREF						m_colorTitle;
 
 public:
 	virtual void	Draw_TitleBar(CDC* pDC, CRect& rect);
@@ -33,6 +34,9 @@ public:
 	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnNcMouseLeave(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnNcRButtonUp(UINT nHitTest, CPoint point);
+	afx_msg void OnNcRButtonDown(UINT nHitTest, CPoint point);
+	afx_msg LRESULT On0x313(WPARAM wParam, LPARAM lParam);
 	
 	virtual BOOL OnInitDialog();
 
@@ -44,10 +48,9 @@ public:
 	BOOL		ContorlButton(INT nID, HBITMAP hBitmap, int nRight, int nTop, BOOL bAdd);
 	BOOL		AddContorlButton(INT nID, INT nBtnBmpID, int nRight, int nTop);
 	BOOL		DelContorlButton(int nID);
+	void		SetTextColor(COLORREF col);
 public:
-	afx_msg void OnNcRButtonUp(UINT nHitTest, CPoint point);
-public:
-	afx_msg void OnNcRButtonDown(UINT nHitTest, CPoint point);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 // Î»Í¼²Ù×÷Àà

@@ -13,6 +13,7 @@ CSkinDlg::CSkinDlg(UINT nIDTemplate, CWnd* pParent /* = NULL */)
 	: CDialog(nIDTemplate, pParent)
 {
 	m_bTrackMouseEvent = FALSE;
+	m_colorTitle = 0x0;
 }
 
 CSkinDlg::~CSkinDlg()
@@ -35,8 +36,11 @@ BEGIN_MESSAGE_MAP(CSkinDlg, CDialog)
 	ON_WM_NCMOUSEMOVE()
 	ON_WM_LBUTTONUP()
 	ON_MESSAGE(WM_NCMOUSELEAVE, OnNcMouseLeave)
+	ON_MESSAGE(0x313, On0x313)
 	ON_WM_NCRBUTTONUP()
 	ON_WM_NCRBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -79,8 +83,12 @@ void CSkinDlg::OnNcPaint()
 		// 上
 		memDC.BitBlt(i, 0, sizeBk.cx, sizeBk.cy
 			, &bkDC, rtBk.left + sizeBk.cx, rtBk.top, SRCCOPY);
-		memDC.BitBlt(i, sizeBk.cy, sizeBk.cx, sizeBk.cy
-			, &bkDC, rtBk.left + sizeBk.cx, rtBk.top + sizeBk.cy, SRCCOPY);
+		// 中
+		for(int k = rtBk.Height() / 3; k < (rect.Height() - rtBk.Height() / 3); k += rtBk.Height() / 3)
+		{
+			memDC.BitBlt(i, k, sizeBk.cx, sizeBk.cy
+				, &bkDC, rtBk.left + sizeBk.cx, rtBk.top + sizeBk.cy, SRCCOPY);
+		}
 		// 下
 		memDC.BitBlt(i, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
 			, &bkDC, rtBk.left + sizeBk.cx, rtBk.top + sizeBk.cy * 2, SRCCOPY);
@@ -127,7 +135,23 @@ void CSkinDlg::OnNcPaint()
 // 绘制标题栏
 void CSkinDlg::Draw_TitleBar(CDC* pDC, CRect& rect)
 {
+	HICON		hIcon				= GetIcon(FALSE);
+	CRect		rt					= rect;
+	TCHAR		szTitle[1024]		= {0};
 
+	rt.left += 5;
+	GetWindowText(szTitle, 1024);
+	if(NULL != hIcon)
+	{
+		// 绘制图标
+		DrawIconEx(pDC->GetSafeHdc(), rt.left, rt.Height() / 2 - 8, hIcon, 16, 16, 0, NULL, DI_NORMAL);
+		rt.left += 20;
+	}
+	// 绘制标题
+	pDC->SelectObject(GetFont());
+	pDC->SetBkMode(TRANSPARENT);
+	pDC->SetTextColor(m_colorTitle);
+	pDC->DrawText(szTitle, _tcslen(szTitle), &rt, DT_SINGLELINE|DT_VCENTER|DT_WORDBREAK);
 }
 // 绘制控制按
 void CSkinDlg::Draw_ControlBox(CDC* pDC, CRect& rect)
@@ -181,11 +205,12 @@ void CSkinDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
 	}
 	
 	BOOL		bInline		= FALSE;
+	CPoint		ptSave		= point;
 
-	ScreenToWindow(&point);
+	ScreenToWindow(&ptSave);
 	for(int i = 0; i < (int)m_SkinControl.size(); i++)
 	{
-		if(m_SkinControl[i]->OnLButtonDown(point))
+		if(m_SkinControl[i]->OnLButtonDown(ptSave))
 			bInline = TRUE;
 	}
 	
@@ -201,15 +226,16 @@ void CSkinDlg::OnNcLButtonUp(UINT nHitTest, CPoint point)
 {
 	if(HTCAPTION != nHitTest)
 	{
-		CDialog::OnNcLButtonDown(nHitTest, point);
+		CDialog::OnNcLButtonUp(nHitTest, point);
 		return;
 	}
 	BOOL		bInline		= FALSE;
+	CPoint		ptSave		= point;
 
-	ScreenToWindow(&point);
+	ScreenToWindow(&ptSave);
 	for(int i = 0; i < (int)m_SkinControl.size(); i++)
 	{
-		if(m_SkinControl[i]->OnLButtonUp(point))
+		if(m_SkinControl[i]->OnLButtonUp(ptSave))
 			bInline = TRUE;
 	}
 
@@ -223,23 +249,17 @@ void CSkinDlg::OnNcLButtonUp(UINT nHitTest, CPoint point)
 
 void CSkinDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	BOOL		bInline		= FALSE;
+	CRect		rect;
 
-	ClientToScreen(&point);
-	ScreenToWindow(&point);
-	for(int i = 0; i < (int)m_SkinControl.size(); i++)
+	GetClientRect(&rect);
+	if(FALSE == rect.PtInRect(point))
 	{
-		if(m_SkinControl[i]->OnLButtonUp(point))
-		{
-			bInline = TRUE;
-		}
-	}
-
-	if(bInline)
-	{
-		OnNcPaint();
+		// 非客户区
+		ClientToScreen(&point);
+		CSkinDlg::OnNcLButtonUp(CSkinDlg::OnNcHitTest(point), point);
 		return;
 	}
+	
 	CDialog::OnLButtonUp(nFlags, point);
 }
 
@@ -284,20 +304,64 @@ void CSkinDlg::OnNcRButtonDown(UINT nHitTest, CPoint point)
 		return;
 	}
 
-	ScreenToWindow(&point);
+	CPoint		ptSave		= point;
+
+	ScreenToWindow(&ptSave);
 	for(int i = 0; i < (int)m_SkinControl.size(); i++)
 	{
-		if(m_SkinControl[i]->m_rawRect.PtInRect(point))
+		if(m_SkinControl[i]->m_rawRect.PtInRect(ptSave))
 		{
+			CDialog::OnNcRButtonDown(nHitTest, point);
 			return;
 		}
 	}
-	CDialog::OnNcRButtonDown(nHitTest, point);
 }
 
 void CSkinDlg::OnNcRButtonUp(UINT nHitTest, CPoint point)
 {
-	CDialog::OnNcRButtonUp(nHitTest, point);
+	// CDialog::OnNcRButtonUp(nHitTest, point);
+
+	if(HTCAPTION != nHitTest)
+		return;
+	// 弹出右键菜单
+	CMenu*		pMenu	= GetSystemMenu(FALSE);
+	DWORD		dwRet;
+
+	if(NULL != pMenu)
+	{
+		DWORD			dwFlag		= 0;
+		DWORD			dwDisable	= MF_BYCOMMAND|MF_DISABLED|MF_GRAYED;
+		DWORD			dwEnable	= MF_BYCOMMAND|MF_ENABLED;
+		// 禁用菜单项
+		if(IsIconic())
+		{
+			dwFlag |= 0x1;
+		}
+		else if(IsZoomed())
+		{
+			dwFlag |= 0x2;
+		}
+
+		pMenu->EnableMenuItem(SC_MINIMIZE, (0x1 & dwFlag)?dwDisable:dwEnable);
+		pMenu->EnableMenuItem(SC_MAXIMIZE, ((0x2 & dwFlag) == 0x2)?dwDisable:dwEnable);
+		pMenu->EnableMenuItem(SC_MOVE, (0x3 & dwFlag)?dwDisable:dwEnable);
+		pMenu->EnableMenuItem(SC_SIZE, (0x3 & dwFlag)?dwDisable:dwEnable);
+		pMenu->EnableMenuItem(SC_RESTORE, (0 == dwFlag)?dwDisable:dwEnable);
+		// 显示菜单
+		OnNcPaint();
+		dwRet = pMenu->TrackPopupMenu(TPM_RETURNCMD | TPM_NONOTIFY, point.x, point.y, this);
+		if(0 != dwRet)
+			PostMessage(WM_SYSCOMMAND, dwRet, 0);
+	}
+}
+
+LRESULT CSkinDlg::On0x313(WPARAM wParam, LPARAM lParam)
+{
+	CPoint		point;
+
+	GetCursorPos(&point);
+	CSkinDlg::OnNcRButtonUp(HTCAPTION, point);
+	return 0;
 }
 
 void CSkinDlg::OnSize(UINT nType, int cx, int cy)
@@ -325,10 +389,53 @@ LRESULT CSkinDlg::OnNcMouseLeave(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+BOOL CSkinDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// 使用原绘制
+	if(NULL == m_bmpBk.GetSafeHandle())
+	{
+		CDialog::OnNcPaint();
+		return CDialog::OnEraseBkgnd(pDC);
+	}
+	// 开始绘制
+	CRect			rect;
+	CDC				memDC;
+	CBitmap			memBmp;
+	int				nMemSaveID;
+	CSize			sizeBk;
+	CBitmapDC		bkDC((HBITMAP)m_bmpBk.GetSafeHandle());
+	BITMAP			bInfo;
+
+	m_bmpBk.GetBitmap(&bInfo);
+	sizeBk.SetSize(bInfo.bmWidth / 3, bInfo.bmHeight / 3);
+	GetClientRect(&rect);
+
+	memDC.CreateCompatibleDC(pDC);
+	memBmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
+	nMemSaveID = memDC.SaveDC();
+	memDC.SelectObject(&memBmp);
+	// 开始绘制
+	for(int i = 0; i < (rect.Width() + sizeBk.cx - 1); i += sizeBk.cx)
+	{
+		for(int k = 0; k < (rect.Height() + sizeBk.cy - 1); k += sizeBk.cy)
+		{
+			memDC.BitBlt(i, k, sizeBk.cx, sizeBk.cy, &bkDC, sizeBk.cx, sizeBk.cy, SRCCOPY);
+		}
+	}
+	// 复制窗体-防止复制客户区
+	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
+
+	memDC.RestoreDC(nMemSaveID);
+	return FALSE;/*CDialog::OnEraseBkgnd(pDC)*/;
+}
+
 
 BOOL CSkinDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
+
+	// 去除系统菜单选项
+	ModifyStyle(WS_SYSMENU, 0, 0);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -528,6 +635,10 @@ BOOL CSkinDlg::DelContorlButton(int nID)
 {
 	return ContorlButton(nID, NULL, 0, 0, FALSE);
 }
+void CSkinDlg::SetTextColor(COLORREF col)
+{
+	m_colorTitle = col;
+}
 //////////////////////////////////////////////////////////////////////////
 // 
 CBitmapDC::CBitmapDC(HBITMAP hBitmap)
@@ -705,5 +816,4 @@ void CSkinNcButton::Draw(CDC* pDC)
 		nIndex = 3;
 	m_imagelist.Draw(pDC, nIndex, m_rawRect.TopLeft(), ILD_TRANSPARENT);
 }
-
 
