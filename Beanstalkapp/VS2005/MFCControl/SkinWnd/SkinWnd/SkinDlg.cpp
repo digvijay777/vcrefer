@@ -80,8 +80,11 @@ void CSkinDlg::OnNcPaint()
 	// 绘制控制按钮
 	CRect		rtTitleBar(0, 0, rect.Width(), rtClient.top - rect.top);
 
-	Draw_ControlBox(&memDC, rtTitleBar);
-	Draw_TitleBar(&memDC, rtTitleBar);
+	if(GetStyle() & WS_CAPTION)
+	{
+		Draw_ControlBox(&memDC, rtTitleBar);
+		Draw_TitleBar(&memDC, rtTitleBar);
+	}
 	// 复制窗体-防止复制客户区
 	CRgn		rgn, rgn2;
 	INT			nSaveDC			= pDC->SaveDC();
@@ -118,11 +121,13 @@ void CSkinDlg::Draw_TitleBar(CDC* pDC, CRect& rect)
 	pDC->SelectObject(GetFont());
 	pDC->SetBkMode(TRANSPARENT);
 	pDC->SetTextColor(m_colorTitle);
-	pDC->DrawText(szTitle, (int)_tcslen(szTitle), &rt, DT_SINGLELINE|DT_VCENTER|DT_WORDBREAK);
+	pDC->DrawText(szTitle, (int)_tcslen(szTitle), &rt, DT_SINGLELINE|DT_VCENTER|DT_WORD_ELLIPSIS);
 }
 // 绘制控制按
 void CSkinDlg::Draw_ControlBox(CDC* pDC, CRect& rect)
 {
+	CRect		rt		= rect;
+
 	for(int i = 0; i < (int)m_SkinControl.size(); i++)
 	{
 		if(NULL == m_SkinControl[i])
@@ -130,7 +135,10 @@ void CSkinDlg::Draw_ControlBox(CDC* pDC, CRect& rect)
 		
 		m_SkinControl[i]->CalcSize(rect);
 		m_SkinControl[i]->Draw(pDC);
+		if(rt.right > m_SkinControl[i]->m_rawRect.left)
+			rt.right = m_SkinControl[i]->m_rawRect.left - 2;
 	}
+	rect = rt;
 }
 
 LRESULT CSkinDlg::OnNcHitTest(CPoint point)
@@ -148,7 +156,7 @@ LRESULT CSkinDlg::OnNcHitTest(CPoint point)
 	rect.top += nFW;
 	rect.bottom = rect.top + nCH;
 	rect.DeflateRect(nFW, 0, nFW, 0);
-	if(rect.PtInRect(point))
+	if(rect.PtInRect(point) && (GetStyle() & WS_CAPTION))
 		return HTCAPTION;
 
 	return CDialog::OnNcHitTest(point);
@@ -177,10 +185,17 @@ void CSkinDlg::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS* lpncsp)
 		nCH = GetSystemMetrics(SM_CYCAPTION);
 	if(-1 == nFW)
 		nFW = GetSystemMetrics(SM_CXFRAME);
-	lpncsp->rgrc[0].top += nCH + nFW;
-	lpncsp->rgrc[0].left += nFW;
-	lpncsp->rgrc[0].bottom -= nFW;
-	lpncsp->rgrc[0].right -= nFW;
+	if(GetStyle() & WS_BORDER)
+	{
+		lpncsp->rgrc[0].top += nFW;
+		lpncsp->rgrc[0].left += nFW;
+		lpncsp->rgrc[0].bottom -= nFW;
+		lpncsp->rgrc[0].right -= nFW;
+	}
+	if(GetStyle() & WS_CAPTION)
+	{
+		lpncsp->rgrc[0].top += nCH;
+	}
 }
 
 void CSkinDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
