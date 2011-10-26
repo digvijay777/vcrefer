@@ -16,6 +16,8 @@ CSkinDlg::CSkinDlg(UINT nIDTemplate, CWnd* pParent /* = NULL */)
 	m_colorTitle = 0x0;
 	m_bNcCapture = FALSE;
 	m_wndrect.SetRect(0, 0, 0, 0);
+	m_nCaptionHeight = -1;
+	m_nFrameWidth = -1;
 }
 
 CSkinDlg::~CSkinDlg()
@@ -134,11 +136,18 @@ void CSkinDlg::Draw_ControlBox(CDC* pDC, CRect& rect)
 LRESULT CSkinDlg::OnNcHitTest(CPoint point)
 {
 	CRect		rect;
+	int			nCH			= m_nCaptionHeight;
+	int			nFW			= m_nFrameWidth;
+
+	if(-1 == nCH)
+		nCH = GetSystemMetrics(SM_CYCAPTION);
+	if(-1 == nFW)
+		nFW = GetSystemMetrics(SM_CYFRAME);
 
 	GetWindowRect(rect);
-	rect.top += GetSystemMetrics(SM_CYFRAME);
-	rect.bottom = rect.top + GetSystemMetrics(SM_CYCAPTION);
-	rect.DeflateRect(GetSystemMetrics(SM_CYFRAME), 0, GetSystemMetrics(SM_CYFRAME), 0);
+	rect.top += nFW;
+	rect.bottom = rect.top + nCH;
+	rect.DeflateRect(nFW, 0, nFW, 0);
 	if(rect.PtInRect(point))
 		return HTCAPTION;
 
@@ -155,9 +164,23 @@ BOOL CSkinDlg::OnNcActivate(BOOL bActive)
 
 void CSkinDlg::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS* lpncsp)
 {
-	// TODO: Add your message handler code here and/or call default
+	if(FALSE == bCalcValidRects)
+	{
+		CDialog::OnNcCalcSize(bCalcValidRects, lpncsp);
+		return;
+	}
 
-	CDialog::OnNcCalcSize(bCalcValidRects, lpncsp);
+	INT		nCH		= m_nCaptionHeight;
+	INT		nFW		= m_nFrameWidth;
+
+	if(-1 == nCH)
+		nCH = GetSystemMetrics(SM_CYCAPTION);
+	if(-1 == nFW)
+		nFW = GetSystemMetrics(SM_CXFRAME);
+	lpncsp->rgrc[0].top += nCH + nFW;
+	lpncsp->rgrc[0].left += nFW;
+	lpncsp->rgrc[0].bottom -= nFW;
+	lpncsp->rgrc[0].right -= nFW;
 }
 
 void CSkinDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
@@ -649,6 +672,29 @@ BOOL CSkinDlg::DelContorlButton(int nID)
 void CSkinDlg::SetTextColor(COLORREF col)
 {
 	m_colorTitle = col;
+}
+/*
+ *  为-1表示使用系统默认选项
+ *	实际的标题栏高度为 nCaptionHeight + nFrameWidth
+ */
+void CSkinDlg::SetNonClient(int nCaptionHeight /* = -1 */, int nFrameWidth /* = -1 */)
+{
+	m_nCaptionHeight = nCaptionHeight;
+	m_nFrameWidth = nFrameWidth;
+	if(IsWindow(GetSafeHwnd()))
+	{
+		CRect		rect;
+
+		if(-1 == nCaptionHeight)
+			nCaptionHeight = GetSystemMetrics(SM_CYCAPTION);
+		if(-1 == nFrameWidth)
+			nFrameWidth = GetSystemMetrics(SM_CYFRAME);
+
+		GetClientRect(&rect);
+		rect.InflateRect(nFrameWidth, nFrameWidth+nCaptionHeight, nFrameWidth, nFrameWidth);
+		SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(), SWP_NOMOVE|SWP_NOZORDER);
+		DoCalcWindowRect();
+	}
 }
 //////////////////////////////////////////////////////////////////////////
 // 

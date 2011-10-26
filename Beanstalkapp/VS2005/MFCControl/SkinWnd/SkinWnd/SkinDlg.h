@@ -21,6 +21,8 @@ public:
 	COLORREF						m_colorTitle;
 	BOOL							m_bNcCapture;
 	CRect							m_wndrect;
+	int								m_nCaptionHeight;
+	int								m_nFrameWidth;
 
 public:
 	virtual void	Draw_TitleBar(CDC* pDC, CRect& rect);
@@ -53,6 +55,7 @@ public:
 	BOOL		AddContorlButton(INT nID, INT nBtnBmpID, int nRight, int nTop);
 	BOOL		DelContorlButton(int nID);
 	void		SetTextColor(COLORREF col);
+	void		SetNonClient(int nCaptionHeight = -1, int nFrameWidth = -1);
 public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };

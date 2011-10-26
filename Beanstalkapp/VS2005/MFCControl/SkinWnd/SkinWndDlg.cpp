@@ -53,6 +53,7 @@ BOOL CSkinWndDlg::OnInitDialog()
 	CSkinDlg::AddContorlButton(SC_MINIMIZE, IDB_BITMAP4, 45 + 34 + 34, 0);
 
 	CSkinDlg::SetTextColor(RGB(0xff, 0xff, 0xff));
+	CSkinDlg::SetNonClient(21, 4);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
