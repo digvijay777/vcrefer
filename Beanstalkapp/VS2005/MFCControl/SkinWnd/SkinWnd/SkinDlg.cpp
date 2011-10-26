@@ -15,6 +15,7 @@ CSkinDlg::CSkinDlg(UINT nIDTemplate, CWnd* pParent /* = NULL */)
 	m_bTrackMouseEvent = FALSE;
 	m_colorTitle = 0x0;
 	m_bNcCapture = FALSE;
+	m_wndrect.SetRect(0, 0, 0, 0);
 }
 
 CSkinDlg::~CSkinDlg()
@@ -50,7 +51,7 @@ END_MESSAGE_MAP()
 void CSkinDlg::OnNcPaint()
 {
 	// 使用原绘制
-	if(NULL == m_bmpBk.GetSafeHandle())
+	if(FALSE == DoCreateSnapshotBmpbk())
 	{
 		CDialog::OnNcPaint();
 		return;
@@ -58,18 +59,12 @@ void CSkinDlg::OnNcPaint()
 	// 开始绘制
 	CDC*			pDC			= GetWindowDC();
 	CRect			rect;
-	CRect			rtBk;
 	CDC				memDC;
 	CBitmap			memBmp;
 	int				nMemSaveID;
-	CSize			sizeBk;
-	CBitmapDC		bkDC((HBITMAP)m_bmpBk.GetSafeHandle());
+	CBitmapDC		bkDC((HBITMAP)m_snapshotBmpbk.GetSafeHandle());
 	CRect			rtClient;
-	BITMAP			bInfo;
 	
-	m_bmpBk.GetBitmap(&bInfo);
-	rtBk.SetRect(0, 0, bInfo.bmWidth, bInfo.bmHeight);
-	sizeBk.SetSize(rtBk.Width() / 3, rtBk.Height() / 3);
 	GetWindowRect(&rect);
 	GetClientRect(&rtClient);
 	ClientToScreen(&rtClient);
@@ -79,38 +74,7 @@ void CSkinDlg::OnNcPaint()
 	nMemSaveID = memDC.SaveDC();
 	memDC.SelectObject(&memBmp);
 	// 开始绘制边框
-	for(int i = rtBk.Width() / 3; i < (rect.Width() - rtBk.Width() / 3); i += rtBk.Width() / 3)
-	{
-		// 上
-		memDC.BitBlt(i, 0, sizeBk.cx, sizeBk.cy
-			, &bkDC, rtBk.left + sizeBk.cx, rtBk.top, SRCCOPY);
-		// 中
-		for(int k = rtBk.Height() / 3; k < (rect.Height() - rtBk.Height() / 3); k += rtBk.Height() / 3)
-		{
-			memDC.BitBlt(i, k, sizeBk.cx, sizeBk.cy
-				, &bkDC, rtBk.left + sizeBk.cx, rtBk.top + sizeBk.cy, SRCCOPY);
-		}
-		// 下
-		memDC.BitBlt(i, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
-			, &bkDC, rtBk.left + sizeBk.cx, rtBk.top + sizeBk.cy * 2, SRCCOPY);
-	}
-	for(int i = rtBk.Height() / 3; i < (rect.Height() - rtBk.Height() / 3); i += rtBk.Height() / 3)
-	{
-		// 左
-		memDC.BitBlt(0, i, sizeBk.cx, sizeBk.cy
-			, &bkDC, rtBk.left, rtBk.top + sizeBk.cy, SRCCOPY);
-		// 右
-		memDC.BitBlt(rect.Width() - sizeBk.cx, i, sizeBk.cx, sizeBk.cy
-			, &bkDC, rtBk.left + sizeBk.cx * 2, rtBk.top + sizeBk.cy, SRCCOPY);
-	}
-	// 四角的绘制
-	memDC.BitBlt(0, 0, sizeBk.cx, sizeBk.cy, &bkDC, rtBk.left, rtBk.top, SRCCOPY);
-	memDC.BitBlt(rect.Width() - sizeBk.cx, 0, sizeBk.cx, sizeBk.cy
-		, &bkDC, rtBk.left + sizeBk.cx * 2, rtBk.top, SRCCOPY);
-	memDC.BitBlt(rect.Width() - sizeBk.cx, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
-		, &bkDC, rtBk.left + sizeBk.cx * 2, rtBk.top + sizeBk.cy * 2, SRCCOPY);
-	memDC.BitBlt(0, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
-		, &bkDC, rtBk.left, rtBk.top + sizeBk.cy * 2, SRCCOPY);
+	memDC.BitBlt(0, 0, rect.Width(), rect.Height(), &bkDC, 0, 0, SRCCOPY);
 	// 绘制控制按钮
 	CRect		rtTitleBar(0, 0, rect.Width(), rtClient.top - rect.top);
 
@@ -152,7 +116,7 @@ void CSkinDlg::Draw_TitleBar(CDC* pDC, CRect& rect)
 	pDC->SelectObject(GetFont());
 	pDC->SetBkMode(TRANSPARENT);
 	pDC->SetTextColor(m_colorTitle);
-	pDC->DrawText(szTitle, _tcslen(szTitle), &rt, DT_SINGLELINE|DT_VCENTER|DT_WORDBREAK);
+	pDC->DrawText(szTitle, (int)_tcslen(szTitle), &rt, DT_SINGLELINE|DT_VCENTER|DT_WORDBREAK);
 }
 // 绘制控制按
 void CSkinDlg::Draw_ControlBox(CDC* pDC, CRect& rect)
@@ -253,7 +217,7 @@ void CSkinDlg::OnLButtonUp(UINT nFlags, CPoint point)
 	{
 		// 非客户区
 		ClientToScreen(&point);
-		CSkinDlg::OnNcLButtonUp(CSkinDlg::OnNcHitTest(point), point);
+		CSkinDlg::OnNcLButtonUp((UINT)CSkinDlg::OnNcHitTest(point), point);
 		return;
 	}
 	
@@ -389,41 +353,26 @@ LRESULT CSkinDlg::OnNcMouseLeave(WPARAM wParam, LPARAM lParam)
 BOOL CSkinDlg::OnEraseBkgnd(CDC* pDC)
 {
 	// 使用原绘制
-	if(NULL == m_bmpBk.GetSafeHandle())
+	if(FALSE == DoCreateSnapshotBmpbk())
 	{
-		CDialog::OnNcPaint();
 		return CDialog::OnEraseBkgnd(pDC);
 	}
 	// 开始绘制
-	CRect			rect;
-	CDC				memDC;
-	CBitmap			memBmp;
-	int				nMemSaveID;
-	CSize			sizeBk;
-	CBitmapDC		bkDC((HBITMAP)m_bmpBk.GetSafeHandle());
-	BITMAP			bInfo;
+	CBitmapDC		bkDC((HBITMAP)m_snapshotBmpbk.GetSafeHandle());
+	CRect			rtWnd;
+	CRect			rtClient;
 
-	m_bmpBk.GetBitmap(&bInfo);
-	sizeBk.SetSize(bInfo.bmWidth / 3, bInfo.bmHeight / 3);
-	GetClientRect(&rect);
+	GetClientRect(&rtClient);
+	GetWindowRect(&rtWnd);
+	ClientToScreen(&rtClient);
 
-	memDC.CreateCompatibleDC(pDC);
-	memBmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
-	nMemSaveID = memDC.SaveDC();
-	memDC.SelectObject(&memBmp);
-	// 开始绘制
-	for(int i = 0; i < (rect.Width() + sizeBk.cx - 1); i += sizeBk.cx)
-	{
-		for(int k = 0; k < (rect.Height() + sizeBk.cy - 1); k += sizeBk.cy)
-		{
-			memDC.BitBlt(i, k, sizeBk.cx, sizeBk.cy, &bkDC, sizeBk.cx, sizeBk.cy, SRCCOPY);
-		}
-	}
-	// 复制窗体-防止复制客户区
-	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
+	pDC->BitBlt(0, 0, rtClient.Width(), rtClient.Height()
+		, &bkDC
+		, rtClient.left - rtWnd.left
+		, rtClient.top - rtWnd.top
+		, SRCCOPY);
 
-	memDC.RestoreDC(nMemSaveID);
-	return FALSE;/*CDialog::OnEraseBkgnd(pDC)*/;
+	return TRUE;/*CDialog::OnEraseBkgnd(pDC)*/;
 }
 
 
@@ -587,6 +536,71 @@ BOOL CSkinDlg::DoCalcWindowRect()
 	}
 	SetWindowRgn((HRGN)rgn.GetSafeHandle(), TRUE);
 	free(pBit);
+	return TRUE;
+}
+// 创建背景快照
+BOOL CSkinDlg::DoCreateSnapshotBmpbk()
+{
+	CRect		rect;
+
+	GetWindowRect(&rect);
+	if(rect.Width() == m_wndrect.Width() && rect.Height() == m_wndrect.Height())
+	{
+		if(NULL != m_snapshotBmpbk.GetSafeHandle())
+			return TRUE;
+	}
+	m_wndrect = rect;
+	if(NULL == m_bmpBk.GetSafeHandle())
+		return FALSE;
+	if(NULL != m_snapshotBmpbk.GetSafeHandle())
+		m_snapshotBmpbk.DeleteObject();
+
+	CDC*		pDC				= GetWindowDC();
+	CDC			memDC;
+	int			nSaveDC;
+	CBitmapDC	bkDC((HBITMAP)m_bmpBk.GetSafeHandle());
+	CSize		sizeBk;
+	BITMAP		bInfo			= {0};
+
+	m_bmpBk.GetBitmap(&bInfo);
+	sizeBk.SetSize(bInfo.bmWidth / 3, bInfo.bmHeight / 3);
+	m_snapshotBmpbk.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
+	memDC.CreateCompatibleDC(pDC);
+	nSaveDC = memDC.SaveDC();
+	memDC.SelectObject(&m_snapshotBmpbk);
+	// 开始绘制边框
+	for(int i = sizeBk.cx; i < (rect.Width() - sizeBk.cx); i += sizeBk.cx)
+	{
+		// 上
+		memDC.BitBlt(i, 0, sizeBk.cx, sizeBk.cy, &bkDC, sizeBk.cx, 0, SRCCOPY);
+		// 中
+		for(int k = sizeBk.cy; k < (rect.Height() - sizeBk.cy); k += sizeBk.cy)
+		{
+			memDC.BitBlt(i, k, sizeBk.cx, sizeBk.cy, &bkDC,sizeBk.cx, sizeBk.cy, SRCCOPY);
+		}
+		// 下
+		memDC.BitBlt(i, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
+			, &bkDC, sizeBk.cx, sizeBk.cy * 2, SRCCOPY);
+	}
+	for(int i = sizeBk.cy; i < (rect.Height() - sizeBk.cy); i += sizeBk.cy)
+	{
+		// 左
+		memDC.BitBlt(0, i, sizeBk.cx, sizeBk.cy, &bkDC, 0, sizeBk.cy, SRCCOPY);
+		// 右
+		memDC.BitBlt(rect.Width() - sizeBk.cx, i, sizeBk.cx, sizeBk.cy
+			, &bkDC, sizeBk.cx * 2, sizeBk.cy, SRCCOPY);
+	}
+	// 四角的绘制
+	memDC.BitBlt(0, 0, sizeBk.cx, sizeBk.cy, &bkDC, 0, 0, SRCCOPY);
+	memDC.BitBlt(rect.Width() - sizeBk.cx, 0, sizeBk.cx, sizeBk.cy
+		, &bkDC, sizeBk.cx * 2, 0, SRCCOPY);
+	memDC.BitBlt(rect.Width() - sizeBk.cx, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
+		, &bkDC, sizeBk.cx * 2, sizeBk.cy * 2, SRCCOPY);
+	memDC.BitBlt(0, rect.Height() - sizeBk.cy, sizeBk.cx, sizeBk.cy
+		, &bkDC, 0, sizeBk.cy * 2, SRCCOPY);
+	// 结束绘制
+	memDC.RestoreDC(nSaveDC);
+	ReleaseDC(pDC);
 	return TRUE;
 }
 // 控制按钮

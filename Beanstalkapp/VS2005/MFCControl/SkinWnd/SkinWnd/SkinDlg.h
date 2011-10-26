@@ -15,10 +15,12 @@ public:
 
 public:
 	CBitmap							m_bmpBk;
+	CBitmap							m_snapshotBmpbk;
 	std::vector<CSkinNcControl*>	m_SkinControl;
 	BOOL							m_bTrackMouseEvent;
 	COLORREF						m_colorTitle;
 	BOOL							m_bNcCapture;
+	CRect							m_wndrect;
 
 public:
 	virtual void	Draw_TitleBar(CDC* pDC, CRect& rect);
@@ -46,6 +48,7 @@ public:
 	BOOL		LoadImages(INT nIDBk);
 	BOOL		LoadBitmaps(HBITMAP hBk);
 	BOOL		DoCalcWindowRect();
+	BOOL		DoCreateSnapshotBmpbk();
 	BOOL		ContorlButton(INT nID, HBITMAP hBitmap, int nRight, int nTop, BOOL bAdd);
 	BOOL		AddContorlButton(INT nID, INT nBtnBmpID, int nRight, int nTop);
 	BOOL		DelContorlButton(int nID);
