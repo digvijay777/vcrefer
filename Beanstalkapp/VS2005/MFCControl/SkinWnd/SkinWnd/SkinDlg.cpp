@@ -14,6 +14,7 @@ CSkinDlg::CSkinDlg(UINT nIDTemplate, CWnd* pParent /* = NULL */)
 {
 	m_bTrackMouseEvent = FALSE;
 	m_colorTitle = 0x0;
+	m_bNcCapture = FALSE;
 }
 
 CSkinDlg::~CSkinDlg()
@@ -211,7 +212,10 @@ void CSkinDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
 	for(int i = 0; i < (int)m_SkinControl.size(); i++)
 	{
 		if(m_SkinControl[i]->OnLButtonDown(ptSave))
+		{
 			bInline = TRUE;
+			m_bNcCapture = TRUE;
+		}
 	}
 	
 	if(bInline)
@@ -224,11 +228,6 @@ void CSkinDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
 
 void CSkinDlg::OnNcLButtonUp(UINT nHitTest, CPoint point)
 {
-	if(HTCAPTION != nHitTest)
-	{
-		CDialog::OnNcLButtonUp(nHitTest, point);
-		return;
-	}
 	BOOL		bInline		= FALSE;
 	CPoint		ptSave		= point;
 
@@ -239,6 +238,7 @@ void CSkinDlg::OnNcLButtonUp(UINT nHitTest, CPoint point)
 			bInline = TRUE;
 	}
 
+	m_bNcCapture = FALSE;
 	if(bInline)
 	{
 		OnNcPaint();
@@ -249,10 +249,7 @@ void CSkinDlg::OnNcLButtonUp(UINT nHitTest, CPoint point)
 
 void CSkinDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	CRect		rect;
-
-	GetClientRect(&rect);
-	if(FALSE == rect.PtInRect(point))
+	if(FALSE != m_bNcCapture)
 	{
 		// 非客户区
 		ClientToScreen(&point);

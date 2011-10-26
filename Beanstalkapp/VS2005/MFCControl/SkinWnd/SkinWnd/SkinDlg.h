@@ -18,6 +18,7 @@ public:
 	std::vector<CSkinNcControl*>	m_SkinControl;
 	BOOL							m_bTrackMouseEvent;
 	COLORREF						m_colorTitle;
+	BOOL							m_bNcCapture;
 
 public:
 	virtual void	Draw_TitleBar(CDC* pDC, CRect& rect);
