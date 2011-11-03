@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScreenLock", "ScreenLock\Sc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinWnd", "SkinWnd\SkinWnd.vcproj", "{A45BB091-B890-4337-914E-E59ABB9D7BE0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawMenu", "DrawMenu\DrawMenu.vcproj", "{5ABF1FBA-B93C-4F7C-B98D-F3EAEAC1B071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,6 +39,10 @@ Global
 		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Debug|Win32.Build.0 = Debug|Win32
 		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Release|Win32.ActiveCfg = Release|Win32
 		{A45BB091-B890-4337-914E-E59ABB9D7BE0}.Release|Win32.Build.0 = Release|Win32
+		{5ABF1FBA-B93C-4F7C-B98D-F3EAEAC1B071}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5ABF1FBA-B93C-4F7C-B98D-F3EAEAC1B071}.Debug|Win32.Build.0 = Debug|Win32
+		{5ABF1FBA-B93C-4F7C-B98D-F3EAEAC1B071}.Release|Win32.ActiveCfg = Release|Win32
+		{5ABF1FBA-B93C-4F7C-B98D-F3EAEAC1B071}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
