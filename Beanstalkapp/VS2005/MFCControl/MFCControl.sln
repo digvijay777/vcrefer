@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawMenu", "DrawMenu\DrawMe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TransWnd", "TransWnd\TransWnd.vcproj", "{BBB2FDC5-5383-489F-AAD2-447E038D3BEE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EHomeFloating", "EHomeFloating\EHomeFloating.vcproj", "{6B887B68-9EEE-463C-A888-A4607EDF0F63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -49,6 +51,10 @@ Global
 		{BBB2FDC5-5383-489F-AAD2-447E038D3BEE}.Debug|Win32.Build.0 = Debug|Win32
 		{BBB2FDC5-5383-489F-AAD2-447E038D3BEE}.Release|Win32.ActiveCfg = Release|Win32
 		{BBB2FDC5-5383-489F-AAD2-447E038D3BEE}.Release|Win32.Build.0 = Release|Win32
+		{6B887B68-9EEE-463C-A888-A4607EDF0F63}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6B887B68-9EEE-463C-A888-A4607EDF0F63}.Debug|Win32.Build.0 = Debug|Win32
+		{6B887B68-9EEE-463C-A888-A4607EDF0F63}.Release|Win32.ActiveCfg = Release|Win32
+		{6B887B68-9EEE-463C-A888-A4607EDF0F63}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
