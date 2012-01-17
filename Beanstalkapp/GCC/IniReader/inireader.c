@@ -1,5 +1,5 @@
-/*
- *	IniÎÄ¼ş²Ù×÷Àà
+ï»¿/*
+ *	Iniæ–‡ä»¶æ“ä½œç±»
  */
 #include "inireader.h"
 #include <string.h>
@@ -17,9 +17,9 @@
 #endif
 
 #if defined(_MSC_VER)
-/* VC¾Í²»Ö´ĞĞÏÂÃæµÄÓï¾ä */
+/* VCå°±ä¸æ‰§è¡Œä¸‹é¢çš„è¯­å¥ */
 #elif defined(__GNUC__)
-/* GCC±àÒëÆ÷ */
+/* GCCç¼–è¯‘å™¨ */
 #include <unistd.h>
 #else
 #error "Not supported"
@@ -29,7 +29,7 @@
 #define min(x, y)		( ((x) < (y))?(x):(y) )
 #endif
 
-/* ¶ÁÈ¡ÎÄ¼ş */
+/* è¯»å–æ–‡ä»¶ */
 char* GetConfigProfileBuff(const char* pFileName)
 {
 	int				nFile				= -1;
@@ -54,26 +54,26 @@ end:
 	return pRetBuff;
 }
 
-/*Ini²Ù×÷º¯Êı*/
+/*Iniæ“ä½œå‡½æ•°*/
 unsigned long GetConfigProfileString(const char* pAppName
 									  , const char* pKeyName, const char* pDefault, char* pReturnedString
 									  , unsigned long nSize, const char* pFileName)
 {
 	char*			pFileBuf			= NULL;
 	int				nLen				= 0;
-	// ¼ì²é½ÓÊÕ»º³åÇø
+	// æ£€æŸ¥æ¥æ”¶ç¼“å†²åŒº
 	if(NULL == pReturnedString)
 		return 0;
-	// ¸´ÖÆÄ¬ÈÏ×Ö·û´®
+	// å¤åˆ¶é»˜è®¤å­—ç¬¦ä¸²
 	if(NULL != pDefault)
 		strncpy(pReturnedString, pDefault, nSize);
 	else
 		memset(pReturnedString, 0, nSize);
-	// ¼ì²éÊÇ·ñÖ¸¶¨ÎÄ¼şÃû
+	// æ£€æŸ¥æ˜¯å¦æŒ‡å®šæ–‡ä»¶å
 	pFileBuf = GetConfigProfileBuff(pFileName);
 	if(NULL == pFileBuf)
 		goto end;
-	// ·ÖÎöÎÄ¼ş»º³åÇø, »ñÈ¡APPµÄ¿ªÊ¼Î»ÖÃ
+	// åˆ†ææ–‡ä»¶ç¼“å†²åŒº, è·å–APPçš„å¼€å§‹ä½ç½®
 	nLen = GetConfigBufferString(pAppName, pKeyName, pReturnedString
 		, nSize, pFileBuf);
 end:
@@ -108,7 +108,7 @@ int GetConfigBufferString(const char* pAppName, const char* pKeyName
 	strncpy(pReturnedString, pStrStart, nSize);
 	return nSize;
 }
-/* »ñÈ¡Êı¾İÇøÖĞµÄÅäÖÃÏî */
+/* è·å–æ•°æ®åŒºä¸­çš„é…ç½®é¡¹ */
 void GetConfigBufferValue(const char* pAppName, const char* pKeyName 
 					   , char** pStrStart, char** pStrEnd , const char* pBuff)
 {
@@ -123,7 +123,7 @@ void GetConfigBufferValue(const char* pAppName, const char* pKeyName
 	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pBuff);
 	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd <= pSecStart)
 		return;
-	/* ¿ªÊ¼·ÖÎöKeyµÄÖµ */
+	/* å¼€å§‹åˆ†æKeyçš„å€¼ */
 	pFindStart = pSecStart;
 	pFindLine = pSecStart;
 	for(; pFindLine < pSecEnd; pFindLine = strchr(pFindLine, '\n'))
@@ -141,18 +141,22 @@ void GetConfigBufferValue(const char* pAppName, const char* pKeyName
 			pFindLine++;
 		if('=' != *pFindLine)
 			continue;
-		/* ÕÒµ½ÁËÏàÓ¦µÄĞĞÊı¾İ */
+		/* æ‰¾åˆ°äº†ç›¸åº”çš„è¡Œæ•°æ® */
 		pFindLine++;
 		while('\t' == *pFindLine || '\x20' == *pFindLine)
 			pFindLine++;
 		*pStrStart = pFindLine;
-		*pStrEnd = strchr(pFindLine, '\n');
+		*pStrEnd = strchr(pFindLine, '\r');
 		if(NULL == *pStrEnd)
-			*pStrEnd = pSecEnd;
+		{
+			*pStrEnd = strchr(pFindLine, '\n');
+			if(NULL == *pStrEnd)
+				*pStrEnd = pSecEnd;
+		}
 	}
 	
 }					   
-/* »ñÈ¡Êı¾İÇøµÄ[Section] */
+/* è·å–æ•°æ®åŒºçš„[Section] */
 void GetConfigBufferSection(const char* pAppName , char** pSecStart
 						 , char** pSecEnd , const char* pBuff)
 {
@@ -169,15 +173,15 @@ void GetConfigBufferSection(const char* pAppName , char** pSecStart
 			break;
 		pFindStart = pFindApp + nLen;
 		if(pFindApp == pBuff)
-			continue; /* Ê××Ö½ÚÊ±±íÊ¾²»ÊÇĞèÒªÕÒµÄSection */
+			continue; /* é¦–å­—èŠ‚æ—¶è¡¨ç¤ºä¸æ˜¯éœ€è¦æ‰¾çš„Section */
 		if('[' != *(pFindApp - 1) || ']' != *(pFindApp + nLen))
-			continue; /* ²»Âú×ãsessionÌõ¼ş */
-		/* ÕÒµ½ÏàÓ¦µÄSection */
+			continue; /* ä¸æ»¡è¶³sessionæ¡ä»¶ */
+		/* æ‰¾åˆ°ç›¸åº”çš„Section */
 		*pSecStart = strchr(pFindApp, '\n');
 		if(NULL != *pSecStart)
 			break;
 	} while (true);
-	/* ²éÕÒSeciontµÄ½áÊøµã */
+	/* æŸ¥æ‰¾Seciontçš„ç»“æŸç‚¹ */
 	if(NULL == *pSecStart)
 		return;
 	do 
@@ -197,17 +201,108 @@ void GetConfigBufferSection(const char* pAppName , char** pSecStart
 	} while (true);
 }
 
-/* Ğ´ÅäÖÃÎÄ¼ş²Ù×÷ */
+/* å†™é…ç½®æ–‡ä»¶æ“ä½œ */
 int WriteConfigProfileSection(const char* pAppName , const char* pSection , const char* pFileName)
 {
 	char*		pFileBuff		= NULL;
+	char*		pSecStart		= NULL;
+	char*		pSecEnd			= NULL;
+	int			nFile			= 0;
 
 	pFileBuff = GetConfigProfileBuff(pAppName);
 	if(NULL == pFileBuff)
-		return -1;
+		goto write_append;
+	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pFileBuff);
+	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd < pSecStart)
+		goto write_append;
+
+write_over: /* è¦†ç›–å¼æ“ä½œ */
+	nFile = open(pFileName, O_RDWR);
+	if(-1 == nFile)
+		goto end;
+	lseek(nFile, pSecStart - pFileBuff, SEEK_SET);
+	write(nFile, pSection, strlen(pSection));
+	write(nFile, pSecEnd, strlen(pSecEnd));
+	if('\n' != pSection[strlen(pSection) - 1]) 
+		write(nFile, "\r\n", 2);
+	close(nFile);
+	goto end;
+
+write_append: /* è¿½åŠ å¼æ“ä½œ */
+	nFile = open(pFileName, O_WRONLY | O_APPEND);
+	if(-1 == nFile)
+		goto end;
+	write(nFile, "\r\n[", 3);
+	write(nFile, pAppName, strlen(pAppName));
+	write(nFile, "]\r\n", 3);
+	write(nFile, pSection, strlen(pSection));
+	close(nFile);
 
 end:
 	if(NULL != pFileBuff)
 		free(pFileBuff);
+	return 0;
+}
+
+/* å†™ä¸€é¡¹é…ç½® */
+int WriteConfigProfileString(const char* pAppName , const char* pKeyName 
+							 , const char* pValue , const char* pFileName)
+{
+	char*		pStrStart		= NULL;
+	char*		pStrEnd			= NULL;
+	char*		pSecStart		= NULL;
+	char*		pSecEnd			= NULL;
+	char*		pFileBuff		= NULL;
+	int			nFile			= 0;
+
+	pFileBuff = GetConfigProfileBuff(pFileName);
+	if(NULL == pFileBuff)
+		goto write_new;
+	/* è·å–åŸSection */
+	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pFileBuff);
+	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd < pSecStart)
+		goto write_new;
+	/* è·å–åŸå€¼ */
+	GetConfigBufferValue(pAppName, pKeyName, &pStrStart, &pStrEnd, pFileBuff);
+	if(NULL == pStrStart || NULL == pStrEnd || pStrEnd < pStrStart)
+		goto write_append;
+
+write_over: /* è¦†ç›–æ“ä½œ */
+	nFile = open(pFileName, O_WRONLY);
+	if(-1 == nFile)
+		goto end;
+	lseek(nFile, pStrStart - pFileBuff, SEEK_SET);
+	write(nFile, pValue, strlen(pValue));
+	write(nFile, pStrEnd, strlen(pStrEnd));
+	close(nFile);
+write_new: /* å†™å…¥ä¸€ä¸ªæ–°é¡¹ */
+	nFile = open(pFileName, O_WRONLY|O_APPEND);
+	if(-1 == nFile)
+		goto end;
+	write(nFile, "\r\n[", 3);
+	write(nFile, pAppName, strlen(pAppName));
+	write(nFile, "]\r\n", 3);
+	write(nFile, pKeyName, strlen(pKeyName));
+	write(nFile, " = ", 3);
+	write(nFile, pValue, strlen(pValue));
+	write(nFile, "\r\n", 2);
+	close(nFile);
+write_append: /* è¿½å›æ“ä½œ */
+	nFile = open(pFileName, O_WRONLY);
+	if(-1 == nFile)
+		goto end;
+	lseek(nFile, pSecEnd - pFileBuff, SEEK_SET);
+	if('\n' != *(pSecEnd - 1))
+		write(nFile, "\r\n", 2);
+	write(nFile, pKeyName, strlen(pKeyName));
+	write(nFile, " = ", 3);
+	write(nFile, pValue, strlen(pValue));
+	write(nFile, "\r\n", 2);
+	write(nFile, pSecEnd, strlen(pSecEnd));
+	close(nFile);
+end:
+	if(NULL != pFileBuff)
+		free(pFileBuff);
+
 	return 0;
 }

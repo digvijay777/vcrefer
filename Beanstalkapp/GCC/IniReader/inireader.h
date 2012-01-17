@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-/*Ini²Ù×÷º¯Êı¼¯*/
+/*Iniæ“ä½œå‡½æ•°é›†*/
 unsigned long		GetConfigProfileString(const char* pAppName
 											, const char* pKeyName
 											, const char* pDefault, char* pReturnedString
