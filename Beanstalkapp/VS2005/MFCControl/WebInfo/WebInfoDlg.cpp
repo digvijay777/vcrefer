@@ -55,13 +55,15 @@ BOOL CWebInfoDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
 
+
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-	Navigate(_T("F:\\GoogleCode\\Beanstalkapp\\VS2005\\MFCControl\\WebInfo\\") _T("web\\WebInfo.html"));
+	// Navigate(_T("F:\\GoogleCode\\Beanstalkapp\\VS2005\\MFCControl\\WebInfo\\") _T("web\\WebInfo.html"));
+	Navigate(_T("http://www.baidu.com"));
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -263,4 +265,20 @@ HRESULT CWebInfoDlg::OnNull(IHTMLElement *pElement)
 		, bstrTagName.m_str, bstrClass.m_str, bstrID.m_str);
 #endif
 	return S_FALSE;
+}
+
+void CWebInfoDlg::OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
+{
+	CDHtmlDialog::OnDocumentComplete(pDisp, szUrl);
+
+	// TODO: Add your specialized code here and/or call the base class
+}
+
+void CWebInfoDlg::OnNavigateComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
+{
+	CDHtmlDialog::OnNavigateComplete(pDisp, szUrl);
+
+	CComBSTR bstrURL;
+	m_spHtmlDoc->get_URL(&bstrURL);
+	int i = 0;
 }

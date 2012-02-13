@@ -42,4 +42,8 @@ protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
+public:
+	virtual void OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl);
+public:
+	virtual void OnNavigateComplete(LPDISPATCH pDisp, LPCTSTR szUrl);
 };
