@@ -42,6 +42,11 @@ protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
+	DECLARE_EVENTSINK_MAP()
+
+public:
+	void	OnNavigateError(LPDISPATCH pDisp, VARIANT* pvURL,
+		VARIANT* pvFrame, VARIANT* pvStatusCode, VARIANT_BOOL* pvbCancel);
 public:
 	virtual void OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl);
 public:

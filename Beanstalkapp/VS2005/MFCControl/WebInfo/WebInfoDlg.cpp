@@ -31,8 +31,10 @@ BEGIN_DHTML_EVENT_MAP(CWebInfoDlg)
 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("div"), OnBodyContextMenu)
 END_DHTML_EVENT_MAP()
 
-
-
+BEGIN_EVENTSINK_MAP(CWebInfoDlg, CDHtmlDialog)
+	ON_EVENT(CWebInfoDlg, AFX_IDC_BROWSER, 271 /*271 DISPID_NAVIGATEERROR */, OnNavigateError, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
+END_EVENTSINK_MAP()
+/*DISPID_NAVIGATEERROR*/
 CWebInfoDlg::CWebInfoDlg(CWnd* pParent /*=NULL*/)
 	: CDHtmlDialog(CWebInfoDlg::IDD, NULL/*CWebInfoDlg::IDH*/, pParent)
 {
@@ -63,7 +65,7 @@ BOOL CWebInfoDlg::OnInitDialog()
 
 	// TODO: Add extra initialization here
 	// Navigate(_T("F:\\GoogleCode\\Beanstalkapp\\VS2005\\MFCControl\\WebInfo\\") _T("web\\WebInfo.html"));
-	Navigate(_T("http://www.baidu.com"));
+	Navigate(_T("http://www.baidu13164654679879.com/test.jsp"));
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -281,4 +283,11 @@ void CWebInfoDlg::OnNavigateComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
 	CComBSTR bstrURL;
 	m_spHtmlDoc->get_URL(&bstrURL);
 	int i = 0;
+}
+
+void CWebInfoDlg::OnNavigateError(LPDISPATCH pDisp, VARIANT* pvURL, VARIANT* pvFrame, VARIANT* pvStatusCode, VARIANT_BOOL* pvbCancel)
+{
+	*pvbCancel = VARIANT_TRUE;
+	Navigate(_T("http://www.baidu.com"));
+	return;
 }
