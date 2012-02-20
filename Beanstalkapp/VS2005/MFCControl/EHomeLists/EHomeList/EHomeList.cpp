@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "EHomeList.h"
-#include <atlimage.h>
+#include <math.h>
 #include "MemDc.h"
 
 // CEHomeList
@@ -21,6 +21,10 @@ CEHomeList::CEHomeList()
 	m_dwMuiltIndex = -1;
 	m_hCursor[0] = ::LoadCursor(NULL, IDC_ARROW);
 	m_hCursor[1] = ::LoadCursor(NULL, IDC_HAND);
+	m_nLoadingIndex = 0;
+	m_pLoadingImg = NULL;
+	m_nLoadingImageCount = 1;
+	m_bEnableWindow = TRUE;
 }
 
 CEHomeList::~CEHomeList()
@@ -32,6 +36,8 @@ BEGIN_MESSAGE_MAP(CEHomeList, CListCtrl)
 	ON_WM_MEASUREITEM_REFLECT()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
+	ON_WM_PAINT()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -45,19 +51,28 @@ void CEHomeList::PreSubclassWindow()
 
 	// 更改普通样式
 	dwStyle = GetWindowLong(GetSafeHwnd(), GWL_STYLE);
-	ASSERT(dwStyle & LVS_OWNERDATA);
+// 	ASSERT(dwStyle & LVS_OWNERDATA);
 	dwStyle |= LVS_REPORT;				// 列表控件
-	dwStyle |= LVS_OWNERDRAWFIXED;		// 自已绘制 DrawItem() 函数会被调用
+// 	dwStyle |= LVS_OWNERDRAWFIXED;		// 自已绘制 DrawItem() 函数会被调用
 	SetWindowLong(GetSafeHwnd(), GWL_STYLE, dwStyle);
 	// 更改扩展样式
 	dwStyle = GetWindowLong(GetSafeHwnd(), GWL_EXSTYLE);
 	dwStyle |= LVS_EX_GRIDLINES;		// 网格线
+	dwStyle &= ~WS_EX_DLGMODALFRAME;
 	// dwStyle |= LVS_EX_LABELTIP;			// 提示语
 	SetWindowLong(GetSafeHwnd(), GWL_EXSTYLE, dwStyle);
 	
 	// 扩展标题栏
-	if(NULL != GetHeaderCtrl())
-		m_ctrlHeader.SubclassWindow(GetHeaderCtrl()->GetSafeHwnd());
+// 	if(NULL != GetHeaderCtrl())
+// 		m_ctrlHeader.SubclassWindow(GetHeaderCtrl()->GetSafeHwnd());
+	// 设置高度
+	m_imagelist.Create(1, m_nItemHeight-1, ILC_COLOR24, 1, 1);
+	SetImageList(&m_imagelist, LVSIL_STATE);
+
+	ASSERT( GetStyle() & LVS_REPORT );
+	VERIFY(m_ctrlHeader.SubclassWindow(GetHeaderCtrl()->GetSafeHwnd()));
+	// 设置定时器
+	SetTimer(1, 250, NULL);
 }
 
 void CEHomeList::SetColumnFormat(int nColumn, EHOMELISTFORMAT fmt, HIMAGELIST hImgList)
@@ -97,7 +112,7 @@ BOOL CEHomeList::SetItemText(int nItem, int nSubItem, LPCTSTR lpszText )
 	item.iSubItem = nSubItem;
 	item.pszText = (LPTSTR)lpszText;
 
-	return SendMessage(LVM_SETITEM, 0, (LPARAM)&item);
+	return ( 0 != SendMessage(LVM_SETITEM, 0, (LPARAM)&item) );
 }
 
 // 设置行高, 行高要在Attach之前设置，否则无效
@@ -120,6 +135,17 @@ void CEHomeList::SetMuiltButtonImageList(int nSubItem, HIMAGELIST hImageList)
 {
 	SetColumnFormat(nSubItem, EHLF_MuiltButton, hImageList);
 }
+// 设置空字符串
+void CEHomeList::SetEmptyString(LPCTSTR lpEmptyString)
+{
+	m_strEmpty = lpEmptyString;
+}
+// 设置加载框图标
+void CEHomeList::SetLoadingImage(Gdiplus::Image* pImage, ULONG nSplitCount)
+{
+	m_pLoadingImg = pImage;
+	m_nLoadingImageCount = (0 == nSplitCount)?1:nSplitCount;
+}
 // 消息回调
 LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -133,7 +159,8 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		item.nImage = pItem->iImage;
 
 		m_vctData.push_back(item);
-		SetItemCount((int)m_vctData.size());
+		if(m_bEnableWindow)
+			SetItemCount((int)m_vctData.size());
 		return (LRESULT)m_vctData.size() - 1;
 	}
 	else if(LVM_SETITEM == message)
@@ -144,9 +171,10 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 			return FALSE;
 		if(pItem->mask & LVIF_TEXT)
 		{
-			if(m_vctData[pItem->iItem].vctstr.size() <= pItem->iSubItem || pItem->iSubItem < 0)
+			if((int)m_vctData[pItem->iItem].vctstr.size() <= pItem->iSubItem || pItem->iSubItem < 0)
 				return FALSE;
 			m_vctData[pItem->iItem].vctstr[pItem->iSubItem] = pItem->pszText;
+			Invalidate(FALSE);
 		}
 		if(pItem->mask & LVIF_IMAGE)
 		{
@@ -184,13 +212,82 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		else if(-1 != m_dwMouseItem)
 		{
-			GetParent()->SendMessage(UM_EHOMELISTCLICKITEM, (WPARAM)GetSafeHwnd(), (LPARAM)m_dwMouseItem);
+// 			if (m_vctColumnFmt[HIWORD(m_dwMouseItem)].fmt != EHLF_SwitchButton)
+				GetParent()->SendMessage(UM_EHOMELISTCLICKITEM, (WPARAM)GetSafeHwnd(), (LPARAM)m_dwMouseItem);
+// 			else
+//				GetParent()->SendMessage(UM_SETITEMSWITCHBUTTON, (WPARAM)GetSafeHwnd(), (LPARAM)m_dwMouseItem);
+				Invalidate(FALSE);
 			return 0;
+		}
+	}
+	else if(LVM_DELETEALLITEMS == message)
+	{
+		m_vctData.clear();
+		m_strEmpty.clear();
+		SetItemCount(0);
+		Invalidate();
+		return TRUE;
+	}
+	else if (LVM_GETITEMTEXT == message)
+	{
+		int			nChars;
+		int			nItem, nSubItem;
+		LPLVITEM	pItemInfo;
+
+		nItem = (int)wParam;
+		pItemInfo = (LPLVITEM)lParam;
+		nSubItem = pItemInfo->iSubItem;
+
+		nChars = RealGetItemText(nItem, nSubItem, pItemInfo->pszText, pItemInfo->cchTextMax);
+		return TRUE;
+	}
+	else if (LVM_DELETEITEM == message)
+	{
+		SetItemCount(GetItemCount() - 1);
+		m_vctData.erase(m_vctData.begin()+(int)wParam);
+		return TRUE;
+	}
+	else if(WM_NOTIFY == message)
+	{
+		NMHDR*		pHdr		= (NMHDR *)lParam;
+
+		if(NULL != pHdr && NM_RELEASEDCAPTURE == pHdr->code)
+		{
+			TRACE("[CEHomeList::WindowProc] WM_NOTIFY code: %d\n", pHdr->code);
+			Invalidate();
+		}
+	}
+	else if(WM_ENABLE == message)
+	{
+		m_bEnableWindow = (BOOL)wParam;
+		if(FALSE == m_bEnableWindow)
+		{
+			SetItemCount(0);
+			Invalidate(FALSE);
+		} 
+		else
+		{
+			SetItemCount((int)m_vctData.size());
+			Invalidate(FALSE);
 		}
 	}
 
 	return CListCtrl::WindowProc(message, wParam, lParam);
 }
+
+int		CEHomeList::RealGetItemText(int nItem, int nSubItem, TCHAR *pBuffer, int nSize)
+{
+	EHOMELISTITEM		*pItem;
+	String				*pString;
+
+	pItem = &m_vctData[nItem];
+	pString = &pItem->vctstr[nSubItem];
+
+	_tcscpy(pBuffer, pString->c_str());
+	return 1;
+
+}
+
 BOOL CEHomeList::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	LPNMHDR			pNMHDR			= (LPNMHDR)lParam;
@@ -205,7 +302,7 @@ BOOL CEHomeList::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 		ScreenToClient(&info.pt);
 		SubItemHitTest(&info);
 
-		if(-1 == info.iItem || -1 == info.iSubItem)
+		if(0 > info.iItem || info.iItem >= (int)m_vctData.size() || -1 == info.iSubItem)
 			return FALSE;
 		switch(m_vctColumnFmt[info.iSubItem].fmt)
 		{
@@ -235,7 +332,7 @@ void		CEHomeList::Draw_NormalItem(CDC* pDC, RECT rect, LPCTSTR lpText, UINT nCol
 	if(LVCFMT_RIGHT & nColumnFmt)
 		nFormat |= DT_RIGHT;
 
-	pDC->DrawText(lpText, _tcslen(lpText), &rect, nFormat);
+	pDC->DrawText(lpText, (int)_tcslen(lpText), &rect, nFormat);
 }
 
 void		CEHomeList::Draw_TitleItem(CDC* pDC, RECT rect, LPCTSTR lpText)
@@ -258,12 +355,12 @@ void		CEHomeList::Draw_TitleItem(CDC* pDC, RECT rect, LPCTSTR lpText)
 	// 绘制标题 
 	rtTitle.bottom -= rtTitle.Height() / 2;
 	CFont*		pOldFont		= pDC->SelectObject(&m_FontBold);
-	pDC->DrawText(lpText, pInfo - lpText, &rtTitle, DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_WORD_ELLIPSIS);
+	pDC->DrawText(lpText, (int)(pInfo - lpText), &rtTitle, DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_WORD_ELLIPSIS);
 	pDC->SelectObject(pOldFont);
 	// 绘制信息
 	rtTitle = rect;
 	rtTitle.top += rtTitle.Height() / 2;
-	pDC->DrawText(pInfo, _tcslen(pInfo), &rtTitle, DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_WORD_ELLIPSIS);
+	pDC->DrawText(pInfo, (int)_tcslen(pInfo), &rtTitle, DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_WORD_ELLIPSIS);
 }
 
 void		CEHomeList::Draw_SwitchButtonItem(CDC* pDC, RECT& rect, int nIndex, HIMAGELIST hImageList, BOOL bMouseOver)
@@ -284,7 +381,8 @@ void		CEHomeList::Draw_SwitchButtonItem(CDC* pDC, RECT& rect, int nIndex, HIMAGE
 	ImageList_GetImageInfo(hImageList, 0, &info);
 	pt.x = rect.left + ((rect.right - rect.left) - (info.rcImage.right - info.rcImage.left)) / 2;
 	pt.y = rect.top + ((rect.bottom - rect.top) - (info.rcImage.bottom - info.rcImage.top)) / 2;
-	ImageList_Draw(hImageList, (bMouseOver)?nIndex * 2+1:nIndex*2, pDC->GetSafeHdc(), pt.x, pt.y, ILD_TRANSPARENT);
+ 	ImageList_Draw(hImageList, (bMouseOver)?nIndex * 2+1:nIndex*2, pDC->GetSafeHdc(), pt.x, pt.y, ILD_TRANSPARENT);
+//	ImageList_Draw(hImageList, (nIndex==1)?1:0, pDC->GetSafeHdc(), pt.x, pt.y, ILD_TRANSPARENT);
 	rect.left = pt.x;
 	rect.top = pt.y;
 	rect.right = rect.left + (info.rcImage.right - info.rcImage.left);
@@ -316,7 +414,7 @@ void		CEHomeList::Draw_ProgressItem(CDC* pDC, RECT rect, int nProg, int nColor)
 	rect.right -= 20;
 	_itot(nProg, szText, 10);
 	_tcscat(szText, _T("%"));
-	pDC->DrawText(szText, _tcslen(szText), &rect, DT_RIGHT|DT_SINGLELINE|DT_VCENTER);
+	pDC->DrawText(szText, (int)_tcslen(szText), &rect, DT_RIGHT|DT_SINGLELINE|DT_VCENTER);
 }
 
 void		CEHomeList::Draw_LinkItem(CDC* pDC, RECT& rect, LPCTSTR lpLink, BOOL bMouseOver)
@@ -334,7 +432,7 @@ void		CEHomeList::Draw_LinkItem(CDC* pDC, RECT& rect, LPCTSTR lpLink, BOOL bMous
 		m_FontLink.CreateFontIndirect(&logFont);
 	}
 	pOldFont = pDC->SelectObject(&m_FontLink);
-	pDC->DrawText(lpLink, _tcslen(lpLink), &rt, DT_CALCRECT);
+	pDC->DrawText(lpLink, (int)_tcslen(lpLink), &rt, DT_CALCRECT);
 	rect.top = rect.top + ((rect.bottom - rect.top) - (rt.bottom - rt.top)) / 2; 
 	rect.bottom = rect.top + (rect.bottom - rect.top);
 	rect.right = min(rect.right, rect.left + (rt.right - rt.left));
@@ -343,7 +441,7 @@ void		CEHomeList::Draw_LinkItem(CDC* pDC, RECT& rect, LPCTSTR lpLink, BOOL bMous
 		pDC->SetTextColor(RGB(0xFF, 0x0, 0x0));
 	else
 		pDC->SetTextColor(RGB(0x0, 0x0, 0xFF));
-	pDC->DrawText(lpLink, _tcslen(lpLink), &rect, DT_SINGLELINE | DT_TOP | DT_WORD_ELLIPSIS);
+	pDC->DrawText(lpLink, (int)_tcslen(lpLink), &rect, DT_SINGLELINE | DT_TOP | DT_WORD_ELLIPSIS);
 	pDC->SetTextColor(colOld);
 	pDC->SelectObject(pOldFont);
 }
@@ -457,7 +555,7 @@ void CEHomeList::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		}
 		rt.DeflateRect(1, 1, 1, 1);
 		// 初始化列
-		if(m_vctColumnFmt.size() < m_ctrlHeader.GetItemCount())
+		if((int)m_vctColumnFmt.size() < m_ctrlHeader.GetItemCount())
 		{
 			EHOMELISTCOLUMN			column;
 
@@ -519,6 +617,27 @@ void CEHomeList::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	dc.SelectObject(pOldPen);
 	dc.Detach();
+}
+// 绘制加载框
+void CEHomeList::DrawLoading(CDC* pDC, CRect rect)
+{
+	if(NULL == m_pLoadingImg)
+	{
+		DrawTextW(pDC->GetSafeHdc(), L"正在加载数据..."
+			, 6 + m_nLoadingIndex % 4, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+		return;
+	}
+	if(0 == m_nLoadingImageCount)
+		m_nLoadingImageCount = 1;
+	// 绘制图标
+	Gdiplus::Graphics		graphics(pDC->GetSafeHdc());
+	int						nWidth		= m_pLoadingImg->GetWidth() / m_nLoadingImageCount;
+	int						nHeight		= m_pLoadingImg->GetHeight();
+
+	graphics.DrawImage(m_pLoadingImg
+		, Gdiplus::Rect((rect.Width() - nWidth) / 2, (rect.Height() - nHeight) / 2, nWidth, nHeight)
+		, (m_nLoadingIndex % m_nLoadingImageCount) * nWidth, 0, nWidth, nHeight
+		, Gdiplus::UnitPixel);
 }
 // 设置行高
 void CEHomeList::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItem)
@@ -631,3 +750,85 @@ int CEHomeList::MuiltButtonHitTest(POINT pt, CRect &rect, HIMAGELIST hImage)
 	return -1;
 }
 
+
+void CEHomeList::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: Add your message handler code here
+	// Do not call CListCtrl::OnPaint() for painting messages
+	CRect			rect;
+	CDC				memDC;
+	CBitmap			bitmap;
+	int				nSaveDC;
+
+	GetClientRect(&rect);
+	memDC.CreateCompatibleDC(&dc);
+	bitmap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
+	nSaveDC = memDC.SaveDC();
+	// 设置环境
+	memDC.SelectObject(&bitmap);
+	memDC.SelectObject(GetFont());
+	// 绘制背景
+	CRect		rtBody = rect, rtHeader(0, 0, 0, 0);
+
+	if( GetHeaderCtrl() )
+		GetHeaderCtrl()->GetWindowRect(&rtHeader);
+	rtBody.top += rtHeader.Height();
+	memDC.FillSolidRect(&rect, RGB(0xff, 0xff, 0xff));/*MyDrawBk(&memDC, rect);*/
+	// 开始绘制项
+	if( FALSE == m_bEnableWindow )
+	{
+		DrawLoading(&memDC, rect);
+	}
+	else if(0 == m_vctData.size())
+	{
+		// 绘制空字符串
+		rtBody.MoveToX(0 - GetScrollPos(SB_HORZ));
+		memDC.DrawText(m_strEmpty.c_str(), (int)_tcslen(m_strEmpty.c_str()), &rtBody, DT_LEFT | DT_EXPANDTABS);
+	}
+	else
+	{
+		// 绘制图标
+		for(int i = 0; i < (int)m_vctData.size(); i++)
+		{
+			int					nItemSaveDC;
+			DRAWITEMSTRUCT		drawitem			= {0};
+
+			GetItemRect(i, &drawitem.rcItem, LVIR_BOUNDS);
+			// 加速处理
+			if(drawitem.rcItem.top > rect.bottom)
+				break;
+			else if(drawitem.rcItem.bottom < rect.top)
+				continue;
+			// 配置参数
+			drawitem.hDC = memDC.GetSafeHdc();
+			drawitem.itemID = i;
+			// 绘制操作
+			nItemSaveDC = memDC.SaveDC();
+			DrawItem(&drawitem);
+			// 真实绘制
+			memDC.RestoreDC(nItemSaveDC);
+		}
+	}
+	// 复制
+	dc.BitBlt(rect.left, rect.top, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
+	// 清理工作
+	memDC.RestoreDC(nSaveDC);
+	bitmap.DeleteObject();
+	memDC.DeleteDC();
+}
+
+void CEHomeList::OnTimer(UINT_PTR nIDEvent)
+{
+	if(1 == nIDEvent)
+	{
+		if( FALSE == m_bEnableWindow )
+		{
+			m_nLoadingIndex++;
+			Invalidate(FALSE);
+			return;
+		}
+	}
+
+	CListCtrl::OnTimer(nIDEvent);
+}

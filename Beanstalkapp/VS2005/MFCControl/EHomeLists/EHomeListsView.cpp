@@ -2,15 +2,18 @@
 //
 
 #include "stdafx.h"
+#include <GdiPlus.h>
+#include <Gdiplusheaders.h>
 #include "EHomeLists.h"
 
 #include "EHomeListsDoc.h"
 #include "EHomeListsView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+// #ifdef _DEBUG
+// #define new DEBUG_NEW
+// #endif
 
+#pragma comment(lib, "gdiplus.lib")
 
 // CEHomeListsView
 
@@ -91,6 +94,7 @@ void CEHomeListsView::OnInitialUpdate()
 	m_imagemuiltbutton.Add(&bmp6, RGB(0xff, 0x00, 0xff));
 	//////////////////////////////////////////////////////////////////////////
 	// 软件列表
+	///m_listsoft.EnableWindow(FALSE);
 	m_listsoft.InsertColumn(0, _T("软件名称"), LVCFMT_LEFT, 280);
 	m_listsoft.InsertColumn(1, _T("分类"), LVCFMT_CENTER, 50);
 	m_listsoft.InsertColumn(2, _T("黑名单"), 0, 120);
@@ -108,9 +112,40 @@ void CEHomeListsView::OnInitialUpdate()
 	nItem = m_listsoft.InsertItem(2, _T("迅雷7.2.0.3076正式版\r\n迅雷最新版本，采用全新界面，提供更顺畅的下载"), 2);
 	m_listsoft.SetItemText(nItem, 1, _T("下载"));
 	m_listsoft.SetItemText(nItem, 2, _T("1"));
+	// 加载图片
+	HRSRC				hRsrc;
+	HGLOBAL				hResorce;
+	DWORD				dwSize;
+	CComPtr<IStream>	spStream;
+	Gdiplus::Image*		pImage			= NULL;
+	ULONG_PTR			pGdiToken;
+
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&pGdiToken, &gdiplusStartupInput, NULL);
+
+	hRsrc = FindResourceA(NULL, "loading.png", "IMAGE");
+	if(NULL != hRsrc)
+	{
+		hResorce = LoadResource(NULL, hRsrc);
+		if(NULL != hResorce)
+		{
+			// 构造Stream
+			CreateStreamOnHGlobal(NULL, TRUE, &spStream);
+
+			dwSize = SizeofResource(NULL, hRsrc);
+			spStream->Write(LockResource(hResorce), dwSize, &dwSize);
+			// 创建图片
+			pImage = Gdiplus::Image::FromStream(spStream);
+
+			UnlockResource(hResorce);
+			FreeResource(hResorce);
+		}
+	}
 	//////////////////////////////////////////////////////////////////////////
 	// 网址列表
-
+	m_listurl.EnableWindow(FALSE);
+	m_listurl.SetLoadingImage(pImage, 8);
+	m_listurl.SetRedraw(FALSE);
 	m_listurl.InsertColumn(0, _T("网址"), LVCFMT_LEFT, 180);
 	m_listurl.InsertColumn(1, _T("网站"), LVCFMT_CENTER, 65);
 	m_listurl.InsertColumn(2, _T("类型"), LVCFMT_CENTER, 85);

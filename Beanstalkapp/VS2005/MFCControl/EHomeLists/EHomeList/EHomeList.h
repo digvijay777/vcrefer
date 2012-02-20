@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "ListHead.h"
+#include <atlimage.h>
 
 #define UM_SETITEMICONHANDER			(WM_USER+1)
 #define UM_SETITEMICONFILE				(WM_USER+2)
@@ -9,10 +11,12 @@
 #define UM_EHOMELISTCLICKITEM			(WM_USER+4)			// 单击其中一个项目: wParam: HWND指向LIST句柄, lParam: MAKELONG(iItem, iSubItem)
 #define UM_EHOMELISTCLICKBUTTON			(WM_USER+5)			// 单击其中一个项目: wParam: HWND指向LIST句柄, lParam: MAKELONG(iItem, iButtonMask)
 
+#ifndef String
 #ifdef UNICODE
-#define String			std::wstring
+#define String std::wstring
 #else
-#define String			std::string
+#define String std::string
+#endif
 #endif
 
 typedef enum _EHomeListFormat{
@@ -47,7 +51,7 @@ public:
 
 private:
 	std::vector<EHOMELISTCOLUMN>		m_vctColumnFmt;
-	CHeaderCtrl							m_ctrlHeader;
+	CListHead							m_ctrlHeader;
 	std::vector<EHOMELISTITEM>			m_vctData;
 	int									m_nItemHeight;			// 行高
 	CImageList*							m_pImageList[3];
@@ -58,10 +62,16 @@ private:
 	DWORD								m_dwMouseItem;
 	DWORD								m_dwMuiltIndex;
 	HCURSOR								m_hCursor[2];
+	CImageList							m_imagelist;
+	ULONG								m_nLoadingIndex;
+	Gdiplus::Image*						m_pLoadingImg;
+	ULONG								m_nLoadingImageCount;
+	BOOL								m_bEnableWindow;
 
 protected:
 	void				SetColumnFormat(int nColumn, EHOMELISTFORMAT fmt, HIMAGELIST hImgList);
 	int					MuiltButtonHitTest(POINT pt, CRect &rect, HIMAGELIST hImage);
+	int					RealGetItemText(int nItem, int nSubItem, TCHAR *pBuffer, int nSize);
 
 public:
 	// 扩展List控件操作方法
@@ -72,6 +82,8 @@ public:
 	void				SetSwitchImageList(int nSubItem, HIMAGELIST hImageList);
 	void				SetIconImageList(int nSubItem, HIMAGELIST hImageList);
 	void				SetMuiltButtonImageList(int nSubItem, HIMAGELIST hImageList);
+	void				SetEmptyString(LPCTSTR lpEmptyString);
+	void				SetLoadingImage(Gdiplus::Image* pImage, ULONG nSplitCount);
 
 protected:
 	// 绘制集合
@@ -84,6 +96,13 @@ protected:
 	virtual void		Draw_MuiltButtonItem(CDC* pDC, RECT& rect, HIMAGELIST hImageList, DWORD dwMask, int nIndex);
 
 	virtual void DrawItem(LPDRAWITEMSTRUCT /*lpDrawItemStruct*/);
+	virtual void DrawLoading(CDC* pDC, CRect rect);
+private:
+#if defined(UNICODE) || defined(_UNICODE)
+	std::wstring							m_strEmpty;
+#else
+	std::string								m_strEmpty;
+#endif
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -95,6 +114,9 @@ public:
 public:
 // 	afx_msg void OnPaint();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnPaint();
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 
