@@ -174,7 +174,8 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 			if((int)m_vctData[pItem->iItem].vctstr.size() <= pItem->iSubItem || pItem->iSubItem < 0)
 				return FALSE;
 			m_vctData[pItem->iItem].vctstr[pItem->iSubItem] = pItem->pszText;
-			Invalidate(FALSE);
+			if(m_bEnableWindow)
+				Invalidate(FALSE);
 		}
 		if(pItem->mask & LVIF_IMAGE)
 		{
@@ -263,14 +264,14 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		if(FALSE == m_bEnableWindow)
 		{
 			SetItemCount(0);
-			if(GetHeaderCtrl())
-				GetHeaderCtrl()->ShowWindow(SW_HIDE);
+// 			if(GetHeaderCtrl())
+// 				GetHeaderCtrl()->ShowWindow(SW_HIDE);
 			Invalidate(FALSE);
 		} 
 		else
 		{
-			if(GetHeaderCtrl())
-				GetHeaderCtrl()->ShowWindow(SW_SHOW);
+// 			if(GetHeaderCtrl())
+// 				GetHeaderCtrl()->ShowWindow(SW_SHOW);
 			SetItemCount((int)m_vctData.size());
 			Invalidate(FALSE);
 		}
@@ -828,8 +829,14 @@ void CEHomeList::OnTimer(UINT_PTR nIDEvent)
 	{
 		if( FALSE == m_bEnableWindow )
 		{
+			CRect			rect, rtHeader(0, 0, 0, 0);
+
+			if(GetHeaderCtrl())
+				GetHeaderCtrl()->GetWindowRect(&rtHeader);
+			GetClientRect(&rect);
+			rect.top += rtHeader.Height();
 			m_nLoadingIndex++;
-			Invalidate(FALSE);
+			InvalidateRect(&rect, FALSE);
 			return;
 		}
 	}
