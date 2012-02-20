@@ -175,7 +175,7 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 				return FALSE;
 			m_vctData[pItem->iItem].vctstr[pItem->iSubItem] = pItem->pszText;
 			if(m_bEnableWindow)
-				Invalidate(FALSE);
+				InvalidateClient();
 		}
 		if(pItem->mask & LVIF_IMAGE)
 		{
@@ -198,7 +198,7 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		m_bTrackMouseEvent = FALSE;
 		m_dwMouseItem = -1; 
-		Invalidate(FALSE);
+		InvalidateClient();
 	}
 	else if(WM_LBUTTONDOWN == message)
 	{
@@ -217,7 +217,7 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 				GetParent()->SendMessage(UM_EHOMELISTCLICKITEM, (WPARAM)GetSafeHwnd(), (LPARAM)m_dwMouseItem);
 // 			else
 //				GetParent()->SendMessage(UM_SETITEMSWITCHBUTTON, (WPARAM)GetSafeHwnd(), (LPARAM)m_dwMouseItem);
-				Invalidate(FALSE);
+				InvalidateClient();
 			return 0;
 		}
 	}
@@ -255,7 +255,7 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		if(NULL != pHdr && NM_RELEASEDCAPTURE == pHdr->code)
 		{
 			TRACE("[CEHomeList::WindowProc] WM_NOTIFY code: %d\n", pHdr->code);
-			Invalidate();
+			InvalidateClient();
 		}
 	}
 	else if(WM_ENABLE == message)
@@ -266,14 +266,14 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 			SetItemCount(0);
 // 			if(GetHeaderCtrl())
 // 				GetHeaderCtrl()->ShowWindow(SW_HIDE);
-			Invalidate(FALSE);
+			InvalidateClient();
 		} 
 		else
 		{
 // 			if(GetHeaderCtrl())
 // 				GetHeaderCtrl()->ShowWindow(SW_SHOW);
 			SetItemCount((int)m_vctData.size());
-			Invalidate(FALSE);
+			InvalidateClient();
 		}
 	}
 
@@ -291,6 +291,17 @@ int		CEHomeList::RealGetItemText(int nItem, int nSubItem, TCHAR *pBuffer, int nS
 	_tcscpy(pBuffer, pString->c_str());
 	return 1;
 
+}
+// Ë¢ÐÂ¿Í»§¶Ë
+void		CEHomeList::InvalidateClient()
+{
+	CRect		rtClient, rtHeader(0, 0, 0, 0);
+
+	GetClientRect(&rtClient);
+	if(GetHeaderCtrl() && GetHeaderCtrl()->IsWindowVisible())
+		GetHeaderCtrl()->GetWindowRect(&rtHeader);
+	rtClient.top += rtHeader.Height();
+	InvalidateRect(&rtClient, FALSE);
 }
 
 BOOL CEHomeList::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
@@ -829,14 +840,8 @@ void CEHomeList::OnTimer(UINT_PTR nIDEvent)
 	{
 		if( FALSE == m_bEnableWindow )
 		{
-			CRect			rect, rtHeader(0, 0, 0, 0);
-
-			if(GetHeaderCtrl())
-				GetHeaderCtrl()->GetWindowRect(&rtHeader);
-			GetClientRect(&rect);
-			rect.top += rtHeader.Height();
 			m_nLoadingIndex++;
-			InvalidateRect(&rect, FALSE);
+			InvalidateClient();
 			return;
 		}
 	}

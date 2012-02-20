@@ -72,6 +72,7 @@ protected:
 	void				SetColumnFormat(int nColumn, EHOMELISTFORMAT fmt, HIMAGELIST hImgList);
 	int					MuiltButtonHitTest(POINT pt, CRect &rect, HIMAGELIST hImage);
 	int					RealGetItemText(int nItem, int nSubItem, TCHAR *pBuffer, int nSize);
+	void				InvalidateClient();
 
 public:
 	// 扩展List控件操作方法
