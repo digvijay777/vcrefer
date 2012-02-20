@@ -263,10 +263,14 @@ LRESULT CEHomeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		if(FALSE == m_bEnableWindow)
 		{
 			SetItemCount(0);
+			if(GetHeaderCtrl())
+				GetHeaderCtrl()->ShowWindow(SW_HIDE);
 			Invalidate(FALSE);
 		} 
 		else
 		{
+			if(GetHeaderCtrl())
+				GetHeaderCtrl()->ShowWindow(SW_SHOW);
 			SetItemCount((int)m_vctData.size());
 			Invalidate(FALSE);
 		}
