@@ -264,11 +264,6 @@
 			RelativePath=".\ReadMe.txt"
 			>
 		</File>
-		<File
-			RelativePath=".\WebInfo.htm"
-			DeploymentContent="true"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global

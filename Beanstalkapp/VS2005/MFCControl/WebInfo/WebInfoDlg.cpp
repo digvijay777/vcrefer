@@ -13,22 +13,22 @@
 // CWebInfoDlg dialog
 
 BEGIN_DHTML_EVENT_MAP(CWebInfoDlg)
-	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOUT, _T("button"), OnButtonMouseLeave)
-	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOVER, _T("button"), OnButtonMouseHover)
-	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("button"), OnButtonMouseDown)
-	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("button"), OnButtonMouseUp)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("body"), OnBodyLButtonDown)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("body"), OnBodyLButtonUp)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("body"), OnBodyLButtonMove)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("body"), OnBodyContextMenu)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("td"), OnBodyLButtonDown)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("td"), OnBodyLButtonUp)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("td"), OnBodyLButtonMove)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("td"), OnBodyContextMenu)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("div"), OnBodyLButtonDown)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("div"), OnBodyLButtonUp)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("div"), OnBodyLButtonMove)
-	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("div"), OnBodyContextMenu)
+// 	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOUT, _T("button"), OnButtonMouseLeave)
+// 	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEOVER, _T("button"), OnButtonMouseHover)
+// 	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("button"), OnButtonMouseDown)
+// 	DHTML_EVENT_CLASS(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("button"), OnButtonMouseUp)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("body"), OnBodyLButtonDown)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("body"), OnBodyLButtonUp)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("body"), OnBodyLButtonMove)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("body"), OnBodyContextMenu)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("td"), OnBodyLButtonDown)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("td"), OnBodyLButtonUp)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("td"), OnBodyLButtonMove)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("td"), OnBodyContextMenu)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN, _T("div"), OnBodyLButtonDown)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEUP, _T("div"), OnBodyLButtonUp)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONMOUSEMOVE, _T("div"), OnBodyLButtonMove)
+// 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("div"), OnBodyContextMenu)
 END_DHTML_EVENT_MAP()
 
 BEGIN_EVENTSINK_MAP(CWebInfoDlg, CDHtmlDialog)
@@ -64,8 +64,8 @@ BOOL CWebInfoDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-	// Navigate(_T("F:\\GoogleCode\\Beanstalkapp\\VS2005\\MFCControl\\WebInfo\\") _T("web\\WebInfo.html"));
-	Navigate(_T("http://www.baidu13164654679879.com/test.jsp"));
+	Navigate(_T("f:\\MySVN\\GoogleCode\\Beanstalkapp\\VS2005\\MFCControl\\WebInfo\\") _T("WebInfo.htm"));
+	//Navigate(_T("http://www.baidu13164654679879.com/test.jsp"));
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -269,6 +269,34 @@ HRESULT CWebInfoDlg::OnNull(IHTMLElement *pElement)
 	return S_FALSE;
 }
 
+// STDMETHODIMP CWebInfoDlg::ShowMessage(HWND hwnd, LPOLESTR lpstrText, LPOLESTR lpstrCaption
+// 									  , DWORD dwType, LPOLESTR lpstrHelpFile, DWORD dwHelpContext, LRESULT *plResult)
+// {
+// 	return S_OK;
+// }
+// 
+// STDMETHODIMP CWebInfoDlg::ShowHelp(HWND hwnd, LPOLESTR pszHelpFile, UINT uCommand
+// 								   , DWORD dwData, POINT ptMouse, IDispatch *pDispatchObjectHit)
+// {
+// 	return S_OK;
+// }
+BOOL CWebInfoDlg::CreateControlSite(COleControlContainer* pContainer, COleControlSite** ppSite, UINT nID, REFCLSID clsid)
+{
+	if(ppSite == NULL)
+	{
+		ASSERT(FALSE);
+		return FALSE;
+	}
+
+	CMyBrowserControlSite *pBrowserSite = 
+		new CMyBrowserControlSite(pContainer, this);
+	if (!pBrowserSite)
+		return FALSE;
+
+	*ppSite = pBrowserSite;
+	return TRUE;
+}
+
 void CWebInfoDlg::OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
 {
 	CDHtmlDialog::OnDocumentComplete(pDisp, szUrl);
@@ -280,14 +308,13 @@ void CWebInfoDlg::OnNavigateComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
 {
 	CDHtmlDialog::OnNavigateComplete(pDisp, szUrl);
 
-	CComBSTR bstrURL;
-	m_spHtmlDoc->get_URL(&bstrURL);
-	int i = 0;
+	 CComQIPtr<ICustomDoc,   &IID_ICustomDoc>   spCustomDoc(m_spHtmlDoc);
+
 }
 
 void CWebInfoDlg::OnNavigateError(LPDISPATCH pDisp, VARIANT* pvURL, VARIANT* pvFrame, VARIANT* pvStatusCode, VARIANT_BOOL* pvbCancel)
 {
 	*pvbCancel = VARIANT_TRUE;
-	Navigate(_T("http://www.baidu.com"));
+// 	Navigate(_T("http://www.baidu.com"));
 	return;
 }
