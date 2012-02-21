@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GdiDraw.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MainFrm.cpp"
 				>
 			</File>
@@ -243,6 +247,10 @@
 			</File>
 			<File
 				RelativePath=".\FontTestView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GdiDraw.h"
 				>
 			</File>
 			<File
