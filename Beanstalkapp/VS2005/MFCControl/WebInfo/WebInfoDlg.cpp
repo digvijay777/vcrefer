@@ -31,22 +31,22 @@ BEGIN_DHTML_EVENT_MAP(CWebInfoDlg)
 // 	DHTML_EVENT_TAG(DISPID_HTMLELEMENTEVENTS_ONCONTEXTMENU, _T("div"), OnBodyContextMenu)
 END_DHTML_EVENT_MAP()
 
-BEGIN_EVENTSINK_MAP(CWebInfoDlg, CDHtmlDialog)
+BEGIN_EVENTSINK_MAP(CWebInfoDlg, CMyDHtmlDialog)
 	ON_EVENT(CWebInfoDlg, AFX_IDC_BROWSER, 271 /*271 DISPID_NAVIGATEERROR */, OnNavigateError, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
 END_EVENTSINK_MAP()
 /*DISPID_NAVIGATEERROR*/
 CWebInfoDlg::CWebInfoDlg(CWnd* pParent /*=NULL*/)
-	: CDHtmlDialog(CWebInfoDlg::IDD, NULL/*CWebInfoDlg::IDH*/, pParent)
+	: CMyDHtmlDialog(CWebInfoDlg::IDD, NULL/*CWebInfoDlg::IDH*/, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CWebInfoDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDHtmlDialog::DoDataExchange(pDX);
+	CMyDHtmlDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CWebInfoDlg, CDHtmlDialog)
+BEGIN_MESSAGE_MAP(CWebInfoDlg, CMyDHtmlDialog)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -55,7 +55,7 @@ END_MESSAGE_MAP()
 
 BOOL CWebInfoDlg::OnInitDialog()
 {
-	CDHtmlDialog::OnInitDialog();
+	CMyDHtmlDialog::OnInitDialog();
 
 
 	// Set the icon for this dialog.  The framework does this automatically
@@ -94,7 +94,7 @@ void CWebInfoDlg::OnPaint()
 	}
 	else
 	{
-		CDHtmlDialog::OnPaint();
+		CMyDHtmlDialog::OnPaint();
 	}
 }
 
@@ -269,44 +269,16 @@ HRESULT CWebInfoDlg::OnNull(IHTMLElement *pElement)
 	return S_FALSE;
 }
 
-// STDMETHODIMP CWebInfoDlg::ShowMessage(HWND hwnd, LPOLESTR lpstrText, LPOLESTR lpstrCaption
-// 									  , DWORD dwType, LPOLESTR lpstrHelpFile, DWORD dwHelpContext, LRESULT *plResult)
-// {
-// 	return S_OK;
-// }
-// 
-// STDMETHODIMP CWebInfoDlg::ShowHelp(HWND hwnd, LPOLESTR pszHelpFile, UINT uCommand
-// 								   , DWORD dwData, POINT ptMouse, IDispatch *pDispatchObjectHit)
-// {
-// 	return S_OK;
-// }
-BOOL CWebInfoDlg::CreateControlSite(COleControlContainer* pContainer, COleControlSite** ppSite, UINT nID, REFCLSID clsid)
-{
-	if(ppSite == NULL)
-	{
-		ASSERT(FALSE);
-		return FALSE;
-	}
-
-	CMyBrowserControlSite *pBrowserSite = 
-		new CMyBrowserControlSite(pContainer, this);
-	if (!pBrowserSite)
-		return FALSE;
-
-	*ppSite = pBrowserSite;
-	return TRUE;
-}
-
 void CWebInfoDlg::OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
 {
-	CDHtmlDialog::OnDocumentComplete(pDisp, szUrl);
+	CMyDHtmlDialog::OnDocumentComplete(pDisp, szUrl);
 
 	// TODO: Add your specialized code here and/or call the base class
 }
 
 void CWebInfoDlg::OnNavigateComplete(LPDISPATCH pDisp, LPCTSTR szUrl)
 {
-	CDHtmlDialog::OnNavigateComplete(pDisp, szUrl);
+	CMyDHtmlDialog::OnNavigateComplete(pDisp, szUrl);
 
 	 CComQIPtr<ICustomDoc,   &IID_ICustomDoc>   spCustomDoc(m_spHtmlDoc);
 

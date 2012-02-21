@@ -192,6 +192,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\MyDHtmlDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -244,6 +248,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\MyDHtmlDialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
@@ -260,8 +268,22 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="html"
+			>
+		</Filter>
+		<File
+			RelativePath=".\MyDHtmlDialog.htm"
+			DeploymentContent="true"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\WebInfo.htm"
+			DeploymentContent="true"
 			>
 		</File>
 	</Files>

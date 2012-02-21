@@ -72,6 +72,7 @@ IDR_MAINFRAME           ICON                    "res\\WebInfo.ico"
 //
 
 IDR_HTML_WEBINFO_DIALOG HTML                    "WebInfo.htm"
+IDR_HTML_MYDHTMLDIALOG  HTML                    "MyDHtmlDialog.htm"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -83,6 +84,13 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPT
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "WebInfo"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+END
+
+IDD_MYDHTMLDIALOG DIALOG  0, 0, 320, 200
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
 BEGIN
 END
 
@@ -140,6 +148,14 @@ BEGIN
         RIGHTMARGIN, 437
         TOPMARGIN, 7
         BOTTOMMARGIN, 271
+    END
+
+    IDD_MYDHTMLDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
     END
 END
 #endif    // APSTUDIO_INVOKED
