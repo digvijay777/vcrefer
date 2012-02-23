@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <Windows.h>
 #include "Resource.h"
 #include <gdiplus.h>
@@ -15,6 +16,9 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	Gdiplus::GdiplusStartupInput			gdiplusStartupInput;
 	Gdiplus::Image*							pPngImage					= NULL;
 	HRSRC									hrsrc						= NULL;
+
+	AfxWinInit(hInstance, NULL, ::GetCommandLine(), nCmdShow);
+	AfxSetResourceHandle(hInstance);
 
 	GdiplusStartup(&pGdiToken, &gdiplusStartupInput, NULL);
 	// 加载图片
@@ -53,13 +57,13 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 // 对话框主函数
 void DialogMain(Gdiplus::Image* pImage)
 {
-	CFloatingWnd		cfb(pImage, 3);
+	CFloatingWnd		cfb/*(pImage, 3)*/;
 
 	cfb.SetClientRect(3, 0, 220, 27);
-	cfb.Create(::GetDesktopWindow(), cfb.GetInitRect());
+	cfb.Create(pImage, 3);
 	cfb.ShowWindow(SW_SHOW);
 	//cfb.UpdateWindow();
-	cfb.SetShowText(L"今日使用: %d时%d分", 2, 5);
+	cfb.SetShowText(L"今日使用: %02d时%02d分", 2, 5);
 	
 	// 消息循环
 	MSG			msg;
