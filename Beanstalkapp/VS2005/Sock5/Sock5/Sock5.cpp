@@ -23,14 +23,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(8022);
-	addr.sin_addr.S_un.S_addr = inet_addr("222.76.216.88");
+ 	addr.sin_port = htons(8022);
+ 	addr.sin_addr.S_un.S_addr = inet_addr("222.76.216.88");
 
 	if( 0 != ConnectEx(sock, (SOCKADDR*)&addr, nLen) )
 	{
 		printf("连接222.76.216.88:8022失败: %d\n", WSAGetLastError());
 		return 0;
 	}
+	// 接收数据
 	CHAR		szData[1024]		= {0};
 
 	recv(sock, szData, 1024, 0);

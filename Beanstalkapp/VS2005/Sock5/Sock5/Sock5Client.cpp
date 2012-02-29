@@ -4,6 +4,7 @@
 #include <Winsock2.h>
 #include <Windows.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #pragma comment(lib, "Advapi32.lib")
 #else
@@ -26,7 +27,7 @@ int __stdcall ConnectEx(SOCKET s, const struct sockaddr* name, int namelen)
 	if(NULL == name)
 		return -1;
 	// 获取代理连接信息
-	if( !GetSockInfo(&nType, szAddr, &nPort, szUser, szPwd) || (4 != nType && 5 != nType))
+	if( !GetSockInfo(&nType, szAddr, &nPort, szUser, szPwd) || (4 != nType && 5 != nType && -1 != nType))
 		return connect(s, name, namelen);
 	// 构建代理地址
 	sockname.sin_family = AF_INET;
@@ -50,6 +51,10 @@ int __stdcall ConnectEx(SOCKET s, const struct sockaddr* name, int namelen)
 	else if( 5 == nType )
 	{
 		bRet = ConnectFromSock5(s, name, namelen, (SOCKADDR *)&sockname, nLen, szUser, szPwd);
+	}
+	else
+	{
+		bRet = ConnectFromHttp(s, name, namelen, (SOCKADDR *)&sockname, nLen);
 	}
 	::setsockopt(s, SOL_SOCKET, SO_RCVTIMEO,(char *)&nOldSTimeout, sizeof(nOldSTimeout));
 
@@ -83,6 +88,7 @@ bool __stdcall GetSockInfo(int* nType, char* pAddr, int* nPort, char* pUser, cha
 	if(0 == szData[0])
 		goto GetSockInfo_end;
 	// 解析代协议设置
+	*nType = -1;
 	// 格式ftp=[ip]:[port];gopher=[ip]:[port];http=[ip]:[port];https=[ip]:[port];socks=[ip]:[port]
 	if(NULL != strchr(szData, '='))
 	{
@@ -91,6 +97,8 @@ bool __stdcall GetSockInfo(int* nType, char* pAddr, int* nPort, char* pUser, cha
 		
 		if(NULL == pSocks)
 			pSocks = strstr(szData, "http");
+		else
+			*nType = 5;
 		if(NULL == pSocks)
 			pSocks = strstr(szData, "=");
 		if(NULL == pSocks)
@@ -118,7 +126,6 @@ bool __stdcall GetSockInfo(int* nType, char* pAddr, int* nPort, char* pUser, cha
 		goto GetSockInfo_end;
 	*pPoint = 0;
 	pPoint++;
-	*nType = 5;
 	strcpy(pAddr, szIP);
 	*nPort = atoi(pPoint);
 	bRet = true;
@@ -209,5 +216,47 @@ int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namele
 	if(5 != szData[0] || 0 != szData[1])
 		return -1;
 	// 连接成功可以操作了
+	return 0;
+}
+/* 退过HTTP代理连接 */
+int __stdcall ConnectFromHttp(SOCKET s, const struct sockaddr* name, int namelen, const struct sockaddr* sockname, int nLen)
+{
+	CHAR		szSend[2048]		= {0};
+	int			nRet				= 0;
+	int			nFlag				= 0;
+
+	// 连接代理服务器
+	if( ERROR_SUCCESS != (nRet = connect(s, sockname, nLen)) )
+		return nRet;
+	// 构建请求
+	sprintf( szSend, "CONNECT %s:%d HTTP/1.0\r\nUser-agent: MyApp/1.0\r\nConnection: Keep-Alive\r\n\r\n"
+		, inet_ntoa( ((SOCKADDR_IN*)name)->sin_addr )
+		, (int)ntohs( ((SOCKADDR_IN*)name)->sin_port ) );
+	// 发送数据
+	send(s, szSend, (int)strlen(szSend), 0);
+	// 接收返回
+	memset(szSend, 0, sizeof(szSend));
+	for(int i = 0; i < (int)sizeof(szSend); i++)
+	{
+		if( 1 != recv(s, &szSend[i], 1, 0) )
+			break;
+		if('\r' == szSend[i] || '\n' == szSend[i])
+			nFlag++;
+		else
+			nFlag = 0;
+		if(4 == nFlag)
+			break;
+	}
+	// 处理返回的值
+	char*		pCode		= NULL;
+
+	pCode = strchr(szSend, '\x20');
+	if(NULL == pCode)
+		return -1;
+	pCode++;
+	nRet = atoi(pCode);
+	if(200 != nRet)
+		return nRet;
+	// 连接成功，可以操作了
 	return 0;
 }
