@@ -79,7 +79,8 @@ FONT 9, "宋体", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
     PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
-    CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC_1,33,53,270,108,SS_NOTIFY
+    CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC_1,25,79,270,108,SS_NOTIFY
+    LTEXT           "Static",IDC_STATIC_2,9,11,216,19
 END
 
 

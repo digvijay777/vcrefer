@@ -24,6 +24,7 @@ CTimeSelectDlg::CTimeSelectDlg(CWnd* pParent /*=NULL*/)
 void CTimeSelectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_2, m_ctlRichTest);
 }
 
 BEGIN_MESSAGE_MAP(CTimeSelectDlg, CDialog)

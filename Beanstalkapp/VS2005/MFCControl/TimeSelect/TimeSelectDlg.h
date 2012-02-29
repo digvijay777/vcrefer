@@ -3,6 +3,7 @@
 
 #pragma once
 #include "TimeSelectCtrl.h"
+#include "afxwin.h"
 
 // CTimeSelectDlg ¶Ô»°¿ò
 class CTimeSelectDlg : public CDialog
@@ -30,4 +31,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
+public:
+	CStatic m_ctlRichTest;
 };

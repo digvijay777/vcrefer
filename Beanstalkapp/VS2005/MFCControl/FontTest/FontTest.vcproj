@@ -292,6 +292,10 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="NewFilter1"
+			>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>
