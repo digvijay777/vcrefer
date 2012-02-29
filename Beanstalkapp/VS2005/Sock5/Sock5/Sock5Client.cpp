@@ -1,12 +1,18 @@
 #ifdef _MSC_VER
 #define WIN32_LEAN_AND_MEAN
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT		0x500
+#endif
 
 #include <Winsock2.h>
 #include <Windows.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Tlhelp32.h>
+#include <Sddl.h>
 
 #pragma comment(lib, "Advapi32.lib")
+#pragma comment(lib, "Kernel32.lib")
 #else
 #error "Can not support!"
 #endif
@@ -74,8 +80,7 @@ bool __stdcall GetSockInfo(int* nType, char* pAddr, int* nPort, char* pUser, cha
 	CHAR*		pPoint					= NULL;
 
 	// 打开注册表
-	::RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", &hKey);
-	if(NULL == hKey)
+	if(ERROR_SUCCESS != OpenIEProxyKey(&hKey) || NULL == hKey)
 		return false;
 	// 读取是否有用代理协议
 	dwSize = sizeof(dwProxyEnable);
@@ -259,4 +264,79 @@ int __stdcall ConnectFromHttp(SOCKET s, const struct sockaddr* name, int namelen
 		return nRet;
 	// 连接成功，可以操作了
 	return 0;
+}
+
+/* 打开IE代理的注册表 */
+LONG __stdcall OpenIEProxyKey(HKEY* pKey)
+{
+	CHAR		szUserName[128]		= {0};
+	DWORD		dwSize				= sizeof(szUserName);
+
+	::GetUserNameA(szUserName, &dwSize);
+	strupr(szUserName);
+	if(strcmp("SYSTEM", szUserName) != 0)
+	{
+		return ::RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_READ, pKey);
+	}
+	// 查询EXPLOERER进程
+	HANDLE				hProcessSnap		= NULL;
+	PROCESSENTRY32W		pe32				= {0};
+	HANDLE				hToken				= NULL;
+	BOOL				bRet				= FALSE;
+
+	hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if(INVALID_HANDLE_VALUE == hProcessSnap)
+		return -1;
+	pe32.dwSize = sizeof(pe32);
+	if(Process32FirstW(hProcessSnap, &pe32))
+	{
+		do 
+		{
+			if(wcsicmp(pe32.szExeFile, L"explorer.exe") == 0)
+			{
+				HANDLE		hProcess;
+
+				if( (hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pe32.th32ProcessID)) )
+				{
+					bRet = OpenProcessToken(hProcess, TOKEN_QUERY, &hToken);
+					CloseHandle(hProcess);
+				}
+				break;
+			}
+		} while (Process32NextW(hProcessSnap, &pe32));
+	}
+	CloseHandle(hProcessSnap);
+	// 查询Explorer进程的用户KEY
+	if( !bRet || NULL == hToken )
+		return -1;
+
+	LONG			nRet			= -1;
+	DWORD			cbti			= 0;
+	PTOKEN_USER		ptiUser			= NULL;
+	LPSTR			pUserSid		= NULL;
+	CHAR			szPath[1024]	= {0};
+
+	GetTokenInformation(hToken, TokenUser, NULL, 0, &cbti);
+	if(0 == cbti)
+		goto OpenIEProxyKey_end;
+	ptiUser = (PTOKEN_USER)HeapAlloc(GetProcessHeap(), 0, cbti);
+	if(NULL == ptiUser)
+		goto OpenIEProxyKey_end;
+	if( !GetTokenInformation(hToken, TokenUser, ptiUser, cbti, &cbti) )
+		goto OpenIEProxyKey_end;
+	if( !ConvertSidToStringSidA(ptiUser->User.Sid, &pUserSid) )
+		goto OpenIEProxyKey_end;
+	// 组合注册表的路径
+	strcpy(szPath, pUserSid);
+	strcat(szPath, "\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
+	nRet = RegOpenKeyExA(HKEY_USERS, szPath, 0, KEY_READ, pKey);
+	// 结束时的清理工作
+OpenIEProxyKey_end:
+	if(NULL != hToken)
+		CloseHandle(hToken);
+	if(NULL != ptiUser)
+		HeapFree(GetProcessHeap(), 0, ptiUser);
+	if(NULL != pUserSid)
+		LocalFree(pUserSid);
+	return nRet;
 }
