@@ -23,8 +23,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	
 	addr.sin_family = AF_INET;
- 	addr.sin_port = htons(8022);
- 	addr.sin_addr.S_un.S_addr = inet_addr("222.76.216.88");
+//  	addr.sin_port = htons(8022);
+//  	addr.sin_addr.S_un.S_addr = inet_addr("222.76.216.88");
+ 	addr.sin_port = htons(8603);
+ 	addr.sin_addr.S_un.S_addr = inet_addr("192.168.1.64");
 
 	if( 0 != ConnectEx(sock, (SOCKADDR*)&addr, nLen) )
 	{
@@ -32,11 +34,27 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 	// 接收数据
-	CHAR		szData[1024]		= {0};
+// 	CHAR		szData[1024]		= {0};
+// 
+// 	recv(sock, szData, 1024, 0);
+// 	printf("Recv: %s\n", szData);
+	// 开始聊天
+	while(true)
+	{
+		char		szSend[1024]		= {0};
 
-	recv(sock, szData, 1024, 0);
-	printf("Recv: %s\n", szData);
-
+		printf("请输入发送内容: ");
+		gets(szSend);
+		if(strcmp(szSend, "exit") == 0)
+			break;
+		if( -1 == send(sock, szSend, (int)strlen(szSend), 0) )
+			break;
+		// 等等回应
+		memset(szSend, 0, sizeof(szSend));
+		if( -1 == recv(sock, szSend, sizeof(szSend), 0) )
+			break;
+		printf("server say: %s\r\n", szSend);
+	}
 	return 0;
 }
 
