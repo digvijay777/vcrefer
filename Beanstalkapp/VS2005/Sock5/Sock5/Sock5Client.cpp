@@ -118,7 +118,7 @@ bool __stdcall GetSockInfo(int* nType, char* pAddr, int* nPort, char* pUser, cha
 		goto GetSockInfo_end;
 	*pPoint = 0;
 	pPoint++;
-	*nType = 4;
+	*nType = 5;
 	strcpy(pAddr, szIP);
 	*nPort = atoi(pPoint);
 	bRet = true;
@@ -173,21 +173,36 @@ int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namele
 	szData[0] = 0x5;		// 版本
 	szData[1] = 0x1;		// 命令 connect
 	szData[2] = 0x0;		// 保留
-	// IPv4类型 - 目前只与IPv4格式， 域名格式暂略， 未处理需要密码的情况
-	szData[3] = 0x1;		// IPv4
-	memcpy(&szData[4], &( ((SOCKADDR_IN*)name)->sin_addr.S_un.S_addr ), 4);
-	memcpy(&szData[8], &( ((SOCKADDR_IN*)name)->sin_port ), 2);
 	// 连接代理服务器
 	iRes = connect(s, sockname, nLen);
 	if(ERROR_SUCCESS != iRes)
 		return iRes;
 	// 发送报文
-	iRes = send(s, (char *)szData, 10, 0);
+	iRes = send(s, (char *)szData, 3, 0);
 	if(SOCKET_ERROR == iRes)
 		return -1;
 	// 接收连接
 	memset(szData, 0, sizeof(szData));
-	iRes = recv(s, (char *)szData, 10, 0);
+	iRes = recv(s, (char *)szData, sizeof(szData), 0);
+	if(SOCKET_ERROR == iRes)
+		return -1;
+	// 验证是否为SOCK5
+	if(5 != szData[0] || 0 != szData[1])
+		return -1;
+	// 发起需要连接的地址
+	memset(szData, 0, sizeof(szData));
+	szData[0] = 0x5;		// 版本
+	szData[1] = 0x1;		// 命令 connect
+	szData[2] = 0x0;		// 保留
+	// IPv4类型, 暂不处理其它类型
+	szData[3] = 0x1;		// IPv4
+	memcpy(&szData[4], &( ((SOCKADDR_IN*)name)->sin_addr.S_un.S_addr ), 4);
+	memcpy(&szData[8], &( ((SOCKADDR_IN*)name)->sin_port ), 2);
+	if(SOCKET_ERROR == send(s, (char *)szData, 10, 0))
+		return -1;
+	// 第二次接收
+	memset(szData, 0, sizeof(szData));
+	iRes = recv(s, (char *)szData, 10/*sizeof(szData)*/, 0);
 	if(SOCKET_ERROR == iRes)
 		return -1;
 	// 验证连接
