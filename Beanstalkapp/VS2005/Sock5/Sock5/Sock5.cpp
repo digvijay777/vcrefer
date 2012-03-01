@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "Sock5Client.h"
 #include <process.h>
+#include <MSWSock.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -27,6 +28,19 @@ int _tmain(int argc, _TCHAR* argv[])
 //  	addr.sin_addr.S_un.S_addr = inet_addr("222.76.216.88");
  	addr.sin_port = htons(8603);
  	addr.sin_addr.S_un.S_addr = inet_addr("192.168.1.64");
+
+	// Õ¨≤Ω£¨“Ï≤Ω≤‚ ‘
+	int			nType		= 0;
+	u_long		uFlag		= 1;
+	int			nSize		= sizeof(nType);
+
+// 	getsockopt(sock, SOL_SOCKET, SO_OPENTYPE, (char*)&nType, &nSize);
+	ioctlsocket(sock, FIONBIO, &uFlag);
+// 	ioctlsocket(sock, FIONBIO, &uFlag);
+// 	getsockopt(sock, SOL_SOCKET, SO_OPENTYPE, (char*)&nType, &nSize);
+// 	uFlag = 0;
+// 	ioctlsocket(sock, FIONBIO, &uFlag);
+// 	getsockopt(sock, SOL_SOCKET, SO_OPENTYPE, (char*)&nType, &nSize);
 
 	if( 0 != ConnectEx(sock, (SOCKADDR*)&addr, nLen) )
 	{

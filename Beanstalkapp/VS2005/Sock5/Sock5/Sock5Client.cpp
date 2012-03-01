@@ -47,20 +47,53 @@ int __stdcall ConnectEx(SOCKET s, const struct sockaddr* name, int namelen)
 	int		iTimeOut		= 1000 * 15;	// 超时为15秒
 	int		nOldSTimeout	= 0;
 	int		iSize			= sizeof(nOldSTimeout);
+	int		iRes			= 0;
+	bool	bAsync			= false;
+	u_long	uFlag;
 
 	::getsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char*)&nOldSTimeout, &iSize);
 	::setsockopt(s, SOL_SOCKET, SO_RCVTIMEO,(char *)&iTimeOut, sizeof(iTimeOut));
+	// 连接代理服务器
+	iRes = connect(s, (SOCKADDR *)&sockname, nLen);
+	if(ERROR_SUCCESS != iRes)
+	{
+		if(WSAEWOULDBLOCK != WSAGetLastError())
+			return iRes;
+		// 原Sock为异步Sock
+		fd_set				fdset;
+		struct timeval		LmtTime;
+
+		FD_ZERO(&fdset);
+		FD_SET(s, &fdset);
+
+		LmtTime.tv_sec = 6;	//连接超时: 秒 
+		LmtTime.tv_usec = 0;				//毫秒
+		if(1 != select(0, 0, &fdset, 0, &LmtTime))
+			return iRes;
+		// 设置为同步
+		bAsync = true;
+		uFlag = 0;
+		ioctlsocket(s, FIONBIO, &uFlag); 
+	}
+
+	// 通过代理服务器连接真实主机
 	if( 4 == nType )
 	{
-		bRet = ConnectFromSock4(s, name, namelen, (SOCKADDR *)&sockname, nLen);
+		bRet = ConnectFromSock4(s, name, namelen);
 	}
 	else if( 5 == nType )
 	{
-		bRet = ConnectFromSock5(s, name, namelen, (SOCKADDR *)&sockname, nLen, szUser, szPwd);
+		bRet = ConnectFromSock5(s, name, namelen, szUser, szPwd);
 	}
 	else
 	{
-		bRet = ConnectFromHttp(s, name, namelen, (SOCKADDR *)&sockname, nLen);
+		bRet = ConnectFromHttp(s, name, namelen);
+	}
+
+	if(false != bAsync)
+	{
+		uFlag = 1;
+		ioctlsocket(s, FIONBIO, &uFlag); 
 	}
 	::setsockopt(s, SOL_SOCKET, SO_RCVTIMEO,(char *)&nOldSTimeout, sizeof(nOldSTimeout));
 
@@ -141,7 +174,7 @@ GetSockInfo_end:
 }
 
 /* 通过Sock4连接 */
-int __stdcall ConnectFromSock4(SOCKET s, const struct sockaddr* name, int namelen, const struct sockaddr* sockname, int nLen)
+int __stdcall ConnectFromSock4(SOCKET s, const struct sockaddr* name, int namelen)
 {
 	// 构建报文
 	BYTE		szData[50];
@@ -154,10 +187,6 @@ int __stdcall ConnectFromSock4(SOCKET s, const struct sockaddr* name, int namele
 	memcpy( &szData[4], &( ((SOCKADDR_IN*)name)->sin_addr.S_un.S_addr ), 4 );	// 目标机子IP
 	szData[8] = 0; // 结束标记
 
-	// 连接代理服务器
-	iRes = connect(s, sockname, nLen);
-	if(ERROR_SUCCESS != iRes)
-		return iRes;
 	// 发送 注意要发送NULL结束符结代理服务器
 	iRes = send(s, (char *)szData, 9, 0); 
 	if(SOCKET_ERROR == iRes)
@@ -175,7 +204,7 @@ int __stdcall ConnectFromSock4(SOCKET s, const struct sockaddr* name, int namele
 }
 
 /* 通过Sock5连接 */
-int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namelen, const struct sockaddr* sockname, int nLen, const char* pUser, const char* pPwd)
+int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namelen, const char* pUser, const char* pPwd)
 {
 	BYTE		szData[1024];
 	int			iRes	= 0;
@@ -185,10 +214,6 @@ int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namele
 	szData[0] = 0x5;		// 版本
 	szData[1] = 0x1;		// 命令 connect
 	szData[2] = 0x0;		// 保留
-	// 连接代理服务器
-	iRes = connect(s, sockname, nLen);
-	if(ERROR_SUCCESS != iRes)
-		return iRes;
 	// 发送报文
 	iRes = send(s, (char *)szData, 3, 0);
 	if(SOCKET_ERROR == iRes)
@@ -224,15 +249,12 @@ int __stdcall ConnectFromSock5(SOCKET s, const struct sockaddr* name, int namele
 	return 0;
 }
 /* 退过HTTP代理连接 */
-int __stdcall ConnectFromHttp(SOCKET s, const struct sockaddr* name, int namelen, const struct sockaddr* sockname, int nLen)
+int __stdcall ConnectFromHttp(SOCKET s, const struct sockaddr* name, int namelen)
 {
 	CHAR		szSend[2048]		= {0};
 	int			nRet				= 0;
 	int			nFlag				= 0;
 
-	// 连接代理服务器
-	if( ERROR_SUCCESS != (nRet = connect(s, sockname, nLen)) )
-		return nRet;
 	// 构建请求
 	sprintf( szSend, "CONNECT %s:%d HTTP/1.0\r\nUser-agent: MyApp/1.0\r\nConnection: Keep-Alive\r\n\r\n"
 		, inet_ntoa( ((SOCKADDR_IN*)name)->sin_addr )

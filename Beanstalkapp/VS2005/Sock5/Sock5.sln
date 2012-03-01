@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5", "Sock5.vcproj", "{1D004126-9B43-406F-9154-32039386E623}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5", "Sock5\Sock5.vcproj", "{1D004126-9B43-406F-9154-32039386E623}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5Char", "..\Sock5Char\Sock5Char.vcproj", "{E655E8AB-38F0-4322-A101-12E507AD5232}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5Char", "Sock5Char\Sock5Char.vcproj", "{E655E8AB-38F0-4322-A101-12E507AD5232}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
