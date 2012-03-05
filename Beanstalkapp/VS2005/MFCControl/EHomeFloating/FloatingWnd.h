@@ -22,6 +22,12 @@ protected:
 	BYTE					m_bAlpha;
 
 	struct {
+		RECT				rect;
+		BOOL				down;
+		BOOL				hover;
+	} Button;
+
+	struct {
 		POINT				pt;
 		BOOL				move;
 		BOOL				capture;
@@ -39,13 +45,16 @@ public:
 	void	SetClientRect(int x, int y, int w, int h);
 	void	SetWindowAlpha(BYTE bAlpha);
 	void	GetShadeFrm(int &nLeft, int &nTop);
-
+	void	SetButtonRect(int x, int y, int w, int h);
 public:
 	virtual	RECT		GetInitRect();
 	virtual void		OnLayerdPrint(HDC hDC, LPRECT lpRect);
 
-	virtual void		NotifyMouseMove(){};		// 鼠标移动消息
-	virtual void		NotifyLButtonClick(){};		// 鼠标单击消息
+	virtual void		NotifyMouseMove(){ATLTRACE("CFloatingWnd::NotifyMouseMove\n");};		// 鼠标移动消息
+	virtual void		NotifyLButtonClick(){ATLTRACE("CFloatingWnd::NotifyLButtonClick\n");};		// 鼠标单击消息
+	virtual void		NotifyHoverButton(){ATLTRACE("CFloatingWnd::NotifyHoverButton\n");};		// 鼠标在按钮上
+	virtual void		NotifyLeavelButton(){ATLTRACE("CFloatingWnd::NotifyLeavelButton\n");};		// 鼠标移开
+	virtual void		NotifyClickButton(){ATLTRACE("CFloatingWnd::NotifyClickButton\n");};		// 单击按钮
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg LRESULT OnNcHitTest(CPoint point);
@@ -54,4 +63,5 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg LRESULT OnMouseLeavel(WPARAM wParam, LPARAM lParam);
 };

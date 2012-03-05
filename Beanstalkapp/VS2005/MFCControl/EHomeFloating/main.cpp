@@ -64,7 +64,7 @@ void DialogMain(Gdiplus::Image* pImage)
 	cfb.ShowWindow(SW_SHOW);
 	//cfb.UpdateWindow();
 	cfb.SetShowText(L"今日使用: %02d时%02d分", 2, 5);
-	
+	cfb.SetButtonRect(0, 0, 82, 25);
 	// 消息循环
 	MSG			msg;
 

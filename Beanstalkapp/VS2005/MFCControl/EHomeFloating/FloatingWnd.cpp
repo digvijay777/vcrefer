@@ -21,6 +21,7 @@ CFloatingWnd::CFloatingWnd()
 	memset(m_szShowText, 0, sizeof(m_szShowText));
 	memset(&m_rtClient, 0, sizeof(m_rtClient));
 	memset(&ClientMove, 0, sizeof(ClientMove));
+	memset(&Button, 0, sizeof(Button));
 }
 
 CFloatingWnd::~CFloatingWnd(void)
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(CFloatingWnd, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeavel)
 END_MESSAGE_MAP()
 
 BOOL CFloatingWnd::Create(Gdiplus::Image* pImage, int nSplit)
@@ -136,6 +138,14 @@ void CFloatingWnd::GetShadeFrm(int &nLeft, int &nTop)
 	nLeft = m_rtClient.left;
 	nTop = m_rtClient.top;
 }
+// 设置按钮的区域
+void CFloatingWnd::SetButtonRect(int x, int y, int w, int h)
+{
+	Button.rect.left = x;
+	Button.rect.top = y;
+	Button.rect.right = Button.rect.left + w;
+	Button.rect.bottom = Button.rect.top + h;
+}
 // 设置客户,除去影子部份的区域
 void CFloatingWnd::SetClientRect(int x, int y, int w, int h)
 {
@@ -232,6 +242,13 @@ void CFloatingWnd::OnPaint()
 
 void CFloatingWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	if(PtInRect(&Button.rect, point))
+	{
+		Button.down = TRUE;
+		SetCapture();
+		CWnd::OnLButtonDown(nFlags, point);
+		return;
+	}
 	ClientMove.move = TRUE;
 	ClientMove.pt = point;
 
@@ -240,6 +257,15 @@ void CFloatingWnd::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CFloatingWnd::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	if(Button.down)
+	{
+		Button.down = FALSE;
+		ReleaseCapture();
+		if(PtInRect(&Button.rect, point))
+			NotifyClickButton();
+		CWnd::OnLButtonUp(nFlags, point);
+		return;
+	}
 	if(NULL != ClientMove.cursor)
 		SetCursor(ClientMove.cursor);
 	if(ClientMove.capture)
@@ -253,6 +279,34 @@ void CFloatingWnd::OnLButtonUp(UINT nFlags, CPoint point)
 
 void CFloatingWnd::OnMouseMove(UINT nFlags, CPoint point)
 {
+	// 是否在按钮上操作
+	if(PtInRect(&Button.rect, point))
+	{
+		if( !Button.hover )
+		{
+			Button.hover = TRUE;
+			NotifyHoverButton();
+		}
+		// 注册鼠标退出事件
+		TRACKMOUSEEVENT			track		= {0};
+
+		track.cbSize = sizeof(track);
+		track.dwFlags = TME_LEAVE;
+		track.hwndTrack = GetSafeHwnd();
+		track.dwHoverTime = HOVER_DEFAULT;
+		TrackMouseEvent(&track);
+		CWnd::OnMouseMove(nFlags, point);
+		return ;
+	}
+	else
+	{
+		if( Button.hover )
+		{
+			Button.hover = FALSE;
+			NotifyLeavelButton();
+		}
+	}
+	// 在窗体上操作
 	if(ClientMove.move)
 	{
 		CRect		rect;
@@ -272,4 +326,15 @@ void CFloatingWnd::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	CWnd::OnMouseMove(nFlags, point);
+}
+
+// 鼠标移开事件
+LRESULT CFloatingWnd::OnMouseLeavel(WPARAM wParam, LPARAM lParam)
+{
+	if(Button.hover)
+	{
+		Button.hover = FALSE;
+		NotifyLeavelButton();
+	}
+	return 0;
 }
