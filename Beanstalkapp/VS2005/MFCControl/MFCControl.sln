@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EHomeFloating", "EHomeFloat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FontTest", "FontTest\FontTest.vcproj", "{4A7156B8-C8BC-4881-B9CC-F552B84FF76D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RichText", "RichText\RichText.vcproj", "{1C6D3064-6073-485E-8618-3CD54F59199A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -61,6 +63,10 @@ Global
 		{4A7156B8-C8BC-4881-B9CC-F552B84FF76D}.Debug|Win32.Build.0 = Debug|Win32
 		{4A7156B8-C8BC-4881-B9CC-F552B84FF76D}.Release|Win32.ActiveCfg = Release|Win32
 		{4A7156B8-C8BC-4881-B9CC-F552B84FF76D}.Release|Win32.Build.0 = Release|Win32
+		{1C6D3064-6073-485E-8618-3CD54F59199A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1C6D3064-6073-485E-8618-3CD54F59199A}.Debug|Win32.Build.0 = Debug|Win32
+		{1C6D3064-6073-485E-8618-3CD54F59199A}.Release|Win32.ActiveCfg = Release|Win32
+		{1C6D3064-6073-485E-8618-3CD54F59199A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

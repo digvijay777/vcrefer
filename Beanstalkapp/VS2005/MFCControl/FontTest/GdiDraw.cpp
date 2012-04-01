@@ -27,11 +27,11 @@ int NGdi::DrawRichText(HDC hDC, LPCWSTR lpText, int nLen, LPRECT lpRect, UINT uF
 		RECT		rect		= *lpRect;
 		int			i			= 0;
 		
-		do
-		{
-// 			if()
-// 			i++;
-		} where(i < (int)vctFontText.size())
+// 		do
+// 		{
+// // 			if()
+// // 			i++;
+// 		} where(i < (int)vctFontText.size())
 	}
 	// ÊÍ·Å²Ù×÷
 	FreeFontText(vctFontText);
