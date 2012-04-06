@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="RichText"
-	ProjectGUID="{1C6D3064-6073-485E-8618-3CD54F59199A}"
-	RootNamespace="RichText"
-	Keyword="MFCProj"
+	Name="LspHttpFilter"
+	ProjectGUID="{F3394C8F-A7C1-4671-8C94-444A9B8576BD}"
+	RootNamespace="LspHttpFilter"
+	Keyword="Win32Proj"
 	>
 	<Platforms>
 		<Platform
@@ -19,8 +19,9 @@
 			Name="Debug|Win32"
 			OutputDirectory="F:\Out\$(ProjectName)\$(ConfigurationName)"
 			IntermediateDirectory="F:\Out\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="1"
+			UseOfATL="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -37,14 +38,11 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LSPHTTPFILTER_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -58,17 +56,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="F:/Out/Bin/$(SolutionName)/$(ProjectName).exe"
+				OutputFile="F:/Out/Bin/$(SolutionName)/$(ProjectName).dll"
 				LinkIncremental="2"
+				ModuleDefinitionFile="LspHttpFilter.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -102,8 +98,9 @@
 			Name="Release|Win32"
 			OutputDirectory="F:\Out\$(ProjectName)\$(ConfigurationName)"
 			IntermediateDirectory="F:\Out\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="1"
+			UseOfATL="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -121,14 +118,10 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LSPHTTPFILTER_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -140,17 +133,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="F:/Out/Bin/$(SolutionName)/$(ProjectName).exe"
+				OutputFile="F:/Out/Bin/$(SolutionName)/$(ProjectName).dll"
 				LinkIncremental="1"
+				ModuleDefinitionFile="LspHttpFilter.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -192,11 +183,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\RichText.cpp"
+				RelativePath=".\LspFilter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\RichTextDlg.cpp"
+				RelativePath=".\LspHttpFilter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LspHttpFilter.def"
 				>
 			</File>
 			<File
@@ -219,24 +214,16 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Ws2_32.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\Resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RichText.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RichTextDlg.h"
-				>
-			</File>
 			<File
 				RelativePath=".\stdafx.h"
 				>
@@ -247,38 +234,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\res\RichText.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\RichText.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\RichText.rc2"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="RichText"
-			>
-			<File
-				RelativePath=".\RichEditCtrlGS.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\RichEditCtrlGS.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RichTextEx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\RichTextEx.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
@@ -286,9 +241,5 @@
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="RichText.rc"
-		/>
 	</Globals>
 </VisualStudioProject>

@@ -3,6 +3,7 @@
 
 #pragma once
 #include "richtextex.h"
+#include "RichEditCtrlGS.h"
 
 
 // CRichTextDlg ¶Ô»°¿ò
@@ -30,5 +31,5 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	CRichTextEx m_text;
+	CRichEditCtrlGS			m_text;
 };
