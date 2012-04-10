@@ -28,5 +28,6 @@
 #include <windows.h>
 
 
-
+#include <atlbase.h>
+#include <atltrace.h>
 // TODO: reference additional headers your program requires here

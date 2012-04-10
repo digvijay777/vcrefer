@@ -183,10 +183,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\LspFilter.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LspHttpFilter.cpp"
 				>
 			</File>
@@ -240,6 +236,18 @@
 			</File>
 			<File
 				RelativePath=".\Installer\Installer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="IpFilter"
+			>
+			<File
+				RelativePath=".\IpFilter\IpFilter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IpFilter\IpFilter.h"
 				>
 			</File>
 		</Filter>

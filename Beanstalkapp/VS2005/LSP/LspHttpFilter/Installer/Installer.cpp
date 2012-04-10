@@ -4,12 +4,6 @@
 #include "stdafx.h"
 #include "Installer.h"
 
-#include <stdio.h>
-#include <ws2spi.h>
-#include <sporder.h>
-#include <TCHAR.H>
-#include <stdlib.h>
-
 #pragma comment(lib, "Ws2_32.lib")
 
 
@@ -125,6 +119,9 @@ void SetProtocolChain(
 	memcpy(&OutProtocolInfo, &ProtocolInfo, sizeof(WSAPROTOCOL_INFOW));
 }
 
+/*
+ *	°²×°
+ */
 void InstallProvider(void)
 {
 	INT					ErrorCode;
@@ -238,6 +235,9 @@ void InstallProvider(void)
 	FreeProviders();
 }
 
+/*
+ *	Ð¶ÔØ
+ */
 void RemoveProvider(void)
 {
 	INT ErrorCode;
@@ -245,4 +245,43 @@ void RemoveProvider(void)
 		printf("WSCDeistallProvider for Layer failed %d\n", ErrorCode);
 	if (WSCDeinstallProvider(&ProviderChainGuid, &ErrorCode) == SOCKET_ERROR)
 		printf("WSCDeistallProvider for Chain failed %d\n", ErrorCode);
+}
+
+BOOL GetHookProvider(
+					 IN	WSAPROTOCOL_INFOW	*pProtocolInfo, 
+					 OUT	TCHAR				*sPathName,
+					 OUT WSAPROTOCOL_INFOW	*pNextProtocolInfo
+					 )
+{
+	if(pProtocolInfo->ProtocolChain.ChainLen <= 1)
+		return FALSE;
+	GetProviders();
+	__try
+	{
+		for(int i = pProtocolInfo->ProtocolChain.ChainLen - 1; i > 0; i--)
+		{
+			for(int j = 0; j < TotalProtocols; j++)
+			{
+				if(pProtocolInfo->ProtocolChain.ChainEntries[i]	
+				== ProtocolInfo[j].dwCatalogEntryId)
+				{
+					INT iErrno, iProviderPathLen = MAX_PATH;
+					if(WSCGetProviderPath(&ProtocolInfo[j].ProviderId
+						, sPathName, &iProviderPathLen, &iErrno) == SOCKET_ERROR)
+						return FALSE;
+					if (!ExpandEnvironmentStrings(sPathName, sPathName, MAX_PATH))
+						return FALSE;
+					memcpy(pNextProtocolInfo
+						, pProtocolInfo, sizeof(WSAPROTOCOL_INFOW));
+					return TRUE;
+				}
+			}
+		}
+	}
+	__finally
+	{
+		FreeProviders();
+	}
+
+	return FALSE;
 }
