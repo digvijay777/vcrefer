@@ -3,3 +3,4 @@ LIBRARY	"LspHttpFilter"
 EXPORTS
 	DllRegisterServer			PRIVATE
 	DllUnregisterServer			PRIVATE
+	WSPStartup					PRIVATE
