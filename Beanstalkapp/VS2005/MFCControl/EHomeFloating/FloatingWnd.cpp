@@ -86,8 +86,8 @@ void CFloatingWnd::UpdateLayeredImageWindow(HDC hDC)
 	RECT			rtWnd			= {0};
 	
 	GetWindowRect(&rtWnd);
-	hMemDC = CreateCompatibleDC(hDC);
-	hBitmap = CreateCompatibleBitmap(hDC, rtWnd.right - rtWnd.left, rtWnd.bottom - rtWnd.top);
+	hMemDC = CreateCompatibleDC(NULL);
+ 	hBitmap = Create32Bitmap(rtWnd.right - rtWnd.left, rtWnd.bottom - rtWnd.top);
 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hBitmap);
 	nSaveMemDC = SaveDC(hMemDC);
 	// 绘制窗体
@@ -337,4 +337,20 @@ LRESULT CFloatingWnd::OnMouseLeavel(WPARAM wParam, LPARAM lParam)
 		NotifyLeavelButton();
 	}
 	return 0;
+}
+
+// 创建位图
+HBITMAP CFloatingWnd::Create32Bitmap( int nWidth, int nHeight )
+{
+	BITMAPINFO					bmpInfo			= {0};
+	BYTE*						pBits			= NULL;
+
+	bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmpInfo.bmiHeader.biWidth = nWidth;
+	bmpInfo.bmiHeader.biHeight = nHeight;
+	bmpInfo.bmiHeader.biPlanes = 1;
+	bmpInfo.bmiHeader.biBitCount = 32; // 强制指定为32色
+	bmpInfo.bmiHeader.biCompression = BI_RGB;
+
+	return CreateDIBSection(NULL, &bmpInfo, DIB_RGB_COLORS, (void **)&pBits, NULL, 0);
 }
