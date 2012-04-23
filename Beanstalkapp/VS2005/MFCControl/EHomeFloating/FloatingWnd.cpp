@@ -171,12 +171,14 @@ void CFloatingWnd::OnLayerdPrint(HDC hDC, LPRECT lpRect)
 {
 	Gdiplus::Graphics		graphics(hDC);
 	Gdiplus::Font			font(L"宋体"/*L"Microsoft Sans Serif"*/, 9);
-	Gdiplus::RectF			rect((Gdiplus::REAL)lpRect->left + 86, (Gdiplus::REAL)lpRect->top + 9, (Gdiplus::REAL)GetRectWidthPtr(lpRect) - 86, (Gdiplus::REAL)GetRectHeightPtr(lpRect) - 9);
+	Gdiplus::RectF			rect((Gdiplus::REAL)lpRect->left + 86, (Gdiplus::REAL)lpRect->top + 9
+		, (Gdiplus::REAL)GetRectWidthPtr(lpRect) - 86, (Gdiplus::REAL)GetRectHeightPtr(lpRect) - 9);
+	Gdiplus::Rect			rtImg(lpRect->left, lpRect->top, GetRectWidthPtr(lpRect), GetRectHeightPtr(lpRect));
 	Gdiplus::StringFormat	strfmt;
 	Gdiplus::SolidBrush		brush(Gdiplus::Color(0xfe, 0xff, 0xff, 0xff));
 
 	// 绘制背景
-	graphics.DrawImage(m_pBkImage, 0, 0, m_nBkImageIndex * m_size.cx, 0, m_size.cx, m_size.cy, Gdiplus::UnitPixel);
+	graphics.DrawImage(m_pBkImage, rtImg, m_nBkImageIndex * m_size.cx, 0, m_size.cx, m_size.cy, Gdiplus::UnitPixel);
 	// 绘制文本
 	strfmt.SetAlignment(Gdiplus::StringAlignmentCenter);
 	graphics.DrawString(m_szShowText, (int)wcslen(m_szShowText), &font, rect, &strfmt, &brush);	
