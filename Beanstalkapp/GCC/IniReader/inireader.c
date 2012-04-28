@@ -30,7 +30,7 @@
 #endif
 
 /* 读取文件 */
-char* GetConfigProfileBuff(const char* pFileName)
+char* get_file_buff(const char* pFileName)
 {
 	int				nFile				= -1;
 	struct stat		filestat			= {0};
@@ -55,72 +55,73 @@ end:
 }
 
 /*Ini操作函数*/
-unsigned long GetConfigProfileString(const char* pAppName
-									  , const char* pKeyName, const char* pDefault, char* pReturnedString
-									  , unsigned long nSize, const char* pFileName)
+unsigned long ini_get_string(const char* papp, const char* pkey, 
+							 const char* pdef, char* pret, 
+							 unsigned long len, const char* pfile)
 {
 	char*			pFileBuf			= NULL;
 	int				nLen				= 0;
 	// 检查接收缓冲区
-	if(NULL == pReturnedString)
+	if(NULL == pret)
 		return 0;
 	// 复制默认字符串
-	if(NULL != pDefault)
-		strncpy(pReturnedString, pDefault, nSize);
+	if(NULL != pdef)
+		strncpy(pret, pdef, len);
 	else
-		memset(pReturnedString, 0, nSize);
+		memset(pret, 0, len);
 	// 检查是否指定文件名
-	pFileBuf = GetConfigProfileBuff(pFileName);
+	pFileBuf = get_file_buff(pfile);
 	if(NULL == pFileBuf)
 		goto end;
 	// 分析文件缓冲区, 获取APP的开始位置
-	nLen = GetConfigBufferString(pAppName, pKeyName, pReturnedString
-		, nSize, pFileBuf);
+	nLen = buff_get_string(papp, pkey, pret
+		, len, pFileBuf);
 end:
 	if(NULL != pFileBuf)
 		free(pFileBuf);
-	return strlen(pReturnedString);
+	return strlen(pret);
 }
 
-int	GetConfigProfileInt(const char* pAppName
-						 , const char* pKeyName, int nDef, const char* pFileName)
+int	ini_get_int(const char* papp, const char* pkey, 
+				int def, const char* pfile)
 {
 	char	szInt[128]		= {0};
 
-	if( 0 == GetConfigProfileString(pAppName, pKeyName, NULL
-		, szInt, sizeof(szInt), pFileName) )
-		return nDef;
+	if( 0 == ini_get_string(papp, pkey, NULL, 
+		szInt, sizeof(szInt), pfile) )
+	{
+		return def;
+	}
 	return atoi(szInt);
 }
 
-int GetConfigBufferString(const char* pAppName, const char* pKeyName
-							, char* pReturnedString, unsigned long nSize
-							, const char* pBuff)
+int buff_get_string(const char* papp, const char* pkey, 
+					char* pret, unsigned long len, const char* buff)
 {
 	char*		pStrStart		= NULL;
 	char*		pStrEnd			= NULL;
 
-	GetConfigBufferValue(pAppName, pKeyName, &pStrStart, &pStrEnd, pBuff);
+	buff_get_value(papp, pkey, &pStrStart, &pStrEnd, buff);
 	if(NULL == pStrStart || NULL == pStrEnd || pStrEnd <= pStrStart)
 		return 0;
 
-	nSize = min(nSize, pStrEnd - pStrStart);
-	strncpy(pReturnedString, pStrStart, nSize);
-	return nSize;
+	len = min(len, pStrEnd - pStrStart);
+	strncpy(pret, pStrStart, len);
+	return len;
 }
 /* 获取数据区中的配置项 */
-void GetConfigBufferValue(const char* pAppName, const char* pKeyName 
-					   , char** pStrStart, char** pStrEnd , const char* pBuff)
+void buff_get_value(const char* papp, const char* pkey, 
+					char** pstart, char** pend, const char* buff)
 {
 	char*		pSecStart			= NULL;
 	char*		pSecEnd				= NULL;
 	char*		pFindLine			= NULL;
 	char*		pFindStart			= NULL;
-	int			nLen				= strlen(pKeyName);
+	int			nLen				= strlen(pkey);
 
-	*pStrStart = NULL;
-	*pStrEnd = NULL;
-	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pBuff);
+	*pstart = NULL;
+	*pend = NULL;
+	buff_get_section(papp, &pSecStart, &pSecEnd, buff);
 	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd <= pSecStart)
 		return;
 	/* 开始分析Key的值 */
@@ -134,7 +135,7 @@ void GetConfigBufferValue(const char* pAppName, const char* pKeyName
 			pFindLine++;
 		while('\t' == *pFindLine || '\x20' == *pFindLine)
 			pFindLine++;
-		if(0 != strncmp(pFindLine, pKeyName, nLen))
+		if(0 != strncmp(pFindLine, pkey, nLen))
 			continue;
 		pFindLine += nLen;
 		while('\t' == *pFindLine || '\x20' == *pFindLine)
@@ -145,56 +146,56 @@ void GetConfigBufferValue(const char* pAppName, const char* pKeyName
 		pFindLine++;
 		while('\t' == *pFindLine || '\x20' == *pFindLine)
 			pFindLine++;
-		*pStrStart = pFindLine;
-		*pStrEnd = strchr(pFindLine, '\r');
-		if(NULL == *pStrEnd)
+		*pstart = pFindLine;
+		*pend = strchr(pFindLine, '\r');
+		if(NULL == *pend)
 		{
-			*pStrEnd = strchr(pFindLine, '\n');
-			if(NULL == *pStrEnd)
-				*pStrEnd = pSecEnd;
+			*pend = strchr(pFindLine, '\n');
+			if(NULL == *pend)
+				*pend = pSecEnd;
 		}
 	}
 	
 }					   
 /* 获取数据区的[Section] */
-void GetConfigBufferSection(const char* pAppName , char** pSecStart
-						 , char** pSecEnd , const char* pBuff)
+void buff_get_section(const char* papp , char** pstart, 
+					  char** pend , const char* buff)
 {
 	char*		pFindApp	= NULL;
-	char*		pFindStart	= (char *)pBuff;
-	int			nLen		= strlen(pAppName);
+	char*		pFindStart	= (char *)buff;
+	int			nLen		= strlen(papp);
 
-	*pSecStart = NULL;
-	*pSecEnd = NULL;
+	*pstart = NULL;
+	*pend = NULL;
 	do 
 	{
-		pFindApp = strstr(pFindStart, pAppName);
+		pFindApp = strstr(pFindStart, papp);
 		if(NULL == pFindApp)
 			break;
 		pFindStart = pFindApp + nLen;
-		if(pFindApp == pBuff)
+		if(pFindApp == buff)
 			continue; /* 首字节时表示不是需要找的Section */
 		if('[' != *(pFindApp - 1) || ']' != *(pFindApp + nLen))
 			continue; /* 不满足session条件 */
 		/* 找到相应的Section */
-		*pSecStart = strchr(pFindApp, '\n');
-		if(NULL != *pSecStart)
+		*pstart = strchr(pFindApp, '\n');
+		if(NULL != *pstart)
 			break;
 	} while (true);
 	/* 查找Seciont的结束点 */
-	if(NULL == *pSecStart)
+	if(NULL == *pstart)
 		return;
 	do 
 	{
 		pFindApp = strchr(pFindStart, '\n');
 		if(NULL == pFindApp)
 		{
-			*pSecEnd = pFindStart + strlen(pFindStart);
+			*pend = pFindStart + strlen(pFindStart);
 			break;
 		}
 		else if('[' == *(pFindApp + 1))
 		{
-			*pSecEnd = pFindApp + 1;
+			*pend = pFindApp + 1;
 			break;
 		}
 		pFindStart = pFindApp + 1;
@@ -202,40 +203,41 @@ void GetConfigBufferSection(const char* pAppName , char** pSecStart
 }
 
 /* 写配置文件操作 */
-int WriteConfigProfileSection(const char* pAppName , const char* pSection , const char* pFileName)
+int ini_set_section(const char* papp , const char* psection, 
+					const char* pfile)
 {
 	char*		pFileBuff		= NULL;
 	char*		pSecStart		= NULL;
 	char*		pSecEnd			= NULL;
 	int			nFile			= 0;
 
-	pFileBuff = GetConfigProfileBuff(pAppName);
+	pFileBuff = get_file_buff(papp);
 	if(NULL == pFileBuff)
 		goto write_append;
-	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pFileBuff);
+	buff_get_section(papp, &pSecStart, &pSecEnd, pFileBuff);
 	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd < pSecStart)
 		goto write_append;
 
 write_over: /* 覆盖式操作 */
-	nFile = open(pFileName, O_RDWR);
+	nFile = open(pfile, O_RDWR);
 	if(-1 == nFile)
 		goto end;
 	lseek(nFile, pSecStart - pFileBuff, SEEK_SET);
-	write(nFile, pSection, strlen(pSection));
+	write(nFile, psection, strlen(psection));
 	write(nFile, pSecEnd, strlen(pSecEnd));
-	if('\n' != pSection[strlen(pSection) - 1]) 
+	if('\n' != psection[strlen(psection) - 1]) 
 		write(nFile, "\r\n", 2);
 	close(nFile);
 	goto end;
 
 write_append: /* 追加式操作 */
-	nFile = open(pFileName, O_WRONLY | O_APPEND);
+	nFile = open(pfile, O_WRONLY | O_APPEND);
 	if(-1 == nFile)
 		goto end;
 	write(nFile, "\r\n[", 3);
-	write(nFile, pAppName, strlen(pAppName));
+	write(nFile, papp, strlen(papp));
 	write(nFile, "]\r\n", 3);
-	write(nFile, pSection, strlen(pSection));
+	write(nFile, psection, strlen(psection));
 	close(nFile);
 
 end:
@@ -245,8 +247,8 @@ end:
 }
 
 /* 写一项配置 */
-int WriteConfigProfileString(const char* pAppName , const char* pKeyName 
-							 , const char* pValue , const char* pFileName)
+int ini_set_string(const char* papp, const char* pkey, 
+				   const char* pvalue, const char* pfile)
 {
 	char*		pStrStart		= NULL;
 	char*		pStrEnd			= NULL;
@@ -255,48 +257,48 @@ int WriteConfigProfileString(const char* pAppName , const char* pKeyName
 	char*		pFileBuff		= NULL;
 	int			nFile			= 0;
 
-	pFileBuff = GetConfigProfileBuff(pFileName);
+	pFileBuff = get_file_buff(pfile);
 	if(NULL == pFileBuff)
 		goto write_new;
 	/* 获取原Section */
-	GetConfigBufferSection(pAppName, &pSecStart, &pSecEnd, pFileBuff);
+	buff_get_section(papp, &pSecStart, &pSecEnd, pFileBuff);
 	if(NULL == pSecStart || NULL == pSecEnd || pSecEnd < pSecStart)
 		goto write_new;
 	/* 获取原值 */
-	GetConfigBufferValue(pAppName, pKeyName, &pStrStart, &pStrEnd, pFileBuff);
+	buff_get_value(papp, pkey, &pStrStart, &pStrEnd, pFileBuff);
 	if(NULL == pStrStart || NULL == pStrEnd || pStrEnd < pStrStart)
 		goto write_append;
 
 write_over: /* 覆盖操作 */
-	nFile = open(pFileName, O_WRONLY);
+	nFile = open(pfile, O_WRONLY);
 	if(-1 == nFile)
 		goto end;
 	lseek(nFile, pStrStart - pFileBuff, SEEK_SET);
-	write(nFile, pValue, strlen(pValue));
+	write(nFile, pvalue, strlen(pvalue));
 	write(nFile, pStrEnd, strlen(pStrEnd));
 	close(nFile);
 write_new: /* 写入一个新项 */
-	nFile = open(pFileName, O_WRONLY|O_APPEND);
+	nFile = open(pfile, O_WRONLY|O_APPEND);
 	if(-1 == nFile)
 		goto end;
 	write(nFile, "\r\n[", 3);
-	write(nFile, pAppName, strlen(pAppName));
+	write(nFile, papp, strlen(papp));
 	write(nFile, "]\r\n", 3);
-	write(nFile, pKeyName, strlen(pKeyName));
+	write(nFile, pkey, strlen(pkey));
 	write(nFile, " = ", 3);
-	write(nFile, pValue, strlen(pValue));
+	write(nFile, pvalue, strlen(pvalue));
 	write(nFile, "\r\n", 2);
 	close(nFile);
 write_append: /* 追回操作 */
-	nFile = open(pFileName, O_WRONLY);
+	nFile = open(pfile, O_WRONLY);
 	if(-1 == nFile)
 		goto end;
 	lseek(nFile, pSecEnd - pFileBuff, SEEK_SET);
 	if('\n' != *(pSecEnd - 1))
 		write(nFile, "\r\n", 2);
-	write(nFile, pKeyName, strlen(pKeyName));
+	write(nFile, pkey, strlen(pkey));
 	write(nFile, " = ", 3);
-	write(nFile, pValue, strlen(pValue));
+	write(nFile, pvalue, strlen(pvalue));
 	write(nFile, "\r\n", 2);
 	write(nFile, pSecEnd, strlen(pSecEnd));
 	close(nFile);
