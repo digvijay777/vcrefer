@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "radix-tree-test", "radix-tr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rbtree-test", "rbtree-test\rbtree-test.vcproj", "{45340F94-9B24-4547-848B-F1B7AF802B46}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "urlhash", "urlhash\urlhash.vcproj", "{49F8C17A-E8DC-4AC2-BBB1-9F7F2F637A1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{45340F94-9B24-4547-848B-F1B7AF802B46}.Debug|Win32.Build.0 = Debug|Win32
 		{45340F94-9B24-4547-848B-F1B7AF802B46}.Release|Win32.ActiveCfg = Release|Win32
 		{45340F94-9B24-4547-848B-F1B7AF802B46}.Release|Win32.Build.0 = Release|Win32
+		{49F8C17A-E8DC-4AC2-BBB1-9F7F2F637A1A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{49F8C17A-E8DC-4AC2-BBB1-9F7F2F637A1A}.Debug|Win32.Build.0 = Debug|Win32
+		{49F8C17A-E8DC-4AC2-BBB1-9F7F2F637A1A}.Release|Win32.ActiveCfg = Release|Win32
+		{49F8C17A-E8DC-4AC2-BBB1-9F7F2F637A1A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
