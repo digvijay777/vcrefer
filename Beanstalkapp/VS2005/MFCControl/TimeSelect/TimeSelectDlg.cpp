@@ -48,6 +48,7 @@ BOOL CTimeSelectDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	BYTE		szWeekFlag[21]		= {0};
+	BYTE		szWeekFlagEx[84]	= {0};
 
 	szWeekFlag[1] = 0xff;
 	szWeekFlag[4] = 0xff;
@@ -57,7 +58,16 @@ BOOL CTimeSelectDlg::OnInitDialog()
 	szWeekFlag[16] = 0xff;
 	szWeekFlag[19] = 0xff;
 	m_timesel.SetWeekFlag(szWeekFlag, 21);
+	szWeekFlagEx[12 * 0 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 1 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 2 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 3 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 4 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 5 + 8 / 2] = 0xa;
+	szWeekFlagEx[12 * 6 + 8 / 2] = 0xa;
+	m_ctlTime.SetWeekFlagEx(szWeekFlagEx, 84);
 	m_timesel.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_1));
+	m_ctlTime.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_3));
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

@@ -221,10 +221,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TimeSelectCtrl.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\TimeSelectDlg.cpp"
 				>
 			</File>
@@ -251,10 +247,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TimeSelectCtrl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\TimeSelectDlg.h"
 				>
 			</File>
@@ -274,6 +266,26 @@
 			</File>
 			<File
 				RelativePath=".\res\TimeSelect.rc2"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="timeselect"
+			>
+			<File
+				RelativePath=".\TimeSelectCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TimeSelectCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TimeSelectCtrl2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TimeSelectCtrl2.h"
 				>
 			</File>
 		</Filter>

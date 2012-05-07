@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5", "Sock5\Sock5.vcproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sock5Char", "Sock5Char\Sock5Char.vcproj", "{E655E8AB-38F0-4322-A101-12E507AD5232}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SelectEvent", "SelectEvent\SelectEvent.vcproj", "{27184C52-C70B-47DE-BD83-198CA7A9E97B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{E655E8AB-38F0-4322-A101-12E507AD5232}.Debug|Win32.Build.0 = Debug|Win32
 		{E655E8AB-38F0-4322-A101-12E507AD5232}.Release|Win32.ActiveCfg = Release|Win32
 		{E655E8AB-38F0-4322-A101-12E507AD5232}.Release|Win32.Build.0 = Release|Win32
+		{27184C52-C70B-47DE-BD83-198CA7A9E97B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{27184C52-C70B-47DE-BD83-198CA7A9E97B}.Debug|Win32.Build.0 = Debug|Win32
+		{27184C52-C70B-47DE-BD83-198CA7A9E97B}.Release|Win32.ActiveCfg = Release|Win32
+		{27184C52-C70B-47DE-BD83-198CA7A9E97B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

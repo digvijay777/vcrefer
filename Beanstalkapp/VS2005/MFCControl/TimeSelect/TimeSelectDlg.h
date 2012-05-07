@@ -3,6 +3,7 @@
 
 #pragma once
 #include "TimeSelectCtrl.h"
+#include "TimeSelectCtrl2.h"
 #include "afxwin.h"
 
 // CTimeSelectDlg 对话框
@@ -23,6 +24,7 @@ public:
 protected:
 	HICON m_hIcon;
 	CTimeSelectCtrl		m_timesel;
+	CTimeSelectCtrl2	m_ctlTime;
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
