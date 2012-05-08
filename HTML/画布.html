@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script language="javascript">
+<!--
+function OnPageLoad(){
+	var obj 	= document.getElementById('idcanvas1');
+	
+	if(!obj || !obj.getContext){
+		return;
+	}
+	var dc 		= obj.getContext('2d');
+	if(!dc){
+		return;
+	}
+	dc.fillRect(0, 0, 150, 100);
+}
+-->
+</script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
+</head>
+
+<body onload="OnPageLoad()">
+<canvas id="idcanvas1" width="400" height="400">
+<H1>浏览器不支持</H1>
+</canvas>
+
+</body>
+</html>
