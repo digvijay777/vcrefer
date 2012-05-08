@@ -15,7 +15,31 @@ function OnPageLoad(){
 	if(!dc){
 		return;
 	}
-	dc.fillRect(0, 0, 150, 100);
+	// 基本线条
+	// 填充色
+	dc.fillStyle = '#f00'; // or rgb(0,0,0xf),rgba(0x0,0x0,0xff,0xff)
+	// 边线色
+	dc.strokeStyle = '#00f';
+	// 线宽
+	dc.lineWidth = 4;
+
+/*
+	// 绘直线	
+	dc.beginPath();
+	dc.moveTo(100, 100);
+	dc.lineTo(200, 200);
+	dc.closePath();
+	dc.stroke();
+*/
+	//dc.fillRect(0, 0, 150, 100);
+	//dc.strokeRect(0, 60, 150, 50);
+	
+	// 绘半圆
+	dc.beginPath();
+	dc.arc(75, 75, 30, 0, Math.PI, false);
+	dc.closePath();
+	dc.stroke();
+	dc.fill();
 }
 -->
 </script>
