@@ -69,6 +69,7 @@ BOOL CTimeSelectDlg::OnInitDialog()
 	m_timesel.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_1));
 	m_ctlTime.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_3));
 
+	m_ctlTime.SetEvent(WM_RBUTTONUP, GetSafeHwnd(), WM_RBUTTONUP);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

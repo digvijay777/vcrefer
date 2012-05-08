@@ -122,6 +122,15 @@ COLORREF CTimeSelectCtrl2::GetRGBValue(COLORREF col, BOOL bGray /* = TRUE */)
 	r = g = b = (r * 3 + g * 6 + g) / 10;
 	return RGB(r, g, b);
 }
+// 设置事件回调函数
+void CTimeSelectCtrl2::SetEvent(UINT msg, HWND hRecv, UINT msgRecv)
+{
+	_Event		evt		= {0};
+
+	evt.hWnd = hRecv;
+	evt.msg = msgRecv;
+	m_mapEvent[msg] = evt;
+}
 //////////////////////////////////////////////////////////////////////////
 // 绘制一项
 void CTimeSelectCtrl2::DrawItem(HDC hDC, LPRECT lpRect)
@@ -380,7 +389,7 @@ void CTimeSelectCtrl2::Draw_SelRect(HDC hDC, LPRECT lpRect, LPCRECT lpWndRect)
 	::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rt2, NULL, 0, NULL);
 
 	bf.BlendOp = AC_SRC_OVER;
-	bf.SourceConstantAlpha = 128;
+	bf.SourceConstantAlpha = 160;
 	if(FALSE == ::AlphaBlend(hDC, lpRect->left, lpRect->top, lpRect->right - lpRect->left, lpRect->bottom - lpRect->top,
 		hDC, rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top, bf))
 	{
@@ -737,5 +746,38 @@ LRESULT CTimeSelectCtrl2::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM l
 LRESULT CTimeSelectCtrl2::OnEnable(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
 	Invalidate(TRUE);
+	return 0;
+}
+
+// 鼠标弹起事件
+LRESULT CTimeSelectCtrl2::OnRButtonUp(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+{
+	RECT			rtCenter	= {0};
+	POINT			pt			= {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+	std::map<UINT, _Event>::iterator	item;
+
+	if(DR_CENTER != HitTest(&pt, &rtCenter))
+	{
+		return 0;
+	}
+	item = m_mapEvent.find(WM_RBUTTONUP);
+	if(item == m_mapEvent.end())
+	{
+		return 0;
+	}
+	// 将事件发送到上层
+	int			nHour		= 0;
+	int			nL, nT;
+	int			nW, nH;
+	
+	nW = (rtCenter.right - rtCenter.left) / 24;
+	nH = (rtCenter.bottom - rtCenter.top) / 7;
+	nL = pt.x - rtCenter.left;
+	nT = pt.y - rtCenter.top;
+	nHour = nL / nW + nT / nH * 24;
+
+	::ClientToScreen(m_hWnd, &pt);
+	::ScreenToClient(item->second.hWnd, &pt);
+	::SendMessage(item->second.hWnd, item->second.msg, nHour, MAKELPARAM(pt.x, pt.y));
 	return 0;
 }

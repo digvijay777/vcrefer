@@ -1,6 +1,7 @@
 #pragma once
 #include <atlbase.h>
 #include <atlwin.h>
+#include <map>
 
 class CTimeSelectCtrl2 : public CWindowImpl<CTimeSelectCtrl2>
 {
@@ -15,6 +16,7 @@ public:
 		MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
 		MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
 		MESSAGE_HANDLER(WM_ENABLE, OnEnable)
+		MESSAGE_HANDLER(WM_RBUTTONUP, OnRButtonUp)
 	END_MSG_MAP()
 
 public:
@@ -24,6 +26,7 @@ public:
 	void		GetWeekFlagEx(BYTE* pWeekFlag, int nSize);
 	COLORREF	GetRGBValue(short r, short g, short b, BOOL bGray = TRUE);
 	COLORREF	GetRGBValue(COLORREF col, BOOL bGray = TRUE);
+	void		SetEvent(UINT msg, HWND hRecv, UINT msgRecv);
 
 private:
 	HPEN		m_penLine;
@@ -35,6 +38,12 @@ private:
 	RECT		m_rtMouseSel;
 	BOOL		m_bEnabled;
 
+	struct _Event{
+		HWND	hWnd;
+		UINT	msg;
+	};
+
+	std::map<UINT, _Event>	m_mapEvent;
 protected:
 	void		DrawItem(HDC hDC, LPRECT lpRect);
 	void		Draw_Frame(HDC hDC, LPRECT lpRect);
@@ -67,5 +76,6 @@ public:
 	LRESULT OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnEnable(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
