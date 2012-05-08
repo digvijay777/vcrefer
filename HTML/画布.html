@@ -11,6 +11,7 @@ function OnPageLoad(){
 	if(!obj || !obj.getContext){
 		return;
 	}
+	// CanvasRenderingContext2D
 	var dc 		= obj.getContext('2d');
 	if(!dc){
 		return;
@@ -33,13 +34,18 @@ function OnPageLoad(){
 */
 	//dc.fillRect(0, 0, 150, 100);
 	//dc.strokeRect(0, 60, 150, 50);
-	
+/*	
 	// 绘半圆
 	dc.beginPath();
 	dc.arc(75, 75, 30, 0, Math.PI, false);
 	dc.closePath();
 	dc.stroke();
 	dc.fill();
+*/
+	// 画图片
+	var img		= new Image();
+	img.src = "http://www.w3school.com.cn/i/eg_tulip.jpg";
+	dc.drawImage(img, 0, 0, 200, 200);
 }
 -->
 </script>
