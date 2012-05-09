@@ -2,14 +2,13 @@
 //
 
 #include "stdafx.h"
-#include "TimeSelect.h"
 #include "TimeSelectCtrl3.h"
 
 
 // CTimeSelectCtrl3
 CTimeSelectCtrl3::CTimeSelectCtrl3()
 {
-	m_nSplit = 1;
+	m_nSplit = -1;
 	m_pData = NULL;
 	m_pText = NULL;
 	m_nButtonDown = -1;
