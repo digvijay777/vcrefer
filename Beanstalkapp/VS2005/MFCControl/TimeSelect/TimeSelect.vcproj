@@ -288,6 +288,14 @@
 				RelativePath=".\TimeSelectCtrl2.h"
 				>
 			</File>
+			<File
+				RelativePath=".\TimeSelectCtrl3.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TimeSelectCtrl3.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

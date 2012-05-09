@@ -80,7 +80,7 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,360,5,50,16
     PUSHBUTTON      "取消",IDCANCEL,360,23,50,16
     CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC_1,7,40,382,108,SS_NOTIFY
-    LTEXT           "Static",IDC_STATIC_2,9,11,216,19
+    LTEXT           "Static",IDC_STATIC_2,34,3,216,19,SS_NOTIFY
     CTEXT           "TODO: 在此放置对话框控件。",IDC_STATIC_3,7,156,424,132,SS_NOTIFY
 END
 

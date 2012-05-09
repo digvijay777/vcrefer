@@ -19,6 +19,7 @@ CTimeSelectDlg::CTimeSelectDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CTimeSelectDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	memset(m_nText, 0, sizeof(m_nText));
 }
 
 void CTimeSelectDlg::DoDataExchange(CDataExchange* pDX)
@@ -68,8 +69,16 @@ BOOL CTimeSelectDlg::OnInitDialog()
 	m_ctlTime.SetWeekFlagEx(szWeekFlagEx, 84);
 	m_timesel.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_1));
 	m_ctlTime.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_3));
+ 	m_ctlTime3.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_STATIC_2));
 
 	m_ctlTime.SetEvent(WM_RBUTTONUP, GetSafeHwnd(), WM_RBUTTONUP);
+
+	m_nsel[0] = true;
+	m_nsel[1] = true;
+	m_nsel[2] = false;
+	m_nsel[3] = true;
+	wcscpy(m_nText, L"日;一;二;三;四;五;六");
+	m_ctlTime3.SetData(m_nsel, 4, m_nText);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
