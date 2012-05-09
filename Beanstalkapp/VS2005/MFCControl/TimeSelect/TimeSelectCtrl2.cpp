@@ -725,6 +725,15 @@ LRESULT CTimeSelectCtrl2::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM l
 	}
 
 	m_bMouseStat = 0;
+	// 通知事件改变
+	std::map<UINT, _Event>::iterator	item;
+
+	item = m_mapEvent.find(WM_LBUTTONUP);
+	if(item != m_mapEvent.end())
+	{
+		::SendMessage(item->second.hWnd, item->second.msg, 0, 0);
+	}
+	
 	return 0;
 }
 // 鼠标移动
