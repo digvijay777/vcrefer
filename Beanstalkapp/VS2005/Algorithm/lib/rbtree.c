@@ -36,7 +36,7 @@ static /*inline*/ void rb_set_color(struct rb_node *rb, int color)
 	rb->rb_parent_color = (rb->rb_parent_color & ~1) | color;
 }
 
-static /*inline*/ void rb_init_node(struct rb_node *rb)
+/*static*/ /*inline*/ void rb_init_node(struct rb_node *rb)
 {
 	rb->rb_parent_color = 0;
 	rb->rb_right = NULL;
@@ -44,7 +44,7 @@ static /*inline*/ void rb_init_node(struct rb_node *rb)
 	RB_CLEAR_NODE(rb);
 }
 
-static /*inline*/ void rb_link_node(struct rb_node * node, struct rb_node * parent,
+/*static*/ /*inline*/ void rb_link_node(struct rb_node * node, struct rb_node * parent,
 struct rb_node ** rb_link)
 {
 	node->rb_parent_color = (unsigned long )parent;

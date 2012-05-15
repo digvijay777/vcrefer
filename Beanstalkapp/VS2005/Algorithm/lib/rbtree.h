@@ -129,7 +129,9 @@ struct rb_root
 #define RB_EMPTY_NODE(node)	(rb_parent(node) == node)
 #define RB_CLEAR_NODE(node)	(rb_set_parent(node, node))
 
-
+void rb_init_node(struct rb_node *rb);
+void rb_link_node(struct rb_node * node, struct rb_node * parent,
+				  struct rb_node ** rb_link);
 
 extern void rb_insert_color(struct rb_node *, struct rb_root *);
 extern void rb_erase(struct rb_node *, struct rb_root *);
@@ -149,9 +151,8 @@ extern struct rb_node *rb_first(const struct rb_root *);
 extern struct rb_node *rb_last(const struct rb_root *);
 
 /* Fast replacement of a single node without remove/rebalance/add/rebalance */
-extern void rb_replace_node(struct rb_node *victim, struct rb_node *new, 
+extern void rb_replace_node(struct rb_node *victim, struct rb_node *newnode, 
 			    struct rb_root *root);
-
 
 
 #endif	/* _LINUX_RBTREE_H */
