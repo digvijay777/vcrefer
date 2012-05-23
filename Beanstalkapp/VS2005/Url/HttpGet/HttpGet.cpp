@@ -3,11 +3,14 @@
 
 #include "stdafx.h"
 #include "HttpReader.h"
+#include "HttpRequest.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	CHttpReader		reader;
 	ZEvtSyncSocket	sock;
+
+	CHttpRequest::StartHttp();
 // 	char*			pData		= "GET / HTTP/1.1\r\n"
 // 		"Host: baidu.com\r\n"
 // 		"\r\n\r\n";
@@ -37,13 +40,13 @@ int _tmain(int argc, _TCHAR* argv[])
 			break;
 		}
 
-// 		if( reader.AddRecv((const unsigned char *)szBuf, dwSize) )
-// 		{
-// 			char *p = (char *)reader.GetResponse();
-// 
-// 			int b = 0;
-// 			break;
-// 		}
+		if( reader.AddRecv((const unsigned char *)szBuf, dwSize) )
+		{
+			char *p = (char *)reader.GetResponse();
+
+			int b = 0;
+			break;
+		}
 	}
 	
 	return 0;

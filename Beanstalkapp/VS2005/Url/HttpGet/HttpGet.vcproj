@@ -229,6 +229,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="HttpRequest"
+			>
+			<File
+				RelativePath=".\HttpRequest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HttpRequest.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

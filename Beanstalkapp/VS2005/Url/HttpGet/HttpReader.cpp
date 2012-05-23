@@ -210,60 +210,6 @@ bool CHttpReader::ReadHttpResponseEx()
 
 bool CHttpReader::ReadChunkedBodyEx()
 {
-	// At this point, m_current contains the headers, up to and including the \r\n\r\n,
-	// plus any additional data that might have been read off the socket. So, we need
-	// to copy off the additional data into our read buffer before we start parsing the
-	// chunks.
-#ifdef _DEBUG
-	// nReadCount, keeps track of how many socket reads we do.
-	int nReadCount = 0;
-#endif
-
-	// nChunkBuffCarryOver
-	// When we run out of data in the input buffer, this is the
-	// count of bytes that are left in the input that could not
-	// be lexed into anything useful. We copy this many bytes to
-	// the top of the input buffer before we fill the input buffer
-	// with more bytes from the socket
-// 	long nChunkBuffCarryOver = 0;
-// 
-// 	// nChunkSize
-// 	// The size of the next chunk to be read from the input buffer.
-// 	long nChunkSize = 0;
-// 
-// 	// t_chunk_buffer
-// 	// The heap allocated buffer that we holds data
-// 	// read from the socket. We will increase the size
-// 	// of this buffer to 2 times the max chunk size we
-// 	// need to read if we have to.
-// 	CHeapPtr<char> t_chunk_buffer;
-// 
-// 	// nTChunkBuffSize
-// 	// Keeps track of the allocated size of t_chunk_buffer.
-// 	// This size will change if we need to read chunks bigger
-// 	// than the currently allocated size of t_chunk_buffer.
-// 	long nTChunkBuffSize = CHUNK_BUFF_SIZE;
-// 
-// 	// chunk_buffer & chunk_buffer_end
-// 	// Keeps track of the current location
-// 	// in t_chunk_buffer that we are lexing input from.
-// 	// chunk_buffer_end is the end of the input buffer we
-// 	// are lexing from. chunk_buffer_end is used as a marker
-// 	// to make sure we don't read past the end of our input buffer
-// 	char *chunk_buffer, *chunk_buffer_end;
-// 
-// 	// cstate
-// 	// The current state of the chunk parsing state machine. We
-// 	// start out reading the size of the first chunk.
-// 	CHUNK_STATE cstate = READ_CHUNK_SIZE;
-// 
-// 	// cresult
-// 	// Holds the value of the result of a lexing operation performed
-// 	// on the input buffer.
-// 	CHUNK_LEX_RESULT cresult = LEX_OK;
-// 
-// 	CAtlIsapiBuffer<> result_buffer;
-
 	// Initialize pointers and allocate the chunk buffer.
 	ChunkedBody.chunk_buffer = ChunkedBody.chunk_buffer_end = NULL;
 	if( !ChunkedBody.t_chunk_buffer.Allocate(ChunkedBody.nTChunkBuffSize) )
@@ -321,9 +267,6 @@ bool CHttpReader::ReadChunkedBodyEx()
 				ATLTRACE("ReadChunkedBody: The socket read timed out and no bytes were read from the socket.\n");
 				return false;
 			}
-#ifdef _DEBUG
-			ATLTRACE("ReadChunkedBody read %d bytes from socket. Reads %d \n", dwReadBuffSize, ++nReadCount);
-#endif
 			ChunkedBody.chunk_buffer_end = ChunkedBody.chunk_buffer + ChunkedBody.nChunkBuffCarryOver + dwReadBuffSize;
 			ChunkedBody.nChunkBuffCarryOver = 0;
 		}
