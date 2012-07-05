@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>打印测试</title>
+<!--media=print 这个属性可以在打印时有效--> 
+<style media=print> 
+.Print{display:inline !important;}
+.Noprint{display:none;} 
+.PageNext{page-break-after: always;} 
+</style> 
+<style type="text/css">
+.Print{display:none;}
+</style>
+
+<script language="javascript">
+<!--
+function PrePrint(){
+	idName.innerText = pt.name.value;
+	idAge.innerText = pt.age.value;
+	idContext.innerText = pt.ct.value;
+}
+
+function OnPrintView(){
+	PrePrint();
+	WebBrowser.ExecWB(7,1);
+}
+
+function OnPrint(){
+	PrePrint();
+	WebBrowser.ExecWB(6,1);
+}
+-->
+</script>
+</head>
+
+<body>
+<div class="Noprint">
+IE浏览器测试通过
+<OBJECT  id=WebBrowser  classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2  height=0  width=0></OBJECT>
+<br />
+<form name="pt">
+姓名: <input name="name" type="text" /><br />
+年龄: <input name="age" type="text"  /><br />
+简介: 
+<textarea name="ct" rows="7"></textarea>
+<br />
+</form>
+<button onclick="OnPrintView()">打印预览</button>&nbsp;
+<button onclick="OnPrint()">打印</button>
+<br />
+</div>
+
+<center>
+<div id="text" class="Print">
+<table width="263" height="125" border="1">
+  <tr>
+    <td colspan="2" align="center"><h2>您输入的资料如下</h2></td>
+    </tr>
+  <tr>
+    <td width="71" align="right">姓名:</td>
+    <td width="176"><label id="idName"></label></td>
+  </tr>
+  <tr>
+    <td align="right">年龄:</td>
+    <td><label id="idAge"></label>岁</td>
+  </tr>
+  <tr>
+    <td align="right">简介:</td>
+    <td><label id="idContext"></label></td>
+  </tr>
+</table>
+</div>
+</center>
+
+</body>
+</html>
