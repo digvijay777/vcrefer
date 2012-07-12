@@ -192,39 +192,55 @@ BOOL CILContainer::TranslateUIEvent(HWND hWnd, UINT nMsg,
 	return CSimpleDUIRoot::TranslateUIEvent(hWnd, nMsg, wParam, lParam);
 }
 
-BOOL CILContainer::AddGroup()
+void CILContainer::SetGroupCount(size_t nCount)
 {
-	size_t		st		= m_groups.size();
-
-	if(5 <= st)
+	if(nCount > 5 || 0 == nCount)
 	{
-		return FALSE;
+		assert(false);
+		return;
 	}
 
-	m_groups.push_back( new CSimpleDUIPanel(this, 
-		RGB(0x25 * (m_groups.size()+1), 0x30 * (m_groups.size()+1), 0x20 * (m_groups.size()+1))) );
-	m_navigates.push_back( new CImageDUIRadio(m_imageRadio, m_navigatebar, 
-		400 + m_groups.size() - 1, &m_radiogroup) );
+	// 少于原来的数
+	if(m_groups.size() > nCount)
+	{
+		for(size_t i = nCount; i < m_groups.size(); i++)
+		{
+			delete m_groups[i];
+			delete m_navigates[i];
+		}
 
-	return TRUE;
+		m_groups.resize(nCount);
+		m_navigates.resize(nCount);
+		return;
+	}
+	else if(m_groups.size() < nCount)
+	{
+		for(size_t i = m_groups.size(); i < nCount; i++)
+		{
+			m_groups.push_back( new CSimpleDUIPanel(this, 0, 0) );
+			m_navigates.push_back( new CImageDUIRadio(m_imageRadio, m_navigatebar, 
+				400 + m_groups.size() - 1, &m_radiogroup) );
+		}
+	}
+
+	// 清空原m_groups的子项
+	for(size_t i = 0; i < m_groups.size(); i++)
+	{
+		DeleteDUI(m_groups[i]->GetChildUI());
+	}
+
+	ShowGroup(0);
+	UpdateNaviageBar();
+}
+
+size_t CILContainer::GetGroupCount()
+{
+	return m_groups.size();
 }
 
 BOOL CILContainer::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	return FALSE;
-}
-
-BOOL CILContainer::DeleteGroup(int nIndex)
-{
-	if(nIndex < 0 || nIndex >= m_groups.size())
-	{
-		return FALSE;
-	}
-
-	delete m_groups[nIndex];
-	m_groups.erase(m_groups.begin() + nIndex);
-
-	return TRUE;
 }
 
 BOOL CILContainer::AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID)
@@ -239,12 +255,6 @@ BOOL CILContainer::AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID)
 	pItem = new CILItem(m_imageItemBk, m_imageItemEt, m_groups[nGroup], 
 		hIcon, lpText, uID + 500);
 	
-	// 测试， 区2为编辑模式
-	if(1 == nGroup)
-	{
-		pItem->SetEditMode(TRUE);
-	}
-
 	return NULL != pItem;
 }
 
@@ -325,6 +335,24 @@ BOOL CILContainer::UpdateGroup(int nGroup)
 
 	UIInvalidate(NULL);
 	return TRUE;
+}
+
+/*
+ *	设置编辑模式
+ */
+void CILContainer::SetEditMode(BOOL bEtMode)
+{
+	for(size_t i = 0; i < m_groups.size(); i++)
+	{
+		CILItem*		pItem		= (CILItem *)m_groups[i]->GetChildUI();
+
+		for(; NULL != pItem; pItem = (CILItem*)pItem->GetBrotherUI())
+		{
+			pItem->SetEditMode(bEtMode);
+		}
+	}
+
+	UIInvalidate(NULL);
 }
 
 BOOL CILContainer::ShowGroup(int nIndex)
@@ -415,13 +443,6 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	rect.bottom -= 10;
 	m_navigatebar->MoveUI(&rect);
 
-	AddGroup();
-	AddGroup();
-	AddGroup();
-	AddGroup();
-
-	ShowGroup(0);
-	UpdateNaviageBar();
 	// 添加子项
 	return TRUE;
 }

@@ -57,6 +57,7 @@ CIconListDlg::CIconListDlg(CWnd* pParent /*=NULL*/)
 void CIconListDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_CHECK1, m_ck);
 }
 
 BEGIN_MESSAGE_MAP(CIconListDlg, CDialog)
@@ -65,6 +66,7 @@ BEGIN_MESSAGE_MAP(CIconListDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(UM_NOTIFY, &CIconListDlg::OnUmNotify)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_CHECK1, &CIconListDlg::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
 
@@ -108,6 +110,7 @@ BOOL CIconListDlg::OnInitDialog()
 	m_ilc.m_uNotifyMsg = UM_NOTIFY;
 	m_ilc.m_hNotifyWnd = GetSafeHwnd();
 	m_ilc.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_ICONLIST));
+	m_ilc.SetGroupCount(2);
 	// 添加子项
 	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1)),
 		L"电脑清理", 0);
@@ -199,4 +202,9 @@ LRESULT CIconListDlg::OnUmNotify(WPARAM wParam, LPARAM lParam)
 		szText[wParam]);
 	MessageBox(str);
 	return 0;
+}
+
+void CIconListDlg::OnBnClickedCheck1()
+{
+	m_ilc.SetEditMode(BST_CHECKED == m_ck.GetCheck());
 }

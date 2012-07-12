@@ -9,7 +9,7 @@
 /*
  *	По
  */
-class CILItem : CSimpleDUIBase
+class CILItem : public CSimpleDUIBase
 {
 public:
 	CILItem(Gdiplus::Image* pImage, Gdiplus::Image* pImageEt, 
@@ -61,12 +61,13 @@ public:
 
 public:
 	BOOL		TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
-	BOOL		AddGroup();
-	BOOL		DeleteGroup(int nIndex);
+	void		SetGroupCount(size_t nCount);
+	size_t		GetGroupCount();
 	BOOL		AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID);
 	BOOL		DeleteItem(int nGroup, UINT uID);
 	BOOL		UpdateNaviageBar();
 	BOOL		UpdateGroup(int nGroup);
+	void		SetEditMode(BOOL bEtMode);
 
 public:
 	BOOL		ShowGroup(int nIndex);

@@ -16,6 +16,8 @@
 #define IDR_PNG2                        135
 #define IDR_PNG3                        136
 #define IDC_ICONLIST                    1001
+#define IDC_BUTTON1                     1002
+#define IDC_CHECK1                      1003
 
 // Next default values for new objects
 // 
@@ -23,7 +25,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

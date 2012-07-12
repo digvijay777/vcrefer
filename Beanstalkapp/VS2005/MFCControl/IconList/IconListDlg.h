@@ -3,6 +3,7 @@
 
 #pragma once
 #include "IconList/IconListCtrl.h"
+#include "afxwin.h"
 
 // CIconListDlg ¶Ô»°¿ò
 class CIconListDlg : public CDialog
@@ -30,4 +31,8 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LRESULT OnUmNotify(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+public:
+	CButton m_ck;
+public:
+	afx_msg void OnBnClickedCheck1();
 };
