@@ -41,8 +41,8 @@ public:
 	void	DrawUI(HDC hDC, LPRECT lpRect);
 	BOOL	IsVisible();
 	void	ShowUI(BOOL bShow);
-	void	SetUICapture();
-	void	ReleaseUICapture();
+	BOOL	SetUICapture();
+	BOOL	ReleaseUICapture();
 	void	SetUIFocus();
 	void	KillUIFocus();
 	void	TrackEvent(UINT nMsg);

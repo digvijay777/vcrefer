@@ -203,21 +203,28 @@ void CSimpleDUIBase::ShowUI(BOOL bShow)
 /*
  *	ÊÂ¼þ
  */
-void CSimpleDUIBase::SetUICapture()
+BOOL CSimpleDUIBase::SetUICapture()
 {
 	if(NULL != GetUIRoot() && NULL == GetUIRoot()->captureUI)
 	{
 		::SetCapture(GetUIRoot()->hWnd);
 		GetUIRoot()->captureUI = this;
+		return TRUE;
 	}
+
+	return FALSE;
 }
-void CSimpleDUIBase::ReleaseUICapture()
+
+BOOL CSimpleDUIBase::ReleaseUICapture()
 {
 	if(NULL != GetUIRoot() && NULL != GetUIRoot()->captureUI)
 	{
 		::ReleaseCapture();
 		GetUIRoot()->captureUI = NULL;
+		return TRUE;
 	}
+
+	return FALSE;
 }
 
 void CSimpleDUIBase::SetUIFocus()

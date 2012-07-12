@@ -169,7 +169,11 @@ BOOL CImageDUIButton::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 	{
 		POINT		pt		= {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 
-		ReleaseUICapture();
+		if(FALSE == ReleaseUICapture())
+		{
+			return FALSE;
+		}
+
 		if(PtInRect(&rect, pt))
 		{
 			m_status = 1;
