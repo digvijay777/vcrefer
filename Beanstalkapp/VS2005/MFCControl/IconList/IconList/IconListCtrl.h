@@ -34,8 +34,8 @@ public:
 	size_t							m_nShowGroup;
 
 public:
-	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
-	virtual BOOL		OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
+	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 
 public:
 	BOOL		AddGroup();

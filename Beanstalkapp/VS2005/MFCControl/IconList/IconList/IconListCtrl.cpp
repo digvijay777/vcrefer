@@ -24,7 +24,7 @@ CILContainer::~CILContainer()
 
 }
 
-void CILContainer::OnDraw(HDC hDC, LPRECT lpRect)
+void CILContainer::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 
 }
@@ -45,7 +45,7 @@ BOOL CILContainer::AddGroup()
 	return TRUE;
 }
 
-BOOL CILContainer::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
+BOOL CILContainer::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(WM_LBUTTONDOWN == nMsg)
 	{
@@ -134,7 +134,7 @@ BOOL CIconListCtrl::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 		return FALSE;
 	}
 
-	if( FALSE != TranslateEvent(hWnd, uMsg, wParam, lParam) )
+	if( FALSE != TranslateUIEvent(hWnd, uMsg, wParam, lParam) )
 	{
 		return FALSE;
 	}
@@ -218,7 +218,7 @@ LRESULT CIconListCtrl::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
 
 	hDC = BeginPaint(&paint);
 
-	Paint(m_hWnd, hDC);
+	PaintUI(m_hWnd, hDC);
 // 	HDC					hMemDC;
 // 	HBITMAP				hBitmap, hOldBitmap;
 // 	int					nSaveDC;

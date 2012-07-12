@@ -94,7 +94,7 @@ BOOL CSimpleDUIBase::DispatchUIEvent(POINT pt, UINT nMsg,
 		return FALSE;
 	}
 
-	if(NULL != GetPaneRoot() && this != GetPaneRoot()->captureUI)
+	if(NULL != GetUIRoot() && this != GetUIRoot()->captureUI)
 	{
 		// 兄弟优先处理事件
 		for(CSimpleDUIBase* node = m_brother;
@@ -149,19 +149,19 @@ BOOL CSimpleDUIBase::DispatchUIEvent(POINT pt, UINT nMsg,
 	TranslateTrackEvent();
 
 	// 判断是否在当前层处理事件
-	bRet = OnEvent(nMsg, wParam, lParam);
+	bRet = OnUIEvent(nMsg, wParam, lParam);
 
 	return bRet;
 }
 
 inline void CSimpleDUIBase::TranslateTrackEvent()
 {
-	if(NULL != GetPaneRoot()
-		&& NULL != GetPaneRoot()->trackUI
-		&& this != GetPaneRoot()->trackUI)
+	if(NULL != GetUIRoot()
+		&& NULL != GetUIRoot()->trackUI
+		&& this != GetUIRoot()->trackUI)
 	{
-		GetPaneRoot()->trackUI->OnEvent(GetPaneRoot()->trackMsg, 0, 0);
-		GetPaneRoot()->trackUI = NULL;
+		GetUIRoot()->trackUI->OnUIEvent(GetUIRoot()->trackMsg, 0, 0);
+		GetUIRoot()->trackUI = NULL;
 	}
 }
 /*
@@ -173,7 +173,7 @@ void CSimpleDUIBase::MoveUI(LPRECT lpRect, BOOL bInvalidate /* = TRUE */)
 
 	if( bInvalidate )
 	{
-		Invalidate();
+		InvalidateUI();
 	}
 }
 
@@ -185,7 +185,7 @@ void CSimpleDUIBase::DrawUI(HDC hDC, LPRECT lpRect)
 	// 绘制自己
 	if( m_isVisible )
 	{
-		OnDraw(hDC, lpRect);
+		OnUIDraw(hDC, lpRect);
 	}
 	// 绘制兄弟窗体
 	if(NULL != m_brother)
@@ -218,7 +218,7 @@ void CSimpleDUIBase::ShowUI(BOOL bShow)
 	{
 		m_isVisible = bShow;
 		GetUIRect(&rect);
-		Invalidate(&rect);
+		InvalidateUI(&rect);
 	}
 }
 /*
@@ -226,53 +226,53 @@ void CSimpleDUIBase::ShowUI(BOOL bShow)
  */
 void CSimpleDUIBase::SetUICapture()
 {
-	if(NULL != GetPaneRoot() && NULL == GetPaneRoot()->captureUI)
+	if(NULL != GetUIRoot() && NULL == GetUIRoot()->captureUI)
 	{
-		::SetCapture(GetPaneRoot()->hWnd);
-		GetPaneRoot()->captureUI = this;
+		::SetCapture(GetUIRoot()->hWnd);
+		GetUIRoot()->captureUI = this;
 	}
 }
 void CSimpleDUIBase::ReleaseUICapture()
 {
-	if(NULL != GetPaneRoot() && NULL != GetPaneRoot()->captureUI)
+	if(NULL != GetUIRoot() && NULL != GetUIRoot()->captureUI)
 	{
 		::ReleaseCapture();
-		GetPaneRoot()->captureUI = NULL;
+		GetUIRoot()->captureUI = NULL;
 	}
 }
 
 void CSimpleDUIBase::SetUIFocus()
 {
-	if(NULL != GetPaneRoot())
+	if(NULL != GetUIRoot())
 	{
-		GetPaneRoot()->focusUI = this;
+		GetUIRoot()->focusUI = this;
 	}
 }
 
 void CSimpleDUIBase::KillUIFocus()
 {
-	if(NULL != GetPaneRoot() && this == GetPaneRoot()->focusUI)
+	if(NULL != GetUIRoot() && this == GetUIRoot()->focusUI)
 	{
-		GetPaneRoot()->focusUI = NULL;
+		GetUIRoot()->focusUI = NULL;
 	}
 }
 
 void CSimpleDUIBase::TrackEvent(UINT nMsg)
 {
-	if(NULL == GetPaneRoot())
+	if(NULL == GetUIRoot())
 	{
 		return;
 	}
 
 	if(0 == nMsg)
 	{
-		GetPaneRoot()->trackUI = NULL;
-		GetPaneRoot()->trackMsg = 0;
+		GetUIRoot()->trackUI = NULL;
+		GetUIRoot()->trackMsg = 0;
 	}
 	else
 	{
-		GetPaneRoot()->trackUI = this;
-		GetPaneRoot()->trackMsg = nMsg;
+		GetUIRoot()->trackUI = this;
+		GetUIRoot()->trackMsg = nMsg;
 	}
 }
 /*
@@ -305,11 +305,11 @@ void CSimpleDUIBase::GetUIRect(RECT* rect)
 /*
  *	重绘窗体
  */
-void CSimpleDUIBase::Invalidate(LPRECT lpRect /* = NULL */)
+void CSimpleDUIBase::InvalidateUI(LPRECT lpRect /* = NULL */)
 {
 	if(NULL != m_parent)
 	{
-		m_parent->Invalidate(lpRect);
+		m_parent->InvalidateUI(lpRect);
 		return;
 	}
 
@@ -318,11 +318,11 @@ void CSimpleDUIBase::Invalidate(LPRECT lpRect /* = NULL */)
 /*
  *	获取panel
  */
-PDUI_ROOT CSimpleDUIBase::GetPaneRoot()
+PDUI_ROOT CSimpleDUIBase::GetUIRoot()
 {
 	if(NULL != m_parent)
 	{
-		return m_parent->GetPaneRoot();
+		return m_parent->GetUIRoot();
 	}
 
 	return NULL;
@@ -330,7 +330,7 @@ PDUI_ROOT CSimpleDUIBase::GetPaneRoot()
 /*
  *	事件处理
  */
-BOOL CSimpleDUIBase::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
+BOOL CSimpleDUIBase::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	return FALSE;
 }
@@ -357,7 +357,7 @@ CSimpleDUIRoot::~CSimpleDUIRoot()
 /*
  *	事件转换
  */
-BOOL CSimpleDUIRoot::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
+BOOL CSimpleDUIRoot::TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	m_panelRoot.hWnd = hWnd;
 	// 鼠标事件
@@ -410,7 +410,7 @@ BOOL CSimpleDUIRoot::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
 		PAINTSTRUCT			ps			= {0};
 
 		hDC = BeginPaint(hWnd, &ps);
-		Paint(hWnd, hDC);
+		PaintUI(hWnd, hDC);
 		EndPaint(hWnd, &ps);
 	}
 
@@ -419,7 +419,7 @@ BOOL CSimpleDUIRoot::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
 /*
  *	绘制函数
  */
-void CSimpleDUIRoot::Paint(HWND hWnd, HDC hDC)
+void CSimpleDUIRoot::PaintUI(HWND hWnd, HDC hDC)
 {
 	HDC					hMemDC;
 	HBITMAP				hBitmap, hOldBitmap;
@@ -435,7 +435,7 @@ void CSimpleDUIRoot::Paint(HWND hWnd, HDC hDC)
 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hBitmap);
 	// 绘制背景
 	nSaveDC = SaveDC(hMemDC);
-	EraseBkgnd(hMemDC, hWnd);
+	EraseUIBkgnd(hMemDC, hWnd);
 	::RestoreDC(hMemDC, nSaveDC);
 	// 开始操作
 	nSaveDC = SaveDC(hMemDC);
@@ -456,12 +456,12 @@ void CSimpleDUIRoot::Paint(HWND hWnd, HDC hDC)
 	::DeleteObject(hMemDC);
 }
 
-PDUI_ROOT CSimpleDUIRoot::GetPaneRoot()
+PDUI_ROOT CSimpleDUIRoot::GetUIRoot()
 {
 	return &m_panelRoot;
 }
 
-void CSimpleDUIRoot::EraseBkgnd(HDC hDC, HWND hWnd)
+void CSimpleDUIRoot::EraseUIBkgnd(HDC hDC, HWND hWnd)
 {
 	HWND				hParent			= ::GetParent(hWnd);
 	RECT				rtParent, rtWnd;
@@ -476,7 +476,7 @@ void CSimpleDUIRoot::EraseBkgnd(HDC hDC, HWND hWnd)
 	::SetViewportOrgEx(hDC, pt.x, pt.y, &ptt);
 }
 
-void CSimpleDUIRoot::Invalidate(LPRECT lpRect)
+void CSimpleDUIRoot::InvalidateUI(LPRECT lpRect)
 {
 	if(NULL == m_panelRoot.hWnd)
 	{
@@ -486,7 +486,7 @@ void CSimpleDUIRoot::Invalidate(LPRECT lpRect)
 	::InvalidateRect(m_panelRoot.hWnd, lpRect, FALSE);
 }
 
-void CSimpleDUIRoot::OnDraw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIRoot::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 
 }
@@ -505,7 +505,7 @@ CSimpleDUIText::~CSimpleDUIText()
 
 }
 
-void CSimpleDUIText::OnDraw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIText::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 	RECT		rect;
 
@@ -534,7 +534,7 @@ CSimpleDUIButton::~CSimpleDUIButton()
 /*
  *	按钮事件
  */
-BOOL CSimpleDUIButton::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
+BOOL CSimpleDUIButton::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	RECT		rect;
 
@@ -544,21 +544,21 @@ BOOL CSimpleDUIButton::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 		if(0 == m_status)
 		{
 			m_status = 1;
-			Invalidate(&rect);
+			InvalidateUI(&rect);
 			TrackEvent(WM_MOUSELEAVE);
 		}
 	}
 	else if(WM_MOUSELEAVE == nMsg)
 	{
 		m_status = 0;
-		Invalidate(&rect);
+		InvalidateUI(&rect);
 	}
 	else if(WM_LBUTTONDOWN == nMsg)
 	{
 		m_status = 2;
 		TrackEvent(0);
 		SetUICapture();
-		Invalidate(&rect);
+		InvalidateUI(&rect);
 	}
 	else if(WM_LBUTTONUP == nMsg)
 	{
@@ -569,13 +569,13 @@ BOOL CSimpleDUIButton::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 		{
 			m_status = 1;
 			TrackEvent(WM_MOUSELEAVE);
-			SendMessage(GetPaneRoot()->hWnd, WM_COMMAND, m_uID, 0);
+			SendMessage(GetUIRoot()->hWnd, WM_COMMAND, m_uID, 0);
 		}
 		else
 		{
 			m_status = 0;
 		}
-		Invalidate(&rect);
+		InvalidateUI(&rect);
 	}
 
 	return TRUE;
@@ -583,7 +583,7 @@ BOOL CSimpleDUIButton::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 /*
  *	绘制按钮
  */
-void CSimpleDUIButton::OnDraw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIButton::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 	RECT		rect;
 
@@ -619,7 +619,7 @@ CSimpleDUIPanel::~CSimpleDUIPanel()
 
 }
 
-void CSimpleDUIPanel::OnDraw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIPanel::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 	RECT		rect;
 

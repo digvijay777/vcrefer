@@ -24,8 +24,6 @@ private:
 	CSimpleDUIBase*		m_child;
 	CSimpleDUIBase*		m_brother;
 	RECT				m_rect;
-
-protected:
 	BOOL				m_isVisible;
 
 protected:
@@ -49,10 +47,10 @@ public:
 	void	GetUIRect(RECT* rect);
 
 public:
-	virtual void				Invalidate(LPRECT lpRect = NULL);
-	virtual PDUI_ROOT		GetPaneRoot();
-	virtual BOOL				OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
-	virtual void				OnDraw(HDC hDC, LPRECT lpRect) = 0;
+	virtual void				InvalidateUI(LPRECT lpRect = NULL);
+	virtual PDUI_ROOT			GetUIRoot();
+	virtual BOOL				OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+	virtual void				OnUIDraw(HDC hDC, LPRECT lpRect) = 0;
 
 public:
 	static void						MergerRect(RECT* des, LPRECT rt1, LPRECT rt2);
@@ -72,14 +70,14 @@ private:
 	BOOL						m_bTrackEvent;
 
 public:
-	BOOL			TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
-	void			Paint(HWND hWnd, HDC hDC);
+	BOOL			TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
+	void			PaintUI(HWND hWnd, HDC hDC);
 
 public:
-	virtual PDUI_ROOT		GetPaneRoot();
-	virtual void				EraseBkgnd(HDC hDC, HWND hWnd);
-	virtual void				Invalidate(LPRECT lpRect);
-	virtual void				OnDraw(HDC hDC, LPRECT lpRect);
+	virtual PDUI_ROOT			GetUIRoot();
+	virtual void				EraseUIBkgnd(HDC hDC, HWND hWnd);
+	virtual void				InvalidateUI(LPRECT lpRect);
+	virtual void				OnUIDraw(HDC hDC, LPRECT lpRect);
 };
 
 /*
@@ -95,7 +93,7 @@ private:
 	std::wstring	m_text;
 
 public:
-	virtual		void	OnDraw(HDC hDC, LPRECT lpRect);
+	virtual		void	OnUIDraw(HDC hDC, LPRECT lpRect);
 
 public:
 	void	SetText(LPCWSTR lpText);
@@ -115,8 +113,8 @@ public:
 	UINT		m_uID;
 
 public:
-	virtual BOOL		OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
-	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
+	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 };
 
 /*
@@ -132,5 +130,5 @@ public:
 	COLORREF		m_color;
 
 public:
-	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
+	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 };
