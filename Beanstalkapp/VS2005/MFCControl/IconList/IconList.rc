@@ -65,6 +65,11 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\IconList.ico"
+IDI_ICON1               ICON                    "res\\icon1.ico"
+IDI_ICON2               ICON                    "res\\icon2.ico"
+IDI_ICON3               ICON                    "res\\icon3.ico"
+IDI_ICON4               ICON                    "res\\icon4.ico"
+IDI_ICON5               ICON                    "res\\icon5.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -90,7 +95,7 @@ FONT 9, "宋体", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,263,7,50,16
     PUSHBUTTON      "取消",IDCANCEL,263,25,50,16
-    CTEXT           "TODO: 在此放置对话框控件。",IDC_ICONLIST,10,52,300,141,SS_NOTIFY | WS_BORDER
+    CTEXT           "TODO: 在此放置对话框控件。",IDC_ICONLIST,10,7,243,186,SS_NOTIFY | WS_BORDER
 END
 
 
@@ -159,6 +164,14 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDR_PNG1                PNG                     "res\\radio.png"
+IDR_PNG2                PNG                     "res\\item_bk.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

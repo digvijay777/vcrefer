@@ -30,6 +30,10 @@ protected:
 	void	DeleteDUI(CSimpleDUIBase* pBase);
 
 public:
+	CSimpleDUIBase*		GetChildUI();
+	CSimpleDUIBase*		GetBrotherUI();
+
+public:
 	BOOL	DispatchUIEvent(POINT pt, UINT nMsg, 
 		WPARAM wParam, LPARAM lParam);
 	void	TranslateTrackEvent();
@@ -123,12 +127,14 @@ public:
 class CSimpleDUIPanel : public CSimpleDUIBase
 {
 public:
-	CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col);
+	CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col, BYTE alpha = 0xff);
 	virtual ~CSimpleDUIPanel();
 
 public:
 	COLORREF		m_color;
+	BYTE			m_alpha;
 
 public:
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 };
+

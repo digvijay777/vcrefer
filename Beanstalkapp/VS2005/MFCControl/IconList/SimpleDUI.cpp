@@ -75,6 +75,15 @@ void CSimpleDUIBase::DeleteDUI(CSimpleDUIBase* pUI)
 	delete pUI;
 }
 
+CSimpleDUIBase* CSimpleDUIBase::GetChildUI()
+{
+	return m_child;
+}
+
+CSimpleDUIBase* CSimpleDUIBase::GetBrotherUI()
+{
+	return m_brother;
+}
 /*
  *	事件分发处理
  *  UI处理了这个消息不再由其它UI处理
@@ -608,9 +617,11 @@ void CSimpleDUIButton::OnUIDraw(HDC hDC, LPRECT lpRect)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CSimpleDUIPanel::CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col)
+CSimpleDUIPanel::CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col, 
+								 BYTE alpha /* = 0xff */)
 : CSimpleDUIBase(parent)
 , m_color(col)
+, m_alpha(alpha)
 {
 
 }
@@ -622,6 +633,11 @@ CSimpleDUIPanel::~CSimpleDUIPanel()
 
 void CSimpleDUIPanel::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
+	if(0 == m_alpha)
+	{
+		return;
+	}
+
 	RECT		rect;
 
 	GetUIRect(&rect);
@@ -630,3 +646,5 @@ void CSimpleDUIPanel::OnUIDraw(HDC hDC, LPRECT lpRect)
 	::SetBkColor(hDC, m_color);
 	::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 }
+
+//////////////////////////////////////////////////////////////////////////

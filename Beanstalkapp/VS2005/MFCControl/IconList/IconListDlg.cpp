@@ -71,6 +71,7 @@ BOOL CIconListDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	InitGdiplus();
 	// 将“关于...”菜单项添加到系统菜单中。
 
 	// IDM_ABOUTBOX 必须在系统命令范围内。
@@ -95,7 +96,25 @@ BOOL CIconListDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	m_ilc.m_imageRadio = ImageFromResouce(AfxGetInstanceHandle(), _T("PNG"),
+		MAKEINTRESOURCE(IDR_PNG1));
+	m_ilc.m_imageItemBk = ImageFromResouce(AfxGetInstanceHandle(), _T("PNG"),
+		MAKEINTRESOURCE(IDR_PNG2));
 	m_ilc.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_ICONLIST));
+	// 添加子项
+	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1)),
+		L"电脑清理", 500 + 0);
+	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON2)),
+		L"优化加速", 500 + 1);
+	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON3)),
+		L"漏洞修复", 500 + 2);
+	m_ilc.AddItem(1, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON4)),
+		L"功能大全", 500 + 3);
+	m_ilc.AddItem(1, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON5)),
+		L"软件管家", 500 + 4);
+	m_ilc.UpdateGroup(0);
+	m_ilc.UpdateGroup(1);
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

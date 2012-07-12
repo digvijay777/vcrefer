@@ -248,6 +248,26 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\icon1.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon2.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon3.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon4.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon5.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\res\IconList.ico"
 				>
 			</File>
@@ -257,6 +277,14 @@
 			</File>
 			<File
 				RelativePath=".\res\IconList.rc2"
+				>
+			</File>
+			<File
+				RelativePath=".\res\item_bk.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\radio.png"
 				>
 			</File>
 		</Filter>
@@ -289,6 +317,14 @@
 			</File>
 			<File
 				RelativePath=".\IconList\IconListCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImageDUIControl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ImageDUIControl.h"
 				>
 			</File>
 			<File

@@ -5,17 +5,27 @@
 #include <GdiPlus.h>
 #include <string>
 #include "../SimpleDUI.h"
-
-#pragma comment(lib, "gdiplus.lib")
-
+#include "../ImageDUIControl.h"
 /*
  *	По
  */
 class CILItem : CSimpleDUIBase
 {
 public:
-	CILItem(CSimpleDUIBase* parent);
+	CILItem(Gdiplus::Image* pImage, CSimpleDUIBase* parent, HICON hIcon,
+		LPCWSTR lpText, UINT uID);
 	virtual ~CILItem();
+
+public:
+	Gdiplus::Bitmap*	m_icon;
+	Gdiplus::Image*		m_image;
+	WCHAR				m_szText[33];
+	UINT				m_uID;
+	int					m_status;
+
+public:
+	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 };
 
 /*
@@ -30,9 +40,12 @@ public:
 public:
 	std::vector<CSimpleDUIBase*>	m_groups;
 	CSimpleDUIBase*					m_navigatebar;
-	std::vector<CSimpleDUIBase*>	m_navigates;
 	size_t							m_nCurrentGroup;
 	size_t							m_nSwitchGroup;
+	std::vector<CSimpleDUIBase*>	m_navigates;
+	Gdiplus::Image*					m_imageRadio;
+	Gdiplus::Image*					m_imageItemBk;
+	DUI_RADIO_GROUP					m_radiogroup;
 
 public:
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
@@ -42,9 +55,10 @@ public:
 	BOOL		TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
 	BOOL		AddGroup();
 	BOOL		DeleteGroup(int nIndex);
-	BOOL		AddItem(int nGroup, CILItem* item);
-	BOOL		DeleteItem(int nGroup, CILItem* item);
+	BOOL		AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID);
+	BOOL		DeleteItem(int nGroup, UINT uID);
 	BOOL		UpdateNaviageBar();
+	BOOL		UpdateGroup(int nGroup);
 
 public:
 	BOOL		ShowGroup(int nIndex);
