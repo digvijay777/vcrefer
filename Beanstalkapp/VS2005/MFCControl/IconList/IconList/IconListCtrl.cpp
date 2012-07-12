@@ -33,62 +33,18 @@ void CILContainer::OnUIDraw(HDC hDC, LPRECT lpRect)
 BOOL CILContainer::TranslateUIEvent(HWND hWnd, UINT nMsg,
 									WPARAM wParam, LPARAM lParam)
 {
-// 	if(WM_TIMER == nMsg && wParam == (WPARAM)this)
-// 	{
-// 		if(m_nSwitchGroup != m_nCurrentGroup
-// 			&& m_nCurrentGroup < m_groups.size()
-// 			&& m_nSwitchGroup < m_groups.size())
-// 		{
-// 			RECT		rect;
-// 			RECT		rtCur, rtSwt;
-// 
-// 			m_groups[m_nCurrentGroup]->GetUIRect(&rect);
-// 			if(m_nSwitchGroup > m_nCurrentGroup)
-// 			{
-// 				rtCur = rect;
-// 				rtCur.left = rect.left - 10;
-// 				rtCur.right = rect.right - 10;
-// 
-// 				rtSwt = rect;
-// 				rtSwt.left = rect.right - 10;
-// 				rtSwt.right = rect.right + rect.right - rect.left - 10;
-// 
-// 				if(rtCur.right < 0)
-// 				{
-// 					KillTimer(hWnd, wParam);
-// 					ShowGroup(m_nSwitchGroup);
-// 					return TRUE;
-// 				}
-// 			}
-// 			else
-// 			{
-// 				rtCur = rect;
-// 				rtCur.left = rect.left + 10;
-// 				rtCur.right = rect.right + 10;
-// 
-// 				rtSwt = rect;
-// 				rtSwt.left = rect.right + 10;
-// 				rtSwt.right = rect.right + rect.right - rect.left + 10;	
-// 
-// 				if(rtCur.left > (rect.right - rect.left))
-// 				{
-// 					KillTimer(hWnd, wParam);
-// 					ShowGroup(m_nSwitchGroup);
-// 					return TRUE;
-// 				}
-// 			}
-// 
-// 			m_groups[m_nCurrentGroup]->MoveUI(&rtCur, FALSE);
-// 			m_groups[m_nSwitchGroup]->ShowUI(TRUE);
-// 			m_groups[m_nSwitchGroup]->MoveUI(&rtSwt, TRUE);
-// 		}
-// 		else
-// 		{
-// 			KillTimer(hWnd, wParam);
-// 		}
-// 
-// 		return TRUE;
-// 	}
+	if(WM_COMMAND == nMsg)
+	{
+		size_t		n		= wParam - 400;
+
+		if(n >= m_groups.size())
+		{
+			return TRUE;
+		}
+		
+		ShowGroup(n);
+		return TRUE;
+	}
 
 	return CSimpleDUIRoot::TranslateUIEvent(hWnd, nMsg, wParam, lParam);
 }
@@ -103,7 +59,7 @@ BOOL CILContainer::AddGroup()
 	}
 
 	m_groups.push_back(new CSimpleDUIPanel(this, 
-		(st%2)?RGB(0xff, 0x0, 0x0):RGB(0x0, 0xff, 0x0)));
+		RGB(0x25 * (m_groups.size()+1), 0x30 * (m_groups.size()+1), 0x20 * (m_groups.size()+1))));
 	m_navigates.push_back(new CSimpleDUIButton(m_navigatebar, 400 + m_groups.size() - 1));
 
 	return TRUE;
@@ -111,33 +67,6 @@ BOOL CILContainer::AddGroup()
 
 BOOL CILContainer::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
-	return FALSE;
-
-	if(WM_LBUTTONDOWN == nMsg)
-	{
-		if(m_groups.size() == 0)
-		{
-			return FALSE;
-		}
-
-		m_nSwitchGroup++;
-		m_nSwitchGroup = m_nSwitchGroup % m_groups.size();
-		ShowGroup(m_nSwitchGroup);
-		return TRUE;
-	}
-	else if(WM_RBUTTONDOWN == nMsg)
-	{
-		if(m_groups.size() == 0)
-		{
-			return FALSE;
-		}
-
-		m_nSwitchGroup += m_groups.size() - 1;
-		m_nSwitchGroup = m_nSwitchGroup % m_groups.size();
-		ShowGroup(m_nSwitchGroup);
-		return TRUE;
-	}
-
 	return FALSE;
 }
 
