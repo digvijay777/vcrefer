@@ -44,6 +44,7 @@ public:
 	BOOL		DeleteGroup(int nIndex);
 	BOOL		AddItem(int nGroup, CILItem* item);
 	BOOL		DeleteItem(int nGroup, CILItem* item);
+	BOOL		UpdateNaviageBar();
 
 public:
 	BOOL		ShowGroup(int nIndex);

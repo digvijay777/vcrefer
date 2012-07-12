@@ -28,7 +28,6 @@ private:
 
 protected:
 	void	DeleteDUI(CSimpleDUIBase* pBase);
-	CSimpleDUIBase*		GetChild();
 
 public:
 	BOOL	DispatchUIEvent(POINT pt, UINT nMsg, 
@@ -45,6 +44,7 @@ public:
 	void	TrackEvent(UINT nMsg);
 	void	RectToPanel(RECT* rect);
 	void	GetUIRect(RECT* rect);
+	void	ForegroundUI();
 
 public:
 	virtual void				UIInvalidate(LPRECT lpRect = NULL);
