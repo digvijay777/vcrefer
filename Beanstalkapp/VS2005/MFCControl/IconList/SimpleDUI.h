@@ -9,7 +9,7 @@ typedef struct _DUI_PANEL_ROOT
 	UINT					trackMsg;
 	CSimpleDUIBase*			captureUI;
 	CSimpleDUIBase*			focusUI;
-} DUI_PANEL_ROOT, *PDUI_PANEL_ROOT;
+} DUI_ROOT, *PDUI_ROOT;
 /*
  *	Direct窗体基类
  */
@@ -36,7 +36,7 @@ public:
 	BOOL	DispatchEvent(POINT pt, UINT nMsg, 
 		WPARAM wParam, LPARAM lParam);
 	void	TranslateTrackEvent();
-	void	MoveUI(LPRECT lpRect);
+	void	MoveUI(LPRECT lpRect, BOOL bInvalidate = TRUE);
 	void	Draw(HDC hDC, LPRECT lpRect);
 	BOOL	IsVisible();
 	void	ShowUI(BOOL bShow);
@@ -50,7 +50,7 @@ public:
 
 public:
 	virtual void				Invalidate(LPRECT lpRect = NULL);
-	virtual PDUI_PANEL_ROOT		GetPaneRoot();
+	virtual PDUI_ROOT		GetPaneRoot();
 	virtual BOOL				OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 	virtual void				OnDraw(HDC hDC, LPRECT lpRect) = 0;
 
@@ -61,14 +61,14 @@ public:
 /*
  *	主面板
  */
-class CSimpleDUIPanel : public CSimpleDUIBase
+class CSimpleDUIRoot : public CSimpleDUIBase
 {
 public:
-	CSimpleDUIPanel();
-	virtual ~CSimpleDUIPanel();
+	CSimpleDUIRoot();
+	virtual ~CSimpleDUIRoot();
 
 private:
-	DUI_PANEL_ROOT				m_panelRoot;
+	DUI_ROOT					m_panelRoot;
 	BOOL						m_bTrackEvent;
 
 public:
@@ -76,7 +76,7 @@ public:
 	void			Paint(HWND hWnd, HDC hDC);
 
 public:
-	virtual PDUI_PANEL_ROOT		GetPaneRoot();
+	virtual PDUI_ROOT		GetPaneRoot();
 	virtual void				EraseBkgnd(HDC hDC, HWND hWnd);
 	virtual void				Invalidate(LPRECT lpRect);
 	virtual void				OnDraw(HDC hDC, LPRECT lpRect);
@@ -118,3 +118,4 @@ public:
 	virtual BOOL		OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
 };
+

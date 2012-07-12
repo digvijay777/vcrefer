@@ -167,11 +167,14 @@ inline void CSimpleDUIBase::TranslateTrackEvent()
 /*
  *	移动窗体
  */
-void CSimpleDUIBase::MoveUI(LPRECT lpRect)
+void CSimpleDUIBase::MoveUI(LPRECT lpRect, BOOL bInvalidate /* = TRUE */)
 {
 	m_rect = *lpRect;
 
-	Invalidate();
+	if( bInvalidate )
+	{
+		Invalidate();
+	}
 }
 
 /*
@@ -315,7 +318,7 @@ void CSimpleDUIBase::Invalidate(LPRECT lpRect /* = NULL */)
 /*
  *	获取panel
  */
-PDUI_PANEL_ROOT CSimpleDUIBase::GetPaneRoot()
+PDUI_ROOT CSimpleDUIBase::GetPaneRoot()
 {
 	if(NULL != m_parent)
 	{
@@ -332,14 +335,6 @@ BOOL CSimpleDUIBase::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
-/*
- *	绘制窗体
- */
-void CSimpleDUIBase::OnDraw(HDC hDC, LPRECT lpRect)
-{
-
-}
-
 void CSimpleDUIBase::MergerRect(RECT* des, LPRECT rt1, LPRECT rt2)
 {
 	des->left = max(rt1->left, rt2->left);
@@ -348,21 +343,21 @@ void CSimpleDUIBase::MergerRect(RECT* des, LPRECT rt1, LPRECT rt2)
 	des->bottom = min(rt1->bottom, rt2->bottom);
 }
 //////////////////////////////////////////////////////////////////////////
-CSimpleDUIPanel::CSimpleDUIPanel()
+CSimpleDUIRoot::CSimpleDUIRoot()
 : CSimpleDUIBase(NULL)
 {
 	memset(&m_panelRoot, 0, sizeof(m_panelRoot));
 	m_bTrackEvent = FALSE;
 }
 
-CSimpleDUIPanel::~CSimpleDUIPanel()
+CSimpleDUIRoot::~CSimpleDUIRoot()
 {
 
 }
 /*
  *	事件转换
  */
-BOOL CSimpleDUIPanel::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
+BOOL CSimpleDUIRoot::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	m_panelRoot.hWnd = hWnd;
 	// 鼠标事件
@@ -424,7 +419,7 @@ BOOL CSimpleDUIPanel::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM
 /*
  *	绘制函数
  */
-void CSimpleDUIPanel::Paint(HWND hWnd, HDC hDC)
+void CSimpleDUIRoot::Paint(HWND hWnd, HDC hDC)
 {
 	HDC					hMemDC;
 	HBITMAP				hBitmap, hOldBitmap;
@@ -461,12 +456,12 @@ void CSimpleDUIPanel::Paint(HWND hWnd, HDC hDC)
 	::DeleteObject(hMemDC);
 }
 
-PDUI_PANEL_ROOT CSimpleDUIPanel::GetPaneRoot()
+PDUI_ROOT CSimpleDUIRoot::GetPaneRoot()
 {
 	return &m_panelRoot;
 }
 
-void CSimpleDUIPanel::EraseBkgnd(HDC hDC, HWND hWnd)
+void CSimpleDUIRoot::EraseBkgnd(HDC hDC, HWND hWnd)
 {
 	HWND				hParent			= ::GetParent(hWnd);
 	RECT				rtParent, rtWnd;
@@ -481,7 +476,7 @@ void CSimpleDUIPanel::EraseBkgnd(HDC hDC, HWND hWnd)
 	::SetViewportOrgEx(hDC, pt.x, pt.y, &ptt);
 }
 
-void CSimpleDUIPanel::Invalidate(LPRECT lpRect)
+void CSimpleDUIRoot::Invalidate(LPRECT lpRect)
 {
 	if(NULL == m_panelRoot.hWnd)
 	{
@@ -491,7 +486,7 @@ void CSimpleDUIPanel::Invalidate(LPRECT lpRect)
 	::InvalidateRect(m_panelRoot.hWnd, lpRect, FALSE);
 }
 
-void CSimpleDUIPanel::OnDraw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIRoot::OnDraw(HDC hDC, LPRECT lpRect)
 {
 
 }

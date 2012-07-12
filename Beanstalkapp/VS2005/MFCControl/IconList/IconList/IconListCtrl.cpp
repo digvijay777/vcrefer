@@ -1,55 +1,39 @@
 #include "IconListCtrl.h"
 
 //////////////////////////////////////////////////////////////////////////
-CIconListItem::CIconListItem(LPCWSTR lpText, HICON hIcon, Gdiplus::Image* pBk, 
-							 Gdiplus::Image* pDel /* = NULL */)
+CILItem::CILItem(CSimpleDUIBase* parent)
+: CSimpleDUIBase(parent)
 {
-	m_pIcon = NULL;
-	if(NULL != hIcon)
-	{
-		m_pIcon = Gdiplus::Bitmap::FromHICON(hIcon);
-	}
-	m_pBk = pBk;
+
 }
 
-CIconListItem::~CIconListItem()
+CILItem::~CILItem()
 {
-	if(NULL != m_pIcon)
-	{
-		delete m_pIcon;
-	}
+
 }
 
-/*
- *	创建窗体
- */
-CIconListItem* CIconListItem::CreateItem(HWND hParent, LPCWSTR lpText,
-										 HICON hIcon, Gdiplus::Image* pBk, 
-										 Gdiplus::Image* pDel /* = NULL */)
+//////////////////////////////////////////////////////////////////////////
+CILContainer::CILContainer(CSimpleDUIBase* parent)
+: CSimpleDUIBase(parent)
 {
-	CIconListItem*		pWnd;
-	RECT				rect		= {0, 0, 60, 80};
 
-	pWnd = new CIconListItem(lpText, hIcon, pBk, pDel);
-	if(NULL == pWnd)
-	{
-		return NULL;
-	}
+}
 
-	if( !pWnd->Create(hParent, &rect) )
-	{
-		delete pWnd;
-		return NULL;
-	}
+CILContainer::~CILContainer()
+{
 
-	return pWnd;
+}
+
+void CILContainer::OnDraw(HDC hDC, LPRECT lpRect)
+{
+
 }
 //////////////////////////////////////////////////////////////////////////
 CIconListCtrl::CIconListCtrl()
 {
-	m_text = NULL;
-	m_text2 = NULL;
-	m_text3 = NULL;
+// 	m_text = NULL;
+// 	m_text2 = NULL;
+// 	m_text3 = NULL;
 }
 
 CIconListCtrl::~CIconListCtrl()
@@ -73,22 +57,22 @@ BOOL CIconListCtrl::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 		return FALSE;
 	}
 
-	if(WM_COMMAND == uMsg)
-	{
-		if(100 == wParam)
-		{
-			m_button2->ShowUI(!m_button2->IsVisible());
-		}
-		else if(101 == wParam)
-		{
-			RECT		rect;
-
-			m_text2->GetUIRect(&rect);
-			rect.left += 10;
-			rect.right += 10;
-			m_text2->MoveUI(&rect);
-		}
-	}
+// 	if(WM_COMMAND == uMsg)
+// 	{
+// 		if(100 == wParam)
+// 		{
+// 			m_button2->ShowUI(!m_button2->IsVisible());
+// 		}
+// 		else if(101 == wParam)
+// 		{
+// 			RECT		rect;
+// 
+// 			m_text2->GetUIRect(&rect);
+// 			rect.left += 10;
+// 			rect.right += 10;
+// 			m_text2->MoveUI(&rect);
+// 		}
+// 	}
 	return FALSE;
 }
 /*
@@ -100,33 +84,39 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	{
 		return FALSE;
 	}
-	RECT		rt	= {0, 0, 100, 30};
-
-	m_text = new CSimpleDUIText(L"Hello", this);
-	m_text2 = new CSimpleDUIText(L"这是测试一个文本区域是否正常", this);
-	m_text3 = new CSimpleDUIText(L"Hi", m_text2);
-	m_text->MoveUI(&rt);
-	rt.top += 5;
-	rt.left += 10;
-	rt.right += 100;
-	m_text2->MoveUI(&rt);
-// 	rt.left += 50;
-// 	rt.right -= 100;
+// 	RECT		rt	= {0, 0, 100, 30};
+// 
+// 	m_text = new CSimpleDUIText(L"Hello", this);
+// 	m_text2 = new CSimpleDUIText(L"这是测试一个文本区域是否正常", this);
+// 	m_text3 = new CSimpleDUIText(L"Hi", m_text2);
+// 	m_text->MoveUI(&rt);
+// 	rt.top += 5;
+// 	rt.left += 10;
+// 	rt.right += 100;
+// 	m_text2->MoveUI(&rt);
+// // 	rt.left += 50;
+// // 	rt.right -= 100;
+// // 	rt.top += 10;
+// 	m_text3->MoveUI(&rt);
+// 
+// 	m_button = new CSimpleDUIButton(this, 100);
+// 	rt.left = 50;
+// 	rt.top = 50;
+// 	rt.right = 100;
+// 	rt.bottom = 70;
+// 	m_button->MoveUI(&rt);
+// 	m_button2 = new CSimpleDUIButton(this, 101);
+// 	rt.left += 10;
 // 	rt.top += 10;
-	m_text3->MoveUI(&rt);
+// 	rt.right += 10;
+// 	rt.bottom += 10;
+// 	m_button2->MoveUI(&rt);
 
-	m_button = new CSimpleDUIButton(this, 100);
-	rt.left = 50;
-	rt.top = 50;
-	rt.right = 100;
-	rt.bottom = 70;
-	m_button->MoveUI(&rt);
-	m_button2 = new CSimpleDUIButton(this, 101);
-	rt.left += 10;
-	rt.top += 10;
-	rt.right += 10;
-	rt.bottom += 10;
-	m_button2->MoveUI(&rt);
+	RECT		rect;
+
+	GetClientRect(&rect);
+	m_container = new CILContainer(this);
+	m_container->MoveUI(&rect);
 	return TRUE;
 }
 /*
