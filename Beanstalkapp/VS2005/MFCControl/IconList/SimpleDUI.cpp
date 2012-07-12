@@ -89,47 +89,11 @@ BOOL CSimpleDUIBase::DispatchUIEvent(POINT pt, UINT nMsg,
 	{
 		return FALSE;
 	}
-
-// 	if(NULL != GetUIRoot() && this != GetUIRoot()->captureUI)
-// 	{
-// 		// 兄弟优先处理事件
-// 		for(CSimpleDUIBase* node = m_brother;
-// 			NULL != node;
-// 			node = node->m_brother)
-// 		{
-// 			if(FALSE == node->m_isVisible)
-// 			{
-// 				continue;
-// 			}
-// 			// 验证是否在关心区域
-// 			node->GetUIRect(&rect);
-// 			ATLTRACE("CSimpleDUIBase::DispatchUIEvent (%d, %d, %d, %d) (%d, %d)\n",
-// 				rect.left, rect.top, rect.right, rect.bottom,
-// 				pt.x, pt.y);
-// 			if( FALSE == PtInRect(&rect, pt) )
-// 			{
-// 				continue;	// 加速处理
-// 			}
-// 
-// 			if( node->DispatchUIEvent(pt, nMsg, wParam, lParam) )
-// 			{
-// 				return TRUE;
-// 			}
-// 		}
-// 		// 事件是否在窗体内
-// 		GetUIRect(&rect);
-// 		if(FALSE == PtInRect(&rect, pt))
-// 		{
-// 			return FALSE;
-// 		}
-// 	}
-
 	// 处理接管事件
 	if(NULL != GetUIRoot() && this == GetUIRoot()->captureUI)
 	{
 		return OnUIEvent(nMsg, wParam, lParam);
 	}
-
 	// 子窗体处理事件
 	for(CSimpleDUIBase* node = m_child;
 		NULL != node;
@@ -440,22 +404,6 @@ BOOL CSimpleDUIRoot::TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARA
 		}
 		// 子窗体接管事件
 		return DispatchUIEvent(pt, nMsg, wParam, lParam);
-// 		if(FALSE != bRet)
-// 		{
-// 			return TRUE;
-// 		}
-// 		if(NULL != GetChild())
-// 		{
-// 			bRet = GetChild()->DispatchUIEvent(pt, nMsg, wParam, lParam);
-// 			if(FALSE != bRet)
-// 			{
-// 				return TRUE;
-// 			}
-// 		}
-//		// 本窗体接管事件
-// 		TranslateTrackEvent();
-// 		// 把消息发向自己
-// 		OnUIEvent(nMsg, wParam, lParam);
 	}
 	else if(WM_PAINT == nMsg)
 	{
