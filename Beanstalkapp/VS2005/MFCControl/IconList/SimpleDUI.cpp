@@ -115,7 +115,7 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 		}
 	}
 	// 子窗体优先处理事件
-	for(CSimpleDUIBase* node = m_brother;
+	for(CSimpleDUIBase* node = m_child;
 		NULL != node;
 		node = node->m_child)
 	{

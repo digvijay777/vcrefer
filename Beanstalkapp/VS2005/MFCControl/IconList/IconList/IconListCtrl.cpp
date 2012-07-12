@@ -105,6 +105,12 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	rt.right = 100;
 	rt.bottom = 70;
 	m_button->MoveWindow(&rt);
+	m_button2 = new CSimpleDUIButton(this, 101);
+	rt.left += 10;
+	rt.top += 10;
+	rt.right += 10;
+	rt.bottom += 10;
+	m_button2->MoveWindow(&rt);
 	return TRUE;
 }
 /*

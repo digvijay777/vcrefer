@@ -214,6 +214,7 @@ public:
 	CSimpleDUIText*		m_text2;
 	CSimpleDUIText*		m_text3;
 	CSimpleDUIButton*	m_button;
+	CSimpleDUIButton*	m_button2;
 
 private:
 //	TWndArrange<CIconListItem>		m_groups[5];
