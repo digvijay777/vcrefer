@@ -12,8 +12,8 @@
 class CILItem : CSimpleDUIBase
 {
 public:
-	CILItem(Gdiplus::Image* pImage, CSimpleDUIBase* parent, HICON hIcon,
-		LPCWSTR lpText, UINT uID);
+	CILItem(Gdiplus::Image* pImage, Gdiplus::Image* pImageEt, 
+		CSimpleDUIBase* parent, HICON hIcon, LPCWSTR lpText, UINT uID);
 	virtual ~CILItem();
 
 public:
@@ -22,10 +22,14 @@ public:
 	WCHAR				m_szText[33];
 	UINT				m_uID;
 	int					m_status;
+	CImageDUIButton*	m_et;
 
 public:
 	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
+
+public:
+	void		SetEditMode(BOOL bEtMode);
 };
 
 /*
@@ -45,6 +49,7 @@ public:
 	std::vector<CSimpleDUIBase*>	m_navigates;
 	Gdiplus::Image*					m_imageRadio;
 	Gdiplus::Image*					m_imageItemBk;
+	Gdiplus::Image*					m_imageItemEt;
 	DUI_RADIO_GROUP					m_radiogroup;
 
 public:

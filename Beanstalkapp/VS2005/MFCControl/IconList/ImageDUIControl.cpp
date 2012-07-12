@@ -121,3 +121,85 @@ void CImageDUIRadio::OnUIDraw(HDC hDC, LPRECT lpRect)
 		Gdiplus::Rect(rect.left, rect.top, nWidth, nHeight),
 		nIndex * nWidth, 0, nWidth, nHeight, Gdiplus::UnitPixel);
 }
+
+//////////////////////////////////////////////////////////////////////////
+CImageDUIButton::CImageDUIButton(Gdiplus::Image* pImage, CSimpleDUIBase* parent, UINT uID)
+: CSimpleDUIBase(parent)
+, m_uID(uID)
+, m_image(pImage)
+{
+	m_status = 0;
+	assert(NULL != pImage);
+}
+
+CImageDUIButton::~CImageDUIButton()
+{
+
+}
+/*
+ *	按钮事件
+ */
+BOOL CImageDUIButton::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+	RECT		rect;
+
+	GetUIRect(&rect);
+	if(WM_MOUSEMOVE == nMsg)
+	{
+		if(0 == m_status)
+		{
+			m_status = 1;
+			UIInvalidate(&rect);
+			TrackEvent(WM_MOUSELEAVE);
+		}
+	}
+	else if(WM_MOUSELEAVE == nMsg)
+	{
+		m_status = 0;
+		UIInvalidate(&rect);
+	}
+	else if(WM_LBUTTONDOWN == nMsg)
+	{
+		m_status = 2;
+		TrackEvent(0);
+		SetUICapture();
+		UIInvalidate(&rect);
+	}
+	else if(WM_LBUTTONUP == nMsg)
+	{
+		POINT		pt		= {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+
+		ReleaseUICapture();
+		if(PtInRect(&rect, pt))
+		{
+			m_status = 1;
+			TrackEvent(WM_MOUSELEAVE);
+			SendMessage(GetUIRoot()->hWnd, WM_COMMAND, m_uID, 0);
+		}
+		else
+		{
+			m_status = 0;
+		}
+		UIInvalidate(&rect);
+	}
+
+	return TRUE;
+}
+/*
+ *	绘制按钮
+ */
+void CImageDUIButton::OnUIDraw(HDC hDC, LPRECT lpRect)
+{
+	RECT					rect;
+	int						nWidth		= m_image->GetWidth() / 4;
+	int						nHeight		= m_image->GetHeight();
+	int						nIndex		= 0;
+	Gdiplus::Graphics		graphics(hDC);
+
+	GetUIRect(&rect);
+	MergerRect(&rect, &rect, lpRect);
+	nIndex = m_status % 4;
+	graphics.DrawImage(m_image, 
+		Gdiplus::Rect(rect.left, rect.top, nWidth, nHeight),
+		nIndex * nWidth, 0, nWidth, nHeight, Gdiplus::UnitPixel);
+}

@@ -30,3 +30,21 @@ public:
 	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 };
+/*
+ *	 Button
+ */
+class CImageDUIButton : public CSimpleDUIBase
+{
+public:
+	CImageDUIButton(Gdiplus::Image* pImage, CSimpleDUIBase* parent, UINT uID);
+	virtual ~CImageDUIButton();
+
+public:
+	Gdiplus::Image*		m_image;
+	int					m_status;
+	UINT				m_uID;
+
+public:
+	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
+};

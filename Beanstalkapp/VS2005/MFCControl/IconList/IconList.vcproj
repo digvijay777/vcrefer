@@ -284,6 +284,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\item_et.png"
+				>
+			</File>
+			<File
 				RelativePath=".\res\radio.png"
 				>
 			</File>

@@ -2,17 +2,27 @@
 #include <assert.h>
 
 //////////////////////////////////////////////////////////////////////////
-CILItem::CILItem(Gdiplus::Image* pImage, CSimpleDUIBase* parent, 
-				 HICON hIcon, LPCWSTR lpText, UINT uID)
+CILItem::CILItem(Gdiplus::Image* pImage, Gdiplus::Image* pImageEt, 
+				 CSimpleDUIBase* parent, HICON hIcon, LPCWSTR lpText, UINT uID)
 : CSimpleDUIBase(parent)
 , m_image(pImage)
 , m_uID(uID)
 {
+	RECT		rect;
+
 	assert(NULL != pImage);
 	m_status = 0;
 	m_icon = Gdiplus::Bitmap::FromHICON(hIcon);
 	memset(m_szText, 0, sizeof(m_szText));
 	wcsncpy(m_szText, lpText, min(32, wcslen(lpText)));
+	m_et = new CImageDUIButton(pImageEt, this, -uID);
+	assert(NULL != m_et);
+	rect.right = pImage->GetWidth() / 2;
+	rect.top = 0;
+	rect.left = rect.right - pImageEt->GetWidth() / 4;
+	rect.bottom = pImageEt->GetHeight();
+	m_et->ShowUI(FALSE);
+	m_et->MoveUI(&rect);
 }
 
 CILItem::~CILItem()
@@ -22,6 +32,11 @@ CILItem::~CILItem()
 
 BOOL CILItem::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
+	if(m_et->IsVisible())
+	{
+		return FALSE; // 编辑模式，不接收这些消息
+	}
+
 	RECT		rect;
 
 	GetUIRect(&rect);
@@ -75,12 +90,18 @@ void CILItem::OnUIDraw(HDC hDC, LPRECT lpRect)
 	int					nHeight		= m_image->GetHeight();
 	HDC					hDC2;
 	RECT				rtText;
+	int					nIndex		= (m_status % 2);
 
 	GetUIRect(&rect);
 	MergerRect(&rect, &rect, lpRect);
+	
+	if(m_et->IsVisible())
+	{
+		nIndex = 1;		// 编辑模式
+	}
 	// 绘制背景
 	graphic.DrawImage(m_image, Gdiplus::Rect(rect.left, rect.top, nWidth, nHeight),
-		nWidth * (m_status % 2), 0, nWidth, nHeight, Gdiplus::UnitPixel);
+		nWidth * nIndex, 0, nWidth, nHeight, Gdiplus::UnitPixel);
 	// 绘制图标
 	if(NULL != m_icon)
 	{
@@ -96,6 +117,11 @@ void CILItem::OnUIDraw(HDC hDC, LPRECT lpRect)
 	graphic.ReleaseHDC(hDC2);
 }
 
+void CILItem::SetEditMode(BOOL bEtMode)
+{
+	m_et->ShowUI(bEtMode);
+}
+
 //////////////////////////////////////////////////////////////////////////
 CILContainer::CILContainer()
 {
@@ -105,6 +131,7 @@ CILContainer::CILContainer()
 	m_imageRadio = NULL;
 	m_radiogroup = NULL;
 	m_imageItemBk = NULL;
+	m_imageItemEt = NULL;
 }
 
 CILContainer::~CILContainer()
@@ -183,8 +210,14 @@ BOOL CILContainer::AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID)
 
 	CILItem*		pItem;
 
-	pItem = new CILItem(m_imageItemBk, m_groups[nGroup], hIcon, lpText, uID);
+	pItem = new CILItem(m_imageItemBk, m_imageItemEt, m_groups[nGroup], hIcon, lpText, uID);
 	
+	// 测试， 区2为编辑模式
+	if(1 == nGroup)
+	{
+		pItem->SetEditMode(TRUE);
+	}
+
 	return NULL != pItem;
 }
 

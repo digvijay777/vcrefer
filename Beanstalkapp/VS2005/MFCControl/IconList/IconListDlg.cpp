@@ -100,6 +100,8 @@ BOOL CIconListDlg::OnInitDialog()
 		MAKEINTRESOURCE(IDR_PNG1));
 	m_ilc.m_imageItemBk = ImageFromResouce(AfxGetInstanceHandle(), _T("PNG"),
 		MAKEINTRESOURCE(IDR_PNG2));
+	m_ilc.m_imageItemEt = ImageFromResouce(AfxGetInstanceHandle(), _T("PNG"),
+		MAKEINTRESOURCE(IDR_PNG3));
 	m_ilc.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_ICONLIST));
 	// Ìí¼Ó×ÓÏî
 	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1)),

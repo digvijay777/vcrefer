@@ -172,6 +172,7 @@ END
 
 IDR_PNG1                PNG                     "res\\radio.png"
 IDR_PNG2                PNG                     "res\\item_bk.png"
+IDR_PNG3                PNG                     "res\\item_et.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //
