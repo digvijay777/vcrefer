@@ -16,7 +16,7 @@ CILItem::~CILItem()
 CILContainer::CILContainer(CSimpleDUIBase* parent)
 : CSimpleDUIBase(parent)
 {
-
+	m_nShowGroup = 0;
 }
 
 CILContainer::~CILContainer()
@@ -27,6 +27,88 @@ CILContainer::~CILContainer()
 void CILContainer::OnDraw(HDC hDC, LPRECT lpRect)
 {
 
+}
+
+BOOL CILContainer::AddGroup()
+{
+	size_t		st		= m_groups.size();
+
+	if(5 <= st)
+	{
+		return FALSE;
+	}
+
+	m_groups.push_back(new CSimpleDUIPanel(this, 
+		(st%2)?RGB(0xff, 0x0, 0x0):RGB(0x0, 0xff, 0x0)));
+
+	ShowGroup(m_nShowGroup);
+	return TRUE;
+}
+
+BOOL CILContainer::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+	if(WM_LBUTTONDOWN == nMsg)
+	{
+		if(m_groups.size() == 0)
+		{
+			return FALSE;
+		}
+
+		m_nShowGroup++;
+		m_nShowGroup = m_nShowGroup % m_groups.size();
+		ShowGroup(m_nShowGroup);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+BOOL CILContainer::DeleteGroup(int nIndex)
+{
+	if(nIndex < 0 || nIndex >= m_groups.size())
+	{
+		return FALSE;
+	}
+
+	delete m_groups[nIndex];
+	m_groups.erase(m_groups.begin() + nIndex);
+
+	return TRUE;
+}
+
+BOOL CILContainer::AddItem(int nGroup, CILItem* item)
+{
+	return FALSE;
+}
+
+BOOL CILContainer::DeleteItem(int nGroup, CILItem* item)
+{
+	return FALSE;
+}
+
+BOOL CILContainer::ShowGroup(int nIndex)
+{
+	if(m_groups.size() <= nIndex || nIndex < 0)
+	{
+		return FALSE;
+	}
+
+	for(size_t i = 0; i < m_groups.size(); i++)
+	{
+		if(i == nIndex)
+		{
+			m_groups[i]->ShowUI(TRUE);
+		}
+		else
+		{
+			m_groups[i]->ShowUI(FALSE);
+		}
+	}
+	RECT		rect;
+
+	GetUIRect(&rect);
+	m_groups[nIndex]->MoveUI(&rect);
+	return TRUE;
 }
 //////////////////////////////////////////////////////////////////////////
 CIconListCtrl::CIconListCtrl()
@@ -117,6 +199,12 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	GetClientRect(&rect);
 	m_container = new CILContainer(this);
 	m_container->MoveUI(&rect);
+
+	m_container->AddGroup();
+	m_container->AddGroup();
+	m_container->AddGroup();
+	m_container->AddGroup();
+
 	return TRUE;
 }
 /*

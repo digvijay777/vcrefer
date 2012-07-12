@@ -31,9 +31,20 @@ public:
 	std::vector<CSimpleDUIBase*>	m_groups;
 	CSimpleDUIBase*					m_navigatebar;
 	std::vector<CSimpleDUIBase*>	m_navigates;
+	size_t							m_nShowGroup;
 
 public:
-	virtual void				OnDraw(HDC hDC, LPRECT lpRect);
+	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
+	virtual BOOL		OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
+
+public:
+	BOOL		AddGroup();
+	BOOL		DeleteGroup(int nIndex);
+	BOOL		AddItem(int nGroup, CILItem* item);
+	BOOL		DeleteItem(int nGroup, CILItem* item);
+
+public:
+	BOOL		ShowGroup(int nIndex);
 };
 /*
  *	¿Ø¼þÀà

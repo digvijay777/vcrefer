@@ -33,17 +33,17 @@ protected:
 	CSimpleDUIBase*		GetChild();
 
 public:
-	BOOL	DispatchEvent(POINT pt, UINT nMsg, 
+	BOOL	DispatchUIEvent(POINT pt, UINT nMsg, 
 		WPARAM wParam, LPARAM lParam);
 	void	TranslateTrackEvent();
 	void	MoveUI(LPRECT lpRect, BOOL bInvalidate = TRUE);
-	void	Draw(HDC hDC, LPRECT lpRect);
+	void	DrawUI(HDC hDC, LPRECT lpRect);
 	BOOL	IsVisible();
 	void	ShowUI(BOOL bShow);
-	void	SetCapture();
-	void	ReleaseCapture();
-	void	SetFocus();
-	void	KillFocus();
+	void	SetUICapture();
+	void	ReleaseUICapture();
+	void	SetUIFocus();
+	void	KillUIFocus();
 	void	TrackEvent(UINT nMsg);
 	void	RectToPanel(RECT* rect);
 	void	GetUIRect(RECT* rect);
@@ -102,7 +102,7 @@ public:
 };
 
 /*
- *	绘制文本
+ *	绘制按钮样本
  */
 class CSimpleDUIButton : public CSimpleDUIBase
 {
@@ -119,3 +119,18 @@ public:
 	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
 };
 
+/*
+ *	绘制面板
+ */
+class CSimpleDUIPanel : public CSimpleDUIBase
+{
+public:
+	CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col);
+	virtual ~CSimpleDUIPanel();
+
+public:
+	COLORREF		m_color;
+
+public:
+	virtual void		OnDraw(HDC hDC, LPRECT lpRect);
+};

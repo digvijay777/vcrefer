@@ -56,7 +56,7 @@ CSimpleDUIBase::~CSimpleDUIBase()
 		}
 	}
 	// 删除自己和子节点
-	ReleaseCapture();
+	ReleaseUICapture();
 	DeleteDUI(this->m_child);
 }
 
@@ -83,7 +83,7 @@ CSimpleDUIBase* CSimpleDUIBase::GetChild()
  *	事件分发处理
  *  UI处理了这个消息不再由其它UI处理
  */
-BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
+BOOL CSimpleDUIBase::DispatchUIEvent(POINT pt, UINT nMsg,
 								   WPARAM wParam, LPARAM lParam)
 {
 	BOOL		bRet;
@@ -112,7 +112,7 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 				continue;	// 加速处理
 			}
 
-			if( node->DispatchEvent(pt, nMsg, wParam, lParam) )
+			if( node->DispatchUIEvent(pt, nMsg, wParam, lParam) )
 			{
 				return TRUE;
 			}
@@ -140,7 +140,7 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 			continue;	// 加速处理
 		}
 
-		if( node->DispatchEvent(pt, nMsg, wParam, lParam) )
+		if( node->DispatchUIEvent(pt, nMsg, wParam, lParam) )
 		{
 			return TRUE;
 		}
@@ -180,7 +180,7 @@ void CSimpleDUIBase::MoveUI(LPRECT lpRect, BOOL bInvalidate /* = TRUE */)
 /*
  *	重绘
  */
-void CSimpleDUIBase::Draw(HDC hDC, LPRECT lpRect)
+void CSimpleDUIBase::DrawUI(HDC hDC, LPRECT lpRect)
 {
 	// 绘制自己
 	if( m_isVisible )
@@ -190,7 +190,7 @@ void CSimpleDUIBase::Draw(HDC hDC, LPRECT lpRect)
 	// 绘制兄弟窗体
 	if(NULL != m_brother)
 	{
-		m_brother->Draw(hDC, lpRect);
+		m_brother->DrawUI(hDC, lpRect);
 	}
 	// 绘制子窗体
 	if(FALSE == m_isVisible)
@@ -199,7 +199,7 @@ void CSimpleDUIBase::Draw(HDC hDC, LPRECT lpRect)
 	}
 	if(NULL != m_child)
 	{
-		m_child->Draw(hDC, lpRect);
+		m_child->DrawUI(hDC, lpRect);
 	}
 }
 
@@ -224,7 +224,7 @@ void CSimpleDUIBase::ShowUI(BOOL bShow)
 /*
  *	事件
  */
-void CSimpleDUIBase::SetCapture()
+void CSimpleDUIBase::SetUICapture()
 {
 	if(NULL != GetPaneRoot() && NULL == GetPaneRoot()->captureUI)
 	{
@@ -232,7 +232,7 @@ void CSimpleDUIBase::SetCapture()
 		GetPaneRoot()->captureUI = this;
 	}
 }
-void CSimpleDUIBase::ReleaseCapture()
+void CSimpleDUIBase::ReleaseUICapture()
 {
 	if(NULL != GetPaneRoot() && NULL != GetPaneRoot()->captureUI)
 	{
@@ -241,7 +241,7 @@ void CSimpleDUIBase::ReleaseCapture()
 	}
 }
 
-void CSimpleDUIBase::SetFocus()
+void CSimpleDUIBase::SetUIFocus()
 {
 	if(NULL != GetPaneRoot())
 	{
@@ -249,7 +249,7 @@ void CSimpleDUIBase::SetFocus()
 	}
 }
 
-void CSimpleDUIBase::KillFocus()
+void CSimpleDUIBase::KillUIFocus()
 {
 	if(NULL != GetPaneRoot() && this == GetPaneRoot()->focusUI)
 	{
@@ -390,12 +390,12 @@ BOOL CSimpleDUIRoot::TranslateEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
 		// 事件优先处理
 		if(NULL != m_panelRoot.captureUI)
 		{
-			return m_panelRoot.captureUI->DispatchEvent(pt, nMsg, wParam, lParam);
+			return m_panelRoot.captureUI->DispatchUIEvent(pt, nMsg, wParam, lParam);
 		}
 		// 子窗体接管事件
 		if(NULL != GetChild())
 		{
-			bRet = GetChild()->DispatchEvent(pt, nMsg, wParam, lParam);
+			bRet = GetChild()->DispatchUIEvent(pt, nMsg, wParam, lParam);
 			if(FALSE != bRet)
 			{
 				return TRUE;
@@ -443,7 +443,7 @@ void CSimpleDUIRoot::Paint(HWND hWnd, HDC hDC)
 	hOldFont = (HFONT)SelectObject(hMemDC, hFont);
 	SetBkMode(hMemDC, TRANSPARENT);
 
-	Draw(hMemDC, &rect);
+	DrawUI(hMemDC, &rect);
 
 	SelectObject(hMemDC, hOldFont);
 	::RestoreDC(hMemDC, nSaveDC);
@@ -557,14 +557,14 @@ BOOL CSimpleDUIButton::OnEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 	{
 		m_status = 2;
 		TrackEvent(0);
-		SetCapture();
+		SetUICapture();
 		Invalidate(&rect);
 	}
 	else if(WM_LBUTTONUP == nMsg)
 	{
 		POINT		pt		= {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 
-		ReleaseCapture();
+		ReleaseUICapture();
 		if(PtInRect(&rect, pt))
 		{
 			m_status = 1;
@@ -603,5 +603,29 @@ void CSimpleDUIButton::OnDraw(HDC hDC, LPRECT lpRect)
 		::SetBkColor(hDC, RGB(0x0, 0x0, 0xff));
 	}
 
+	::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+CSimpleDUIPanel::CSimpleDUIPanel(CSimpleDUIBase* parent, COLORREF col)
+: CSimpleDUIBase(parent)
+, m_color(col)
+{
+
+}
+
+CSimpleDUIPanel::~CSimpleDUIPanel()
+{
+
+}
+
+void CSimpleDUIPanel::OnDraw(HDC hDC, LPRECT lpRect)
+{
+	RECT		rect;
+
+	GetUIRect(&rect);
+	MergerRect(&rect, &rect, lpRect);
+
+	::SetBkColor(hDC, m_color);
 	::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 }
