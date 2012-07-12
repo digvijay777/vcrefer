@@ -77,7 +77,7 @@ BOOL CIconListCtrl::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 	{
 		if(100 == wParam)
 		{
-			m_button2->ShowWindow(!m_button2->IsVisible());
+			m_button2->ShowUI(!m_button2->IsVisible());
 		}
 		else if(101 == wParam)
 		{

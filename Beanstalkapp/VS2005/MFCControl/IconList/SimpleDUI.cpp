@@ -207,7 +207,7 @@ BOOL CSimpleDUIBase::IsVisible()
 /*
  *	œ‘ æ¥∞ÃÂ
  */
-void CSimpleDUIBase::ShowWindow(BOOL bShow)
+void CSimpleDUIBase::ShowUI(BOOL bShow)
 {
 	RECT		rect;
 

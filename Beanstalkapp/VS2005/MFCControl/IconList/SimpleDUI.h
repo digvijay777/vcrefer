@@ -39,7 +39,7 @@ public:
 	void	MoveUI(LPRECT lpRect);
 	void	Draw(HDC hDC, LPRECT lpRect);
 	BOOL	IsVisible();
-	void	ShowWindow(BOOL bShow);
+	void	ShowUI(BOOL bShow);
 	void	SetCapture();
 	void	ReleaseCapture();
 	void	SetFocus();
