@@ -21,10 +21,10 @@ public:
 /*
  *	划动面板
  */
-class CILContainer : public CSimpleDUIBase
+class CILContainer : public CSimpleDUIRoot
 {
 public:
-	CILContainer(CSimpleDUIBase* parent);
+	CILContainer();
 	virtual ~CILContainer();
 
 public:
@@ -50,7 +50,7 @@ public:
  *	控件类
  */
 class CIconListCtrl : public CWindowImpl<CIconListCtrl>,
-	public CSimpleDUIRoot
+	public CILContainer
 {
 public:
 	CIconListCtrl();
@@ -66,8 +66,6 @@ public:
 // 	CSimpleDUIText*		m_text3;
 // 	CSimpleDUIButton*	m_button;
 // 	CSimpleDUIButton*	m_button2;
-
-	CILContainer*		m_container;
 
 private:
 //	TWndArrange<CIconListItem>		m_groups[5];

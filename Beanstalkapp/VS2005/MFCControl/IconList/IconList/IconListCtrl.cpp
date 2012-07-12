@@ -13,8 +13,7 @@ CILItem::~CILItem()
 }
 
 //////////////////////////////////////////////////////////////////////////
-CILContainer::CILContainer(CSimpleDUIBase* parent)
-: CSimpleDUIBase(parent)
+CILContainer::CILContainer()
 {
 	m_nShowGroup = 0;
 }
@@ -194,16 +193,15 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 // 	rt.bottom += 10;
 // 	m_button2->MoveUI(&rt);
 
-	RECT		rect;
+	RECT	rect;
 
 	GetClientRect(&rect);
-	m_container = new CILContainer(this);
-	m_container->MoveUI(&rect);
+	MoveUI(&rect);
 
-	m_container->AddGroup();
-	m_container->AddGroup();
-	m_container->AddGroup();
-	m_container->AddGroup();
+	AddGroup();
+	AddGroup();
+	AddGroup();
+	AddGroup();
 
 	return TRUE;
 }

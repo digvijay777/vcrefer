@@ -403,6 +403,8 @@ BOOL CSimpleDUIRoot::TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARA
 		}
 		// 本窗体接管事件
 		TranslateTrackEvent();
+		// 把消息发向自己
+		OnUIEvent(nMsg, wParam, lParam);
 	}
 	else if(WM_PAINT == nMsg)
 	{

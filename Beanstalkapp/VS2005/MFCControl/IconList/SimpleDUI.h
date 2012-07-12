@@ -59,7 +59,7 @@ public:
 /*
  *	Ö÷Ãæ°å
  */
-class CSimpleDUIRoot : public CSimpleDUIBase
+class CSimpleDUIRoot : protected CSimpleDUIBase
 {
 public:
 	CSimpleDUIRoot();
