@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FontTest", "FontTest\FontTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RichText", "RichText\RichText.vcproj", "{1C6D3064-6073-485E-8618-3CD54F59199A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IconList", "IconList\IconList.vcproj", "{CCDB6F12-B7B5-4369-B50A-C73E682AECCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -67,6 +69,10 @@ Global
 		{1C6D3064-6073-485E-8618-3CD54F59199A}.Debug|Win32.Build.0 = Debug|Win32
 		{1C6D3064-6073-485E-8618-3CD54F59199A}.Release|Win32.ActiveCfg = Release|Win32
 		{1C6D3064-6073-485E-8618-3CD54F59199A}.Release|Win32.Build.0 = Release|Win32
+		{CCDB6F12-B7B5-4369-B50A-C73E682AECCD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCDB6F12-B7B5-4369-B50A-C73E682AECCD}.Debug|Win32.Build.0 = Debug|Win32
+		{CCDB6F12-B7B5-4369-B50A-C73E682AECCD}.Release|Win32.ActiveCfg = Release|Win32
+		{CCDB6F12-B7B5-4369-B50A-C73E682AECCD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
