@@ -89,6 +89,11 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 	BOOL		bRet;
 	RECT		rect;
 
+	if(FALSE == m_isVisible)
+	{
+		return FALSE;
+	}
+
 	if(NULL != GetPaneRoot() && this != GetPaneRoot()->captureUI)
 	{
 		// 兄弟优先处理事件
@@ -96,6 +101,11 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 			NULL != node;
 			node = node->m_brother)
 		{
+			if(FALSE == node->m_isVisible)
+			{
+				continue;
+			}
+			// 验证是否在关心区域
 			node->GetUIRect(&rect);
 			if( FALSE == PtInRect(&rect, pt) )
 			{
@@ -119,6 +129,11 @@ BOOL CSimpleDUIBase::DispatchEvent(POINT pt, UINT nMsg,
 		NULL != node;
 		node = node->m_child)
 	{
+		if(FALSE == node->m_isVisible)
+		{
+			continue;
+		}
+		// 验证是否在关心区域
 		node->GetUIRect(&rect);
 		if( FALSE == PtInRect(&rect, pt) )
 		{
@@ -152,7 +167,7 @@ inline void CSimpleDUIBase::TranslateTrackEvent()
 /*
  *	移动窗体
  */
-void CSimpleDUIBase::MoveWindow(LPRECT lpRect)
+void CSimpleDUIBase::MoveUI(LPRECT lpRect)
 {
 	m_rect = *lpRect;
 
@@ -184,12 +199,24 @@ void CSimpleDUIBase::Draw(HDC hDC, LPRECT lpRect)
 		m_child->Draw(hDC, lpRect);
 	}
 }
+
+BOOL CSimpleDUIBase::IsVisible()
+{
+	return m_isVisible;
+}
 /*
  *	显示窗体
  */
 void CSimpleDUIBase::ShowWindow(BOOL bShow)
 {
-	m_isVisible = bShow;
+	RECT		rect;
+
+	if(m_isVisible != bShow)
+	{
+		m_isVisible = bShow;
+		GetUIRect(&rect);
+		Invalidate(&rect);
+	}
 }
 /*
  *	事件

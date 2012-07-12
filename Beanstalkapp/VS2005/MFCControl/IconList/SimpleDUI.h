@@ -36,8 +36,9 @@ public:
 	BOOL	DispatchEvent(POINT pt, UINT nMsg, 
 		WPARAM wParam, LPARAM lParam);
 	void	TranslateTrackEvent();
-	void	MoveWindow(LPRECT lpRect);
+	void	MoveUI(LPRECT lpRect);
 	void	Draw(HDC hDC, LPRECT lpRect);
+	BOOL	IsVisible();
 	void	ShowWindow(BOOL bShow);
 	void	SetCapture();
 	void	ReleaseCapture();

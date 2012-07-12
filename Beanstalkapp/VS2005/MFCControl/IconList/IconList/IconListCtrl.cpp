@@ -73,6 +73,22 @@ BOOL CIconListCtrl::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 		return FALSE;
 	}
 
+	if(WM_COMMAND == uMsg)
+	{
+		if(100 == wParam)
+		{
+			m_button2->ShowWindow(!m_button2->IsVisible());
+		}
+		else if(101 == wParam)
+		{
+			RECT		rect;
+
+			m_text2->GetUIRect(&rect);
+			rect.left += 10;
+			rect.right += 10;
+			m_text2->MoveUI(&rect);
+		}
+	}
 	return FALSE;
 }
 /*
@@ -89,28 +105,28 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	m_text = new CSimpleDUIText(L"Hello", this);
 	m_text2 = new CSimpleDUIText(L"这是测试一个文本区域是否正常", this);
 	m_text3 = new CSimpleDUIText(L"Hi", m_text2);
-	m_text->MoveWindow(&rt);
+	m_text->MoveUI(&rt);
 	rt.top += 5;
 	rt.left += 10;
 	rt.right += 100;
-	m_text2->MoveWindow(&rt);
+	m_text2->MoveUI(&rt);
 // 	rt.left += 50;
 // 	rt.right -= 100;
 // 	rt.top += 10;
-	m_text3->MoveWindow(&rt);
+	m_text3->MoveUI(&rt);
 
 	m_button = new CSimpleDUIButton(this, 100);
 	rt.left = 50;
 	rt.top = 50;
 	rt.right = 100;
 	rt.bottom = 70;
-	m_button->MoveWindow(&rt);
+	m_button->MoveUI(&rt);
 	m_button2 = new CSimpleDUIButton(this, 101);
 	rt.left += 10;
 	rt.top += 10;
 	rt.right += 10;
 	rt.bottom += 10;
-	m_button2->MoveWindow(&rt);
+	m_button2->MoveUI(&rt);
 	return TRUE;
 }
 /*
