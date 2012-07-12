@@ -31,13 +31,15 @@ public:
 	std::vector<CSimpleDUIBase*>	m_groups;
 	CSimpleDUIBase*					m_navigatebar;
 	std::vector<CSimpleDUIBase*>	m_navigates;
-	size_t							m_nShowGroup;
+	size_t							m_nCurrentGroup;
+	size_t							m_nSwitchGroup;
 
 public:
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
 	virtual BOOL		OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 
 public:
+	BOOL		TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
 	BOOL		AddGroup();
 	BOOL		DeleteGroup(int nIndex);
 	BOOL		AddItem(int nGroup, CILItem* item);
@@ -45,6 +47,7 @@ public:
 
 public:
 	BOOL		ShowGroup(int nIndex);
+	BOOL		AnimationShowGroup(int nIndex);
 };
 /*
  *	¿Ø¼þÀà
@@ -57,10 +60,6 @@ public:
 	~CIconListCtrl();
 
 public:
-// 	BEGIN_MSG_MAP(CIconListCtrl)
-// 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
-// 	END_MSG_MAP()
-
 // 	CSimpleDUIText*		m_text;
 // 	CSimpleDUIText*		m_text2;
 // 	CSimpleDUIText*		m_text3;
@@ -68,14 +67,10 @@ public:
 // 	CSimpleDUIButton*	m_button2;
 
 private:
-//	TWndArrange<CIconListItem>		m_groups[5];
-//	TWndArrange<CIconListNavigate>	m_navigate;
 	virtual BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 		LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID);
 
 public:
 	BOOL	SubclassWindow(HWND hWnd);
-
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 

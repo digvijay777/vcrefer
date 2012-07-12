@@ -173,7 +173,7 @@ void CSimpleDUIBase::MoveUI(LPRECT lpRect, BOOL bInvalidate /* = TRUE */)
 
 	if( bInvalidate )
 	{
-		InvalidateUI();
+		UIInvalidate();
 	}
 }
 
@@ -218,7 +218,7 @@ void CSimpleDUIBase::ShowUI(BOOL bShow)
 	{
 		m_isVisible = bShow;
 		GetUIRect(&rect);
-		InvalidateUI(&rect);
+		UIInvalidate(&rect);
 	}
 }
 /*
@@ -305,11 +305,11 @@ void CSimpleDUIBase::GetUIRect(RECT* rect)
 /*
  *	重绘窗体
  */
-void CSimpleDUIBase::InvalidateUI(LPRECT lpRect /* = NULL */)
+void CSimpleDUIBase::UIInvalidate(LPRECT lpRect /* = NULL */)
 {
 	if(NULL != m_parent)
 	{
-		m_parent->InvalidateUI(lpRect);
+		m_parent->UIInvalidate(lpRect);
 		return;
 	}
 
@@ -346,7 +346,7 @@ void CSimpleDUIBase::MergerRect(RECT* des, LPRECT rt1, LPRECT rt2)
 CSimpleDUIRoot::CSimpleDUIRoot()
 : CSimpleDUIBase(NULL)
 {
-	memset(&m_panelRoot, 0, sizeof(m_panelRoot));
+	memset(&m_root, 0, sizeof(m_root));
 	m_bTrackEvent = FALSE;
 }
 
@@ -359,7 +359,7 @@ CSimpleDUIRoot::~CSimpleDUIRoot()
  */
 BOOL CSimpleDUIRoot::TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
-	m_panelRoot.hWnd = hWnd;
+	m_root.hWnd = hWnd;
 	// 鼠标事件
 	if(WM_LBUTTONDOWN == nMsg || WM_LBUTTONUP == nMsg 
 		|| WM_LBUTTONDBLCLK == nMsg || WM_RBUTTONDOWN == nMsg
@@ -388,9 +388,9 @@ BOOL CSimpleDUIRoot::TranslateUIEvent(HWND hWnd, UINT nMsg, WPARAM wParam, LPARA
 			m_bTrackEvent = FALSE;
 		}
 		// 事件优先处理
-		if(NULL != m_panelRoot.captureUI)
+		if(NULL != m_root.captureUI)
 		{
-			return m_panelRoot.captureUI->DispatchUIEvent(pt, nMsg, wParam, lParam);
+			return m_root.captureUI->DispatchUIEvent(pt, nMsg, wParam, lParam);
 		}
 		// 子窗体接管事件
 		if(NULL != GetChild())
@@ -460,7 +460,7 @@ void CSimpleDUIRoot::PaintUI(HWND hWnd, HDC hDC)
 
 PDUI_ROOT CSimpleDUIRoot::GetUIRoot()
 {
-	return &m_panelRoot;
+	return &m_root;
 }
 
 void CSimpleDUIRoot::EraseUIBkgnd(HDC hDC, HWND hWnd)
@@ -478,14 +478,14 @@ void CSimpleDUIRoot::EraseUIBkgnd(HDC hDC, HWND hWnd)
 	::SetViewportOrgEx(hDC, pt.x, pt.y, &ptt);
 }
 
-void CSimpleDUIRoot::InvalidateUI(LPRECT lpRect)
+void CSimpleDUIRoot::UIInvalidate(LPRECT lpRect)
 {
-	if(NULL == m_panelRoot.hWnd)
+	if(NULL == m_root.hWnd)
 	{
 		return;
 	}
 
-	::InvalidateRect(m_panelRoot.hWnd, lpRect, FALSE);
+	::InvalidateRect(m_root.hWnd, lpRect, FALSE);
 }
 
 void CSimpleDUIRoot::OnUIDraw(HDC hDC, LPRECT lpRect)
@@ -546,21 +546,21 @@ BOOL CSimpleDUIButton::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 		if(0 == m_status)
 		{
 			m_status = 1;
-			InvalidateUI(&rect);
+			UIInvalidate(&rect);
 			TrackEvent(WM_MOUSELEAVE);
 		}
 	}
 	else if(WM_MOUSELEAVE == nMsg)
 	{
 		m_status = 0;
-		InvalidateUI(&rect);
+		UIInvalidate(&rect);
 	}
 	else if(WM_LBUTTONDOWN == nMsg)
 	{
 		m_status = 2;
 		TrackEvent(0);
 		SetUICapture();
-		InvalidateUI(&rect);
+		UIInvalidate(&rect);
 	}
 	else if(WM_LBUTTONUP == nMsg)
 	{
@@ -577,7 +577,7 @@ BOOL CSimpleDUIButton::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 		{
 			m_status = 0;
 		}
-		InvalidateUI(&rect);
+		UIInvalidate(&rect);
 	}
 
 	return TRUE;

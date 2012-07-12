@@ -47,7 +47,7 @@ public:
 	void	GetUIRect(RECT* rect);
 
 public:
-	virtual void				InvalidateUI(LPRECT lpRect = NULL);
+	virtual void				UIInvalidate(LPRECT lpRect = NULL);
 	virtual PDUI_ROOT			GetUIRoot();
 	virtual BOOL				OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam);
 	virtual void				OnUIDraw(HDC hDC, LPRECT lpRect) = 0;
@@ -66,7 +66,7 @@ public:
 	virtual ~CSimpleDUIRoot();
 
 private:
-	DUI_ROOT					m_panelRoot;
+	DUI_ROOT					m_root;
 	BOOL						m_bTrackEvent;
 
 public:
@@ -76,7 +76,7 @@ public:
 public:
 	virtual PDUI_ROOT			GetUIRoot();
 	virtual void				EraseUIBkgnd(HDC hDC, HWND hWnd);
-	virtual void				InvalidateUI(LPRECT lpRect);
+	virtual void				UIInvalidate(LPRECT lpRect);
 	virtual void				OnUIDraw(HDC hDC, LPRECT lpRect);
 };
 

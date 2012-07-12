@@ -15,7 +15,8 @@ CILItem::~CILItem()
 //////////////////////////////////////////////////////////////////////////
 CILContainer::CILContainer()
 {
-	m_nShowGroup = 0;
+	m_nCurrentGroup = -1;
+	m_nSwitchGroup = 0;
 }
 
 CILContainer::~CILContainer()
@@ -26,6 +27,69 @@ CILContainer::~CILContainer()
 void CILContainer::OnUIDraw(HDC hDC, LPRECT lpRect)
 {
 
+}
+
+BOOL CILContainer::TranslateUIEvent(HWND hWnd, UINT nMsg,
+									WPARAM wParam, LPARAM lParam)
+{
+	if(WM_TIMER == nMsg && wParam == (WPARAM)this)
+	{
+		if(m_nSwitchGroup != m_nCurrentGroup
+			&& m_nCurrentGroup < m_groups.size()
+			&& m_nSwitchGroup < m_groups.size())
+		{
+			RECT		rect;
+			RECT		rtCur, rtSwt;
+
+			m_groups[m_nCurrentGroup]->GetUIRect(&rect);
+			if(m_nSwitchGroup > m_nCurrentGroup)
+			{
+				rtCur = rect;
+				rtCur.left = rect.left - 10;
+				rtCur.right = rect.right - 10;
+
+				rtSwt = rect;
+				rtSwt.left = rect.right - 10;
+				rtSwt.right = rect.right + rect.right - rect.left - 10;
+
+				if(rtCur.right < 0)
+				{
+					KillTimer(hWnd, wParam);
+					ShowGroup(m_nSwitchGroup);
+					return TRUE;
+				}
+			}
+			else
+			{
+				rtCur = rect;
+				rtCur.left = rect.left + 10;
+				rtCur.right = rect.right + 10;
+
+				rtSwt = rect;
+				rtSwt.left = rect.right + 10;
+				rtSwt.right = rect.right + rect.right - rect.left + 10;	
+
+				if(rtCur.left > (rect.right - rect.left))
+				{
+					KillTimer(hWnd, wParam);
+					ShowGroup(m_nSwitchGroup);
+					return TRUE;
+				}
+			}
+
+			m_groups[m_nCurrentGroup]->MoveUI(&rtCur, FALSE);
+			m_groups[m_nSwitchGroup]->ShowUI(TRUE);
+			m_groups[m_nSwitchGroup]->MoveUI(&rtSwt, TRUE);
+		}
+		else
+		{
+			KillTimer(hWnd, wParam);
+		}
+
+		return TRUE;
+	}
+
+	return CSimpleDUIRoot::TranslateUIEvent(hWnd, nMsg, wParam, lParam);
 }
 
 BOOL CILContainer::AddGroup()
@@ -40,7 +104,6 @@ BOOL CILContainer::AddGroup()
 	m_groups.push_back(new CSimpleDUIPanel(this, 
 		(st%2)?RGB(0xff, 0x0, 0x0):RGB(0x0, 0xff, 0x0)));
 
-	ShowGroup(m_nShowGroup);
 	return TRUE;
 }
 
@@ -53,9 +116,21 @@ BOOL CILContainer::OnUIEvent(UINT nMsg, WPARAM wParam, LPARAM lParam)
 			return FALSE;
 		}
 
-		m_nShowGroup++;
-		m_nShowGroup = m_nShowGroup % m_groups.size();
-		ShowGroup(m_nShowGroup);
+		m_nSwitchGroup++;
+		m_nSwitchGroup = m_nSwitchGroup % m_groups.size();
+		AnimationShowGroup(m_nSwitchGroup);
+		return TRUE;
+	}
+	else if(WM_RBUTTONDOWN == nMsg)
+	{
+		if(m_groups.size() == 0)
+		{
+			return FALSE;
+		}
+
+		m_nSwitchGroup += m_groups.size() - 1;
+		m_nSwitchGroup = m_nSwitchGroup % m_groups.size();
+		AnimationShowGroup(m_nSwitchGroup);
 		return TRUE;
 	}
 
@@ -87,11 +162,12 @@ BOOL CILContainer::DeleteItem(int nGroup, CILItem* item)
 
 BOOL CILContainer::ShowGroup(int nIndex)
 {
-	if(m_groups.size() <= nIndex || nIndex < 0)
+	if(m_groups.size() <= nIndex || nIndex < 0
+		|| nIndex == m_nCurrentGroup)
 	{
 		return FALSE;
 	}
-
+	m_nCurrentGroup = nIndex;
 	for(size_t i = 0; i < m_groups.size(); i++)
 	{
 		if(i == nIndex)
@@ -107,6 +183,18 @@ BOOL CILContainer::ShowGroup(int nIndex)
 
 	GetUIRect(&rect);
 	m_groups[nIndex]->MoveUI(&rect);
+	return TRUE;
+}
+
+BOOL CILContainer::AnimationShowGroup(int nIndex)
+{
+	if(m_groups.size() <= nIndex || nIndex < 0)
+	{
+		return FALSE;
+	}
+
+	m_nSwitchGroup = nIndex;
+	::SetTimer(GetUIRoot()->hWnd, (ULONG_PTR)this, 100, NULL);
 	return TRUE;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -203,62 +291,8 @@ BOOL CIconListCtrl::SubclassWindow(HWND hWnd)
 	AddGroup();
 	AddGroup();
 
+	ShowGroup(0);
 	return TRUE;
-}
-/*
- *	主绘制函数
- */
-LRESULT CIconListCtrl::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, 
-							   LPARAM /*lParam*/, BOOL& /*bHandled*/)
-{
-	PAINTSTRUCT			paint;
-	HDC					hDC;
-
-	hDC = BeginPaint(&paint);
-
-	PaintUI(m_hWnd, hDC);
-// 	HDC					hMemDC;
-// 	HBITMAP				hBitmap, hOldBitmap;
-// 	int					nSaveDC;
-// 	RECT				rect			= {0};
-// 
-// 	GetClientRect(&rect);
-// 	
-// 	// 创建内存DC
-// 	hMemDC = CreateCompatibleDC(hDC);
-// 	hBitmap = CreateCompatibleBitmap(hDC, rect.right - rect.left, 
-// 		rect.bottom - rect.top);
-// 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hBitmap);
-// 	nSaveDC = SaveDC(hMemDC);
-// 	// 绘制背景
-// 	HWND				hParent			= ::GetParent(m_hWnd);
-// 	RECT				rtParent, rtWnd;
-// 	POINT				pt, ptt;
-// 
-// 	::GetWindowRect(hParent, &rtParent);
-// 	::GetWindowRect(m_hWnd, &rtWnd);
-// 	pt.x = rtWnd.left - rtParent.left;
-// 	pt.y = rtWnd.top - rtParent.top;
-// 	::SetWindowOrgEx(hMemDC, pt.x, pt.y, &ptt);
-// 	::SendMessage(hParent, WM_ERASEBKGND, (WPARAM)hMemDC, 0);
-// 	::SetViewportOrgEx(hMemDC, pt.x, pt.y, &ptt);
-// 	// 开始操作
-// 	Draw(hMemDC, &rect);
-// // 
-// // 	::SetBkColor(hMemDC, RGB(0xff, 0x0, 0x0));
-// // 	::ExtTextOut(hMemDC, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);	
-// 	// copy
-// 	BitBlt(hDC, 0, 0, rect.right - rect.left, rect.bottom - rect.top,
-// 		hMemDC, 0, 0, SRCCOPY);
-// 	// 恢复
-// 	RestoreDC(hMemDC, nSaveDC);
-// 	SelectObject(hMemDC, hOldBitmap);
-// 	DeleteObject(hBitmap);
-// 	DeleteObject(hMemDC);
-
-	EndPaint(&paint);
-
-	return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
