@@ -51,6 +51,9 @@ public:
 	Gdiplus::Image*					m_imageItemBk;
 	Gdiplus::Image*					m_imageItemEt;
 	DUI_RADIO_GROUP					m_radiogroup;
+	// 通知主界面有事件发生 wParam, 消息ID, lParam, 高位指定组，低位指定模式0正常，1编辑
+	UINT							m_uNotifyMsg;		
+	HWND							m_hNotifyWnd;
 
 public:
 	virtual void		OnUIDraw(HDC hDC, LPRECT lpRect);
@@ -78,13 +81,6 @@ class CIconListCtrl : public CWindowImpl<CIconListCtrl>,
 public:
 	CIconListCtrl();
 	~CIconListCtrl();
-
-public:
-// 	CSimpleDUIText*		m_text;
-// 	CSimpleDUIText*		m_text2;
-// 	CSimpleDUIText*		m_text3;
-// 	CSimpleDUIButton*	m_button;
-// 	CSimpleDUIButton*	m_button2;
 
 private:
 	virtual BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam,

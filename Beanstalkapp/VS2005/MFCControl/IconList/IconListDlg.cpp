@@ -5,6 +5,8 @@
 #include "IconList.h"
 #include "IconListDlg.h"
 
+#define UM_NOTIFY			WM_USER + 1
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -61,6 +63,7 @@ BEGIN_MESSAGE_MAP(CIconListDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(UM_NOTIFY, &CIconListDlg::OnUmNotify)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -102,18 +105,20 @@ BOOL CIconListDlg::OnInitDialog()
 		MAKEINTRESOURCE(IDR_PNG2));
 	m_ilc.m_imageItemEt = ImageFromResouce(AfxGetInstanceHandle(), _T("PNG"),
 		MAKEINTRESOURCE(IDR_PNG3));
+	m_ilc.m_uNotifyMsg = UM_NOTIFY;
+	m_ilc.m_hNotifyWnd = GetSafeHwnd();
 	m_ilc.SubclassWindow(::GetDlgItem(GetSafeHwnd(), IDC_ICONLIST));
 	// 添加子项
 	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1)),
-		L"电脑清理", 500 + 0);
+		L"电脑清理", 0);
 	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON2)),
-		L"优化加速", 500 + 1);
+		L"优化加速", 1);
 	m_ilc.AddItem(0, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON3)),
-		L"漏洞修复", 500 + 2);
+		L"漏洞修复", 2);
 	m_ilc.AddItem(1, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON4)),
-		L"功能大全", 500 + 3);
+		L"功能大全", 3);
 	m_ilc.AddItem(1, LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON5)),
-		L"软件管家", 500 + 4);
+		L"软件管家", 4);
 	m_ilc.UpdateGroup(0);
 	m_ilc.UpdateGroup(1);
 
@@ -169,3 +174,29 @@ HCURSOR CIconListDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+/*
+ *	接收控件消息
+ */
+LRESULT CIconListDlg::OnUmNotify(WPARAM wParam, LPARAM lParam)
+{
+	LPTSTR		szText[5]	= {
+		_T("电脑清理"),
+		_T("优化加速"),
+		_T("漏洞修复"),
+		_T("功能大全"),
+		_T("软件管家")
+	};
+	
+	if(wParam > 5)
+	{
+		return 0;
+	}
+
+	CString			str;
+
+	str.Format(_T("单击了%s模式下: %s"),
+		(0x1 & lParam)?_T("编辑模式"):_T("正常模式"),
+		szText[wParam]);
+	MessageBox(str);
+	return 0;
+}

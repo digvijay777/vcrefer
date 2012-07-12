@@ -132,6 +132,8 @@ CILContainer::CILContainer()
 	m_radiogroup = NULL;
 	m_imageItemBk = NULL;
 	m_imageItemEt = NULL;
+	m_uNotifyMsg = 0;
+	m_hNotifyWnd = NULL;
 }
 
 CILContainer::~CILContainer()
@@ -152,15 +154,35 @@ BOOL CILContainer::TranslateUIEvent(HWND hWnd, UINT nMsg,
 {
 	if(WM_COMMAND == nMsg)
 	{
-		size_t		n		= wParam - 400;
-
-		if(n >= m_groups.size())
+		if(wParam < 500)
 		{
+			// 内部消息
+			size_t		n		= wParam - 400;
+
+			if(n >= m_groups.size())
+			{
+				return TRUE;
+			}
+
+			ShowGroup(n);
 			return TRUE;
 		}
-		
-		ShowGroup(n);
-		return TRUE;
+		else
+		{
+			// 项消息
+			if(0x80000 & wParam)
+			{
+				// 编辑模式消息
+				PostMessage(m_hNotifyWnd, m_uNotifyMsg, -wParam - 500
+					, MAKELPARAM(1, m_nCurrentGroup));
+			}
+			else
+			{
+				// 正常模式消息
+				PostMessage(m_hNotifyWnd, m_uNotifyMsg, wParam - 500
+					, MAKELPARAM(0, m_nCurrentGroup));
+			}
+		}
 	}
 
 	return CSimpleDUIRoot::TranslateUIEvent(hWnd, nMsg, wParam, lParam);
@@ -210,7 +232,8 @@ BOOL CILContainer::AddItem(int nGroup, HICON hIcon, LPCWSTR lpText, UINT uID)
 
 	CILItem*		pItem;
 
-	pItem = new CILItem(m_imageItemBk, m_imageItemEt, m_groups[nGroup], hIcon, lpText, uID);
+	pItem = new CILItem(m_imageItemBk, m_imageItemEt, m_groups[nGroup], 
+		hIcon, lpText, uID + 500);
 	
 	// 测试， 区2为编辑模式
 	if(1 == nGroup)
