@@ -226,7 +226,10 @@ void CILContainer::SetGroupCount(size_t nCount)
 	// 清空原m_groups的子项
 	for(size_t i = 0; i < m_groups.size(); i++)
 	{
-		DeleteDUI(m_groups[i]->GetChildUI());
+		while(NULL != m_groups[i]->GetChildUI())
+		{
+			delete m_groups[i]->GetChildUI();
+		}
 	}
 
 	ShowGroup(0);

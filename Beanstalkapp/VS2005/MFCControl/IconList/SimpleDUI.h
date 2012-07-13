@@ -27,7 +27,7 @@ private:
 	BOOL				m_isVisible;
 
 protected:
-	void	DeleteDUI(CSimpleDUIBase* pBase);
+	static void	DeleteDUI(CSimpleDUIBase* pUI, BOOL bAutoDel = TRUE);
 
 public:
 	CSimpleDUIBase*		GetChildUI();

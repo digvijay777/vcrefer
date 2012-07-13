@@ -33,46 +33,60 @@ CSimpleDUIBase::CSimpleDUIBase(CSimpleDUIBase* parent)
 
 CSimpleDUIBase::~CSimpleDUIBase()
 {
-	// 从父树中删除
-	if(NULL != m_parent)
-	{
-		CSimpleDUIBase*		node		= m_parent;
-
-		if(this == node->m_child)
-		{
-			node->m_child = m_brother;
-		}
-		else
-		{
-			node = node->m_child;
-			for(; node; node = node->m_brother)
-			{
-				if(this == node->m_brother)
-				{
-					node->m_brother = this->m_brother;
-					break;
-				}
-			}
-		}
-	}
-	// 删除自己和子节点
+	// 释放资源
 	ReleaseUICapture();
-	DeleteDUI(this->m_child);
+	// 删除子节点
+	DeleteDUI(this, FALSE);
 }
 
 /*
  *	删除子节点
  */
-void CSimpleDUIBase::DeleteDUI(CSimpleDUIBase* pUI)
+void CSimpleDUIBase::DeleteDUI(CSimpleDUIBase* pUI, BOOL bAutoDel /* = TRUE */)
 {
 	if(NULL == pUI)
 	{
 		return ;
 	}
 
-	DeleteDUI(pUI->m_brother);
-	DeleteDUI(pUI->m_child);
-	delete pUI;
+	// 从父树中删除
+	if(NULL != pUI->m_parent)
+	{
+		CSimpleDUIBase*		node		= pUI->m_parent;
+
+		if(pUI == node->m_child)
+		{
+			node->m_child = pUI->m_brother;
+		}
+		else
+		{
+			node = node->m_child;
+			for(; node; node = node->m_brother)
+			{
+				if(pUI == node->m_brother)
+				{
+					node->m_brother = pUI->m_brother;
+					break;
+				}
+			}
+		}
+	}
+
+	// 删除子节点
+	for( CSimpleDUIBase* node = pUI->m_child;
+		NULL != node; )
+	{
+		CSimpleDUIBase*		temp		= node;
+		
+		node = node->m_brother;
+		DeleteDUI(temp, TRUE);
+	}
+
+	// 删除自己
+	if( FALSE != bAutoDel )
+	{
+		delete pUI;
+	}
 }
 
 CSimpleDUIBase* CSimpleDUIBase::GetChildUI()
@@ -378,7 +392,6 @@ CSimpleDUIRoot::CSimpleDUIRoot()
 
 CSimpleDUIRoot::~CSimpleDUIRoot()
 {
-
 }
 /*
  *	事件转换
