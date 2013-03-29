@@ -1,0 +1,9 @@
+TARGETNAME=ProcessProc
+TARGETPATH=F:\Out\Bin\TestDriver
+TARGETTYPE=DRIVER
+TARGETLIBS=
+C_DEFINES=
+
+SOURCES = main.c \
+	
+
